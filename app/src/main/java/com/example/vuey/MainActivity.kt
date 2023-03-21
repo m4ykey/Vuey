@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = albumAdapter
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        viewModel.searchAlbum("believe")
+        viewModel.searchAlbum("a")
         viewModel.albumResponse.observe(this) { response ->
             response.let {
                 albumAdapter.submitAlbum(it)

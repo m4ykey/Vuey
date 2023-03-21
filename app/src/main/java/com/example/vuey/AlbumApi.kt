@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface AlbumApi {
 
-    @GET("?method=album.search&album=believe&api_key=&format=json")
+    @GET("?method=album.search&api_key=&format=json")
     suspend fun searchAlbum(
         @Query("album") albumName : String
     ) : Response<AlbumSearchResponse>
