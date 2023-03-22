@@ -1,9 +1,9 @@
-package com.example.vuey.model
+package com.example.vuey.data.local.album.detail
 
 import com.google.gson.annotations.SerializedName
 
-data class Image(
+data class Streamable(
     @SerializedName("#text")
     val text: String,
-    val size: String
+    val fulltrack: String
 )

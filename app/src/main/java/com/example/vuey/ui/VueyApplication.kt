@@ -1,4 +1,4 @@
-package com.example.vuey
+package com.example.vuey.ui
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

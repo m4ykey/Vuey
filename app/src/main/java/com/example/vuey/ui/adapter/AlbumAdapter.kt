@@ -1,12 +1,16 @@
-package com.example.vuey
+package com.example.vuey.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.vuey.R
 import com.example.vuey.databinding.LayoutAlbumBinding
-import com.example.vuey.model.Album
+import com.example.vuey.util.DiffUtils
+import com.example.vuey.data.local.album.search.Album
+import com.example.vuey.ui.fragment.album.AlbumFragmentDirections
 
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
@@ -23,9 +27,17 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
         fun bind(albumResult : Album) {
             with(binding){
                 val extraLarge = albumResult.image.find { it.size == "extralarge"}
-                imgAlbum.load(extraLarge?.text)
-                txtAlbum.text = albumResult.name
+                imgAlbum.load(extraLarge?.image) {
+                    crossfade(500)
+                    crossfade(true)
+                    error(R.drawable.album_error)
+                }
+                txtAlbum.text = albumResult.albumName
                 txtArtist.text = albumResult.artist
+
+                layoutAlbum.setOnClickListener {
+
+                }
             }
         }
     }

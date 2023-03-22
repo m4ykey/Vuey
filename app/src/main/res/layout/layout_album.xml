@@ -2,21 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutAlbum"
+    android:layout_margin="10dp"
     android:orientation="vertical">
 
     <ImageView
+        tools:src="@drawable/album_test"
         android:id="@+id/imgAlbum"
         android:scaleType="centerCrop"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+        android:layout_width="160dp"
+        android:layout_height="160dp"/>
 
     <TextView
+        android:layout_marginTop="5dp"
+        tools:text="Havana"
+        android:fontFamily="@font/cabin_semibold"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        tools:textColor="@color/black"
         android:id="@+id/txtAlbum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
+        tools:text="Camila Cabello"
+        android:fontFamily="@font/cabin"
+        android:textSize="13sp"
+        android:textColor="@color/text_color"
         android:id="@+id/txtArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
