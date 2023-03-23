@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
@@ -60,6 +61,11 @@ class SearchAlbumFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = albumAdapter
         }
+        albumAdapter.setOnItemClickListener(object : AlbumAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                findNavController().navigate(R.id.action_searchFragment_to_albumDetailFragment)
+            }
+        })
     }
 
     override fun onDestroy() {
