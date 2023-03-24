@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.data.repository.AlbumRepository
+import com.example.vuey.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,24 +16,17 @@ class AlbumViewModel @Inject constructor(
     private val albumRepository: AlbumRepository
 ) : ViewModel() {
 
-    private val _albumResponse = MutableLiveData<List<Album>>()
-    val albumResponse : LiveData<List<Album>> get() = _albumResponse
+    private val _albumSearch = MutableLiveData<Resource<List<Album>>>()
+    val albumSearch : LiveData<Resource<List<Album>>> get() = _albumSearch
 
-    private val _albumDetail = MutableLiveData<com.example.vuey.data.local.album.detail.AlbumDetail>()
-    val albumDetail : LiveData<com.example.vuey.data.local.album.detail.AlbumDetail> get() = _albumDetail
-
-    fun searchAlbum(album : String) = viewModelScope.launch {
-        albumRepository.searchAlbum(album).let {
-            if (it.isSuccessful) {
-                _albumResponse.value = it.body()!!.results.albummatches.album
-            }
-        }
-    }
-
-    fun getInfo(artist: String, album : String) = viewModelScope.launch {
-        albumRepository.getInfo(album, artist).let {
-            if (it.isSuccessful) {
-                _albumDetail.value = it.body()!!.album
+    fun searchAlbum(album : String) {
+        viewModelScope.launch {
+            _albumSearch.value = Resource.Loading()
+            try {
+                val response = albumRepository.searchAlbum(album)
+                _albumSearch.value = response.data?.let { Resource.Success(it) }
+            } catch (e : Exception) {
+                _albumSearch.value = Resource.Failure("Failed to fetch album list ${e.localizedMessage}")
             }
         }
     }

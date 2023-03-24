@@ -1,10 +1,12 @@
 package com.example.vuey.ui.fragment.album
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +26,6 @@ class DetailAlbumFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
     }
 
     override fun onDestroy() {

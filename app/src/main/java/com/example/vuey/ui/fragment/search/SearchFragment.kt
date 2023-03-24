@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.vuey.databinding.FragmentSearchBinding
 import com.example.vuey.ui.adapter.SearchViewPagerAdapter
-import com.example.vuey.ui.fragment.album.SearchAlbumFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 

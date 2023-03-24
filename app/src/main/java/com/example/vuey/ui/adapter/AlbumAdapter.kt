@@ -1,6 +1,7 @@
 package com.example.vuey.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ import com.example.vuey.data.local.album.search.Album
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     private var albumResult = listOf<Album>()
-    private lateinit var albumListener : OnItemClickListener
+    private lateinit var albumListener: OnItemClickListener
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
@@ -23,34 +24,11 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
         albumListener = listener
     }
 
-    fun submitAlbum(newAlbum : List<Album>) {
+    fun submitAlbum(newAlbum: List<Album>) {
         val oldAlbum = DiffUtils(albumResult, newAlbum)
         val result = DiffUtil.calculateDiff(oldAlbum)
         albumResult = newAlbum
         result.dispatchUpdatesTo(this)
-    }
-
-    class AlbumViewHolder(
-        private val binding : LayoutAlbumBinding,
-        listener: OnItemClickListener
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(albumResult : Album) {
-            with(binding){
-                val extraLarge = albumResult.image.find { it.size == "extralarge"}
-                imgAlbum.load(extraLarge?.image) {
-                    crossfade(500)
-                    crossfade(true)
-                    error(R.drawable.album_error)
-                }
-                txtAlbum.text = albumResult.albumName
-                txtArtist.text = albumResult.artist
-            }
-        }
-        init {
-            binding.layoutAlbum.setOnClickListener {
-                listener.onItemClick(adapterPosition)
-            }
-        }
     }
 
     override fun onCreateViewHolder(
@@ -70,4 +48,28 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
     override fun getItemCount(): Int {
         return albumResult.size
     }
+
+    class AlbumViewHolder(
+        private val binding: LayoutAlbumBinding,
+        listener: OnItemClickListener
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(albumResult: Album) {
+            with(binding) {
+                val extraLarge = albumResult.image.find { it.size == "extralarge" }
+                imgAlbum.load(extraLarge?.image) {
+                    crossfade(500)
+                    crossfade(true)
+                    error(R.drawable.album_error)
+                }
+                txtAlbum.text = albumResult.albumName
+                txtArtist.text = albumResult.artist
+            }
+        }
+        init {
+            binding.layoutAlbum.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+            }
+        }
+    }
 }
+
