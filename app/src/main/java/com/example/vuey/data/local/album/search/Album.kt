@@ -13,11 +13,11 @@ data class Album(
     val albumName: String,
     val streamable: String,
     val url: String
-) : Parcelable
-
-@Parcelize
-data class Image(
-    @SerializedName("#text")
-    val image: String,
-    val size: String
-) : Parcelable
+) : Parcelable {
+    @Parcelize
+    data class Image(
+        @SerializedName("#text")
+        val image: String,
+        val size: String
+    ) : Parcelable
+}
