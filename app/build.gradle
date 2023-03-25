@@ -18,7 +18,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "0.0.6-alpha"
+        versionName "0.1.0-alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -86,4 +86,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:24.4.4'
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
 
+    // Palette
+    implementation 'androidx.palette:palette-ktx:1.0.0'
+
+    // Glide
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+    implementation 'com.github.bumptech.glide:glide:4.15.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
 }
