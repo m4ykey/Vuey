@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vuey</string>
-
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
@@ -37,8 +37,8 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
-    <string name="album_error_title">Album is not available.</string>
-    <string name="album_error_message">Unfortunately, this album is not available. Please try selecting something else.</string>
-    <string name="character_message">Enter at least 3 characters</string>
+    <string name="album_error_title">Album nie jest dostępny.</string>
+    <string name="album_error_message">Ten album jest niestety niedostępny. Spróbuj wybrać coś innego.</string>
+    <string name="character_message">Wprowadź co najmniej 3 znaki.</string>
     <string name="album">Album</string>
 </resources>

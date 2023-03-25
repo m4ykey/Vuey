@@ -15,6 +15,7 @@ import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.ui.adapter.AlbumAdapter
 import com.example.vuey.ui.fragment.album.AlbumViewModel
 import com.example.vuey.util.Resource
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +37,9 @@ class SearchAlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bottomNavigationView : BottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
+        bottomNavigationView.visibility = View.GONE
+
         setupRecyclerView()
         observeSearchAlbum()
 
@@ -47,7 +51,7 @@ class SearchAlbumFragment : Fragment() {
                     ) {
                         Toast.makeText(
                             requireContext(),
-                            "Enter at least 3 characters",
+                            R.string.character_message,
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
@@ -70,7 +74,7 @@ class SearchAlbumFragment : Fragment() {
                     hideLoading()
                 }
                 is Resource.Failure -> {
-                    showError()
+                    Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                     hideLoading()
                 }
                 is Resource.Loading -> {
@@ -88,22 +92,12 @@ class SearchAlbumFragment : Fragment() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun showError() {
-        Toast.makeText(requireContext(), viewModel.albumSearch.value?.message, Toast.LENGTH_SHORT)
-            .show()
-    }
-
     private fun setupRecyclerView() {
         albumAdapter = AlbumAdapter()
         binding.recyclerViewSearchAlbum.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = albumAdapter
         }
-        albumAdapter.setOnItemClickListener(object : AlbumAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                findNavController().navigate(R.id.action_searchFragment_to_albumDetailFragment)
-            }
-        })
     }
 
     override fun onDestroy() {
