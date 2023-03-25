@@ -1,28 +1,21 @@
 package com.example.vuey.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
-import com.example.vuey.databinding.LayoutAlbumBinding
-import com.example.vuey.util.DiffUtils
 import com.example.vuey.data.local.album.search.Album
+import com.example.vuey.databinding.LayoutAlbumBinding
+import com.example.vuey.ui.fragment.search.SearchFragmentDirections
+import com.example.vuey.util.DiffUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     private var albumResult = listOf<Album>()
-    private lateinit var albumListener: OnItemClickListener
-
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        albumListener = listener
-    }
 
     fun submitAlbum(newAlbum: List<Album>) {
         val oldAlbum = DiffUtils(albumResult, newAlbum)
@@ -38,7 +31,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
         val binding = LayoutAlbumBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return AlbumViewHolder(binding, albumListener)
+        return AlbumViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
@@ -50,8 +43,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
     }
 
     class AlbumViewHolder(
-        private val binding: LayoutAlbumBinding,
-        listener: OnItemClickListener
+        private val binding: LayoutAlbumBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(albumResult: Album) {
             with(binding) {
@@ -63,11 +55,23 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                 }
                 txtAlbum.text = albumResult.albumName
                 txtArtist.text = albumResult.artist
-            }
-        }
-        init {
-            binding.layoutAlbum.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+
+                layoutAlbum.setOnClickListener {
+                    if (albumResult.albumName.isNotEmpty() && albumResult.artist.isNotEmpty() && extraLarge!!.image.isNotEmpty()) {
+                        val action =
+                            SearchFragmentDirections.actionSearchFragmentToAlbumDetailFragment(
+                                albumResult
+                            )
+                        it.findNavController().navigate(action)
+                    } else {
+                        val errorDialog = MaterialAlertDialogBuilder(root.context)
+                            .setTitle(R.string.album_error_title)
+                            .setMessage(R.string.album_error_message)
+                            .setPositiveButton("Ok") { _, _ -> }
+                            .create()
+                        errorDialog.show()
+                    }
+                }
             }
         }
     }
