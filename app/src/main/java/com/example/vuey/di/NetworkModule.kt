@@ -1,7 +1,7 @@
 package com.example.vuey.di
 
 import com.example.vuey.data.remote.api.AlbumApi
-import com.example.vuey.data.remote.api.ApiClient
+import com.example.vuey.data.remote.api.AlbumApiClient
 import com.example.vuey.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -28,7 +28,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideHttpClient(
-        apiClient: ApiClient,
+        apiClient: AlbumApiClient,
         httpLoggingInterceptor: HttpLoggingInterceptor
     ) : OkHttpClient {
         return OkHttpClient.Builder()
