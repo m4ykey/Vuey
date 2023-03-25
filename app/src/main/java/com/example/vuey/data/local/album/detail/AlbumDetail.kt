@@ -38,8 +38,8 @@ data class Tracks(
         val attr: Attr,
         val artist: Artist,
         val duration: Int,
-        val name: String,
-        val streamable: Streamable,
+        @SerializedName("name")
+        val trackName: String,
         val url: String
     ) {
         data class Attr(

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.ui.adapter.AlbumAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +32,9 @@ class AlbumFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val bottomNavigationView : BottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
+        bottomNavigationView.visibility = View.VISIBLE
 
         setupRecyclerView()
         binding.fabSearch.setOnClickListener {
