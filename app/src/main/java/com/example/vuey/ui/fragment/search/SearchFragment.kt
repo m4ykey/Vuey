@@ -43,7 +43,7 @@ class SearchFragment : Fragment() {
             viewPager.adapter = viewPagerAdapter
             TabLayoutMediator(tabLayout, viewPager) { tab, position, ->
                 when (position) {
-                    0 -> tab.text = R.string.album.toString()
+                    0 -> tab.text = "Album"
                 }
             }.attach()
         }

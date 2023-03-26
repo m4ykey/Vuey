@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.data.local.album.detail.AlbumDetail
 import com.example.vuey.data.local.album.search.Album
+import com.example.vuey.data.local.database.dao.AlbumDao
+import com.example.vuey.data.local.database.model.AlbumEntity
 import com.example.vuey.data.repository.AlbumRepository
 import com.example.vuey.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +24,20 @@ class AlbumViewModel @Inject constructor(
 
     private val _albumDetail = MutableLiveData<Resource<AlbumDetail>>()
     val albumDetail : LiveData<Resource<AlbumDetail>> get() = _albumDetail
+
+    val allAlbums : LiveData<List<AlbumEntity>> = albumRepository.getAllAlbums()
+
+    fun insertAlbum(albumEntity: AlbumEntity) {
+        viewModelScope.launch {
+            albumRepository.insertAlbum(albumEntity)
+        }
+    }
+
+    fun deleteAlbum(albumEntity: AlbumEntity) {
+        viewModelScope.launch {
+            albumRepository.deleteAlbum(albumEntity)
+        }
+    }
 
     fun getInfo(artist : String, album: String) {
         viewModelScope.launch {

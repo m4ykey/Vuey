@@ -41,4 +41,10 @@
     <string name="album_error_message">Ten album jest niestety niedostępny. Spróbuj wybrać coś innego.</string>
     <string name="character_message">Wprowadź co najmniej 3 znaki.</string>
     <string name="album">Album</string>
+    <string name="album_unavailable">Opis tego albumu jest niedostępny</string>
+    <string name="search_fav_album">Wyszukaj swój ulubiony album</string>
+    <string name="delete_album">Usunąć album?</string>
+    <string name="delete_album_message">Jesteś pewien, że chcesz usunąć ten album?</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
 </resources>

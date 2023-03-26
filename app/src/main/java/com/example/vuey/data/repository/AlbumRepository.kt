@@ -1,14 +1,23 @@
 package com.example.vuey.data.repository
 
+import androidx.lifecycle.LiveData
 import com.example.vuey.data.local.album.detail.AlbumDetail
 import com.example.vuey.data.local.album.search.Album
+import com.example.vuey.data.local.database.dao.AlbumDao
+import com.example.vuey.data.local.database.model.AlbumEntity
 import com.example.vuey.data.remote.api.AlbumApi
 import com.example.vuey.util.Resource
 import javax.inject.Inject
 
 class AlbumRepository @Inject constructor(
-    private val albumApi: AlbumApi
+    private val albumApi: AlbumApi,
+    private val albumDao: AlbumDao
 ) {
+
+    suspend fun insertAlbum(albumEntity: AlbumEntity) = albumDao.insertAlbum(albumEntity)
+    suspend fun deleteAlbum(albumEntity: AlbumEntity) = albumDao.deleteAlbum(albumEntity)
+    fun getAllAlbums() : LiveData<List<AlbumEntity>> = albumDao.getAllAlbums()
+    //fun deleteAllAlbums() : LiveData<List<AlbumEntity>> = albumDao.deleteAllAlbums()
 
     suspend fun getInfo(artist : String, album : String) : Resource<AlbumDetail> {
         return try {

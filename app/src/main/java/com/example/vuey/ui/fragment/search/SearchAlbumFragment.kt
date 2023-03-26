@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
-import com.example.vuey.ui.adapter.AlbumAdapter
+import com.example.vuey.ui.adapter.SearchAlbumAdapter
 import com.example.vuey.ui.fragment.album.AlbumViewModel
 import com.example.vuey.util.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -24,7 +24,7 @@ class SearchAlbumFragment : Fragment() {
     private var _binding: FragmentSearchAlbumBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AlbumViewModel by viewModels()
-    private lateinit var albumAdapter: AlbumAdapter
+    private lateinit var albumAdapter: SearchAlbumAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,7 +93,7 @@ class SearchAlbumFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        albumAdapter = AlbumAdapter()
+        albumAdapter = SearchAlbumAdapter()
         binding.recyclerViewSearchAlbum.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = albumAdapter

@@ -26,11 +26,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.vuey.R
+import com.example.vuey.data.local.database.model.AlbumEntity
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.ui.adapter.AlbumTagAdapter
 import com.example.vuey.ui.adapter.TrackListAdapter
+import com.example.vuey.util.Constants.LUMINANCE_VALUE
 import com.example.vuey.util.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.*
@@ -53,7 +56,6 @@ class DetailAlbumFragment : Fragment() {
         return binding.root
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,12 +66,11 @@ class DetailAlbumFragment : Fragment() {
 
         binding.imgBack.setOnClickListener { findNavController().navigateUp() }
 
-        val medium = arguments.albums.image.find { it.size == "medium" }
         val extraLarge = arguments.albums.image.find { it.size == "extralarge" }
 
         val luminanceJob = lifecycleScope.launch(Dispatchers.IO) {
             val bitmap =
-                Glide.with(requireContext()).asBitmap().load(medium!!.image).submit().get()
+                Glide.with(requireContext()).asBitmap().load(extraLarge!!.image).submit().get()
             val palette = Palette.from(bitmap).generate()
             val dominantColor = palette.getDominantColor(Color.GRAY)
 
@@ -85,15 +86,15 @@ class DetailAlbumFragment : Fragment() {
                     txtAlbum.text = arguments.albums.albumName
                     txtArtist.text = arguments.albums.artist
 
-                    txtAlbum.setTextColor(if (luminance < 0.5) Color.WHITE else Color.BLACK)
-                    txtArtist.setTextColor(if (luminance < 0.5) Color.WHITE else Color.BLACK)
-                    txtPlaycount.setTextColor(if (luminance < 0.5) Color.WHITE else Color.BLACK)
-                    txtListeners.setTextColor(if (luminance < 0.5) Color.WHITE else Color.BLACK)
+                    txtAlbum.setTextColor(if (luminance < LUMINANCE_VALUE) Color.WHITE else Color.BLACK)
+                    txtArtist.setTextColor(if (luminance < LUMINANCE_VALUE) Color.WHITE else Color.BLACK)
+                    txtPlaycount.setTextColor(if (luminance < LUMINANCE_VALUE) Color.WHITE else Color.BLACK)
+                    txtListeners.setTextColor(if (luminance < LUMINANCE_VALUE) Color.WHITE else Color.BLACK)
 
-                    imgPlaycount.setColorFilter(if (luminance < 0.5) Color.WHITE else Color.BLACK)
-                    imgBack.setColorFilter(if (luminance < 0.5) Color.WHITE else Color.BLACK)
-                    imgArtistSite.setColorFilter(if (luminance < 0.5) Color.WHITE else Color.BLACK)
-                    imgListeners.setColorFilter(if (luminance < 0.5) Color.WHITE else Color.BLACK)
+                    imgPlaycount.setColorFilter(if (luminance < LUMINANCE_VALUE) Color.WHITE else Color.BLACK)
+                    imgBack.setColorFilter(if (luminance < LUMINANCE_VALUE) Color.WHITE else Color.BLACK)
+                    imgArtistSite.setColorFilter(if (luminance < LUMINANCE_VALUE) Color.WHITE else Color.BLACK)
+                    imgListeners.setColorFilter(if (luminance < LUMINANCE_VALUE) Color.WHITE else Color.BLACK)
 
                 }
             }
@@ -107,10 +108,63 @@ class DetailAlbumFragment : Fragment() {
                     hideLoading()
                     setupRecyclerView()
 
+                    val albumDetail = response.data
+
+                    val saveAlbumToDatabase = AlbumEntity(
+                        mbid = arguments.albums.mbid,
+                        artist = arguments.albums.artist,
+                        albumName = arguments.albums.albumName,
+                        url = arguments.albums.url,
+                        listeners = albumDetail!!.listeners,
+                        playcount = albumDetail.playcount,
+                        wikiContent = albumDetail.wiki.content,
+                        wikiSummary = albumDetail.wiki.summary,
+                        image = listOf(AlbumEntity.Image(
+                            image = arguments.albums.image[3].image,
+                            size = arguments.albums.image[3].size
+                        )),
+                        tracks = albumDetail.tracks.track.map { track ->
+                            AlbumEntity.Track(
+                                duration = track.duration,
+                                trackName = track.trackName,
+                                url = track.url,
+                                attr = AlbumEntity.Track.Attr(rank = track.attr.rank),
+                                artist = AlbumEntity.Artist(
+                                    mbid = track.artist.mbid,
+                                    name = track.artist.name,
+                                    url = track.artist.url
+                                )
+                            )
+                        },
+                        tags = albumDetail.tags.tag.map { tag ->
+                            AlbumEntity.Tag(
+                                name = tag.name,
+                                url = tag.url
+                            )
+                        })
+                    viewModel.insertAlbum(saveAlbumToDatabase)
+                    //Toast.makeText(requireContext(), "Dodano do bazy danych", Toast.LENGTH_SHORT).show()
+
                     with(binding) {
 
+                        var isActive = false
+                        imgDelete.setOnClickListener {
+                            val deleteAlbum = MaterialAlertDialogBuilder(requireContext())
+                                .setTitle(R.string.delete_album)
+                                .setMessage(R.string.delete_album)
+                                .setPositiveButton(R.string.yes) { _, _ ->
+                                    viewModel.deleteAlbum(saveAlbumToDatabase)
+                                    isActive = true
+                                    imgDelete.setImageResource(R.drawable.ic_restore)
+                                }
+                                .setNegativeButton(R.string.no) { _, _ -> }
+                                .create()
+                            deleteAlbum.show()
+
+                        }
+
                         // LinearLayout with summary and content
-                        if (response.data?.wiki?.content == null) {
+                        if (albumDetail.wiki.content == null) {
                             expandableLinearLayout.visibility = View.GONE
                             txtAlbumUnavailable.visibility = View.VISIBLE
                         }
@@ -135,22 +189,22 @@ class DetailAlbumFragment : Fragment() {
                         }
 
                         // TextViews
-                        txtContent.text = response.data?.wiki?.content
-                        txtSummary.text = response.data?.wiki?.summary
-                        txtPlaycount.text = response.data!!.playcount
-                        txtListeners.text = response.data.listeners
+                        txtContent.text = albumDetail.wiki.content
+                        txtSummary.text = albumDetail.wiki.summary
+                        txtPlaycount.text = albumDetail.playcount
+                        txtListeners.text = albumDetail.listeners
 
                         // Icons
                         imgArtistSite.setOnClickListener {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(response.data.url))
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(albumDetail.url))
                             startActivity(intent)
                         }
 
                         // RecyclerViews
-                        response.data.let { tagList ->
+                        albumDetail.let { tagList ->
                             tagAdapter.submitTags(tagList.tags.tag)
                         }
-                        response.data.let { trackList ->
+                        albumDetail.let { trackList ->
                             trackListAdapter.submitTrack(trackList.tracks.track)
                         }
 
@@ -159,7 +213,7 @@ class DetailAlbumFragment : Fragment() {
                         imgBackgroundAlbum.apply {
                             Glide.with(requireContext())
                                 .asBitmap()
-                                .load(medium!!.image)
+                                .load(extraLarge.image)
                                 .override(400, 400)
                                 .let { request ->
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

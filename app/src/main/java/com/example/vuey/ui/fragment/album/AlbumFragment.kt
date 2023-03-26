@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.ui.adapter.AlbumAdapter
+import com.example.vuey.ui.adapter.SearchAlbumAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,6 +40,9 @@ class AlbumFragment : Fragment() {
         setupRecyclerView()
         binding.fabSearch.setOnClickListener {
             findNavController().navigate(R.id.action_albumFragment_to_searchFragment)
+        }
+        viewModel.allAlbums.observe(viewLifecycleOwner) { albumList ->
+            albumAdapter.submitAlbum(albumList)
         }
     }
 
