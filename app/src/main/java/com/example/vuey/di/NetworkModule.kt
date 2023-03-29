@@ -1,8 +1,9 @@
 package com.example.vuey.di
 
 import com.example.vuey.data.remote.api.AlbumApi
-import com.example.vuey.data.remote.api.AlbumApiClient
-import com.example.vuey.util.Constants
+import com.example.vuey.data.remote.api.SpotifyAuthInterceptor
+import com.example.vuey.util.Constants.SPOTIFY_BASE_URL
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,38 +20,44 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLoggingInterceptor() : HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().setLevel(
-            level = HttpLoggingInterceptor.Level.BODY
-        )
-    }
-
-    @Provides
-    @Singleton
     fun provideHttpClient(
-        apiClient: AlbumApiClient,
+        authInterceptor: SpotifyAuthInterceptor,
         httpLoggingInterceptor: HttpLoggingInterceptor
-    ) : OkHttpClient {
+    ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(apiClient)
+            .addInterceptor(authInterceptor)
             .addInterceptor(httpLoggingInterceptor)
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideAlbumApi(retrofit: Retrofit) : AlbumApi {
+    fun provideAlbumApi(retrofit: Retrofit): AlbumApi {
         return retrofit.create(AlbumApi::class.java)
     }
 
     @Provides
-    @Singleton
-    fun provideRetrofitInstance(okHttpClient: OkHttpClient) : Retrofit {
+    fun provideRetrofitInstance(okHttpClient: OkHttpClient, gsonConverterFactory: GsonConverterFactory): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Constants.LAST_FM_BASE_URL)
+            .baseUrl(SPOTIFY_BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(gsonConverterFactory)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGsonConverterFactory(): GsonConverterFactory {
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+        return GsonConverterFactory.create(gson)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
 }

@@ -1,55 +1,25 @@
 package com.example.vuey.ui.fragment.album
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.vuey.data.local.album.detail.AlbumDetail
-import com.example.vuey.data.local.album.search.Album
-import com.example.vuey.data.local.database.dao.AlbumDao
-import com.example.vuey.data.local.database.model.AlbumEntity
+import com.example.vuey.data.local.album.Item
 import com.example.vuey.data.repository.AlbumRepository
 import com.example.vuey.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
     private val albumRepository: AlbumRepository
 ) : ViewModel() {
 
-    private val _albumSearch = MutableLiveData<Resource<List<Album>>>()
-    val albumSearch : LiveData<Resource<List<Album>>> get() = _albumSearch
-
-    private val _albumDetail = MutableLiveData<Resource<AlbumDetail>>()
-    val albumDetail : LiveData<Resource<AlbumDetail>> get() = _albumDetail
-
-    val allAlbums : LiveData<List<AlbumEntity>> = albumRepository.getAllAlbums()
-
-    fun insertAlbum(albumEntity: AlbumEntity) {
-        viewModelScope.launch {
-            albumRepository.insertAlbum(albumEntity)
-        }
-    }
-
-    fun deleteAlbum(albumEntity: AlbumEntity) {
-        viewModelScope.launch {
-            albumRepository.deleteAlbum(albumEntity)
-        }
-    }
-
-    fun getInfo(artist : String, album: String) {
-        viewModelScope.launch {
-            _albumDetail.value = Resource.Loading()
-            try {
-                val response = albumRepository.getInfo(artist, album)
-                _albumDetail.value = response.data?.let { Resource.Success(it) }
-            } catch (e : Exception) {
-                _albumDetail.value = Resource.Failure("Failed to fetch album detail ${e.localizedMessage}")
-            }
-        }
-    }
+    private val _albumSearch = MutableLiveData<Resource<List<Item>>>()
+    val albumSearch : LiveData<Resource<List<Item>>> get() = _albumSearch
 
     fun searchAlbum(album : String) {
         viewModelScope.launch {

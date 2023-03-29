@@ -39,7 +39,7 @@
     </string>
     <string name="album_error_title">Album is not available.</string>
     <string name="album_error_message">Unfortunately, this album is not available. Please try selecting something else.</string>
-    <string name="character_message">Enter at least 3 characters</string>
+    <string name="character_message">Enter at least 2 characters</string>
     <string name="album">Album</string>
     <string name="album_unavailable">Description of the album is unavailable</string>
     <string name="delete_album">Delete album?</string>

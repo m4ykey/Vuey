@@ -18,7 +18,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "0.2.0-alpha"
+        versionName "0.2.1-alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,12 +55,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
-    // Coil
-    implementation("io.coil-kt:coil:2.2.2")
-
     // Kotlin Lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
 
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
@@ -87,16 +84,15 @@ dependencies {
     // Palette
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
-    // Glide
-    implementation 'jp.wasabeef:glide-transformations:4.3.0'
-    implementation 'com.github.bumptech.glide:glide:4.15.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
-
     // Room Database
     implementation "androidx.room:room-runtime:2.5.1"
-    kapt "androidx.room:room-compiler:2.5.0"
-    implementation "androidx.room:room-ktx:2.5.0"
+    kapt "androidx.room:room-compiler:2.5.1"
+    implementation "androidx.room:room-ktx:2.5.1"
 
     // Gson
     implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Coil
+    implementation("io.coil-kt:coil:2.3.0")
+
 }

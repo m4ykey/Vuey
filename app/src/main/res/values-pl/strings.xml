@@ -39,7 +39,7 @@
     </string>
     <string name="album_error_title">Album nie jest dostępny.</string>
     <string name="album_error_message">Ten album jest niestety niedostępny. Spróbuj wybrać coś innego.</string>
-    <string name="character_message">Wprowadź co najmniej 3 znaki.</string>
+    <string name="character_message">Wprowadź co najmniej 2 znaki.</string>
     <string name="album">Album</string>
     <string name="album_unavailable">Opis tego albumu jest niedostępny</string>
     <string name="search_fav_album">Wyszukaj swój ulubiony album</string>

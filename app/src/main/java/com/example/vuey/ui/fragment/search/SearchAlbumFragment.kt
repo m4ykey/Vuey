@@ -37,7 +37,8 @@ class SearchAlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val bottomNavigationView : BottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
+        val bottomNavigationView: BottomNavigationView =
+            requireActivity().findViewById(R.id.bottomNavigation)
         bottomNavigationView.visibility = View.GONE
 
         setupRecyclerView()
@@ -47,7 +48,7 @@ class SearchAlbumFragment : Fragment() {
             imgBack.setOnClickListener { findNavController().navigateUp() }
             etSearch.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (etSearch.text.toString().isEmpty() || etSearch.text.toString().length <= 2
+                    if (etSearch.text.toString().isEmpty() || etSearch.text.toString().length <= 1
                     ) {
                         Toast.makeText(
                             requireContext(),
@@ -98,10 +99,5 @@ class SearchAlbumFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = albumAdapter
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

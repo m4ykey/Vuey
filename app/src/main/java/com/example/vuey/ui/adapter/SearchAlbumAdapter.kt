@@ -7,17 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
-import com.example.vuey.data.local.album.search.Album
+import com.example.vuey.data.local.album.Item
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.ui.fragment.search.SearchFragmentDirections
 import com.example.vuey.util.DiffUtils
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SearchAlbumAdapter : RecyclerView.Adapter<SearchAlbumAdapter.AlbumViewHolder>() {
 
-    private var albumResult = listOf<Album>()
+    private var albumResult = listOf<Item>()
 
-    fun submitAlbum(newAlbum: List<Album>) {
+    fun submitAlbum(newAlbum: List<Item>) {
         val oldAlbum = DiffUtils(albumResult, newAlbum)
         val result = DiffUtil.calculateDiff(oldAlbum)
         albumResult = newAlbum
@@ -45,35 +44,26 @@ class SearchAlbumAdapter : RecyclerView.Adapter<SearchAlbumAdapter.AlbumViewHold
     class AlbumViewHolder(
         private val binding: LayoutAlbumBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(albumResult: Album) {
+        fun bind(albumResult: Item) {
             with(binding) {
-                val extraLarge = albumResult.image.find { it.size == "extralarge" }
-                imgAlbum.load(extraLarge?.image) {
-                    crossfade(500)
+
+                val image = albumResult.images.find { it.height == 640 && it.width == 640 }
+
+                imgAlbum.load(image!!.url) {
                     crossfade(true)
+                    crossfade(500)
                     error(R.drawable.album_error)
                 }
                 txtAlbum.text = albumResult.albumName
-                txtArtist.text = albumResult.artist
+                txtArtist.text = albumResult.artists[0].name
 
                 layoutAlbum.setOnClickListener {
-                    if (albumResult.albumName.isNotEmpty() && albumResult.artist.isNotEmpty() && extraLarge!!.image.isNotEmpty()) {
-                        val action =
-                            SearchFragmentDirections.actionSearchFragmentToAlbumDetailFragment(
-                                albumResult
-                            )
-                        it.findNavController().navigate(action)
-                    } else {
-                        val errorDialog = MaterialAlertDialogBuilder(root.context)
-                            .setTitle(R.string.album_error_title)
-                            .setMessage(R.string.album_error_message)
-                            .setPositiveButton("Ok") { _, _ -> }
-                            .create()
-                        errorDialog.show()
-                    }
+                    val action = SearchFragmentDirections.actionSearchFragmentToAlbumDetailFragment()
+                    it.findNavController().navigate(action)
                 }
             }
         }
     }
 }
+
 
