@@ -1,8 +1,8 @@
-package com.example.vuey.data.local.album
+package com.example.vuey.data.local.album.search
 
 data class Albums(
     val href: String,
-    val items: List<Item>,
+    val items: List<Album>,
     val limit: Int,
     val next: String,
     val offset: Int,

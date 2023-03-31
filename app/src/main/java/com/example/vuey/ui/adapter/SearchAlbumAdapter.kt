@@ -7,16 +7,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
-import com.example.vuey.data.local.album.Item
+import com.example.vuey.data.local.album.detail.Artist
+import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.ui.fragment.search.SearchFragmentDirections
 import com.example.vuey.util.DiffUtils
 
 class SearchAlbumAdapter : RecyclerView.Adapter<SearchAlbumAdapter.AlbumViewHolder>() {
 
-    private var albumResult = listOf<Item>()
+    private var albumResult = listOf<Album>()
 
-    fun submitAlbum(newAlbum: List<Item>) {
+    fun submitAlbum(newAlbum: List<Album>) {
         val oldAlbum = DiffUtils(albumResult, newAlbum)
         val result = DiffUtil.calculateDiff(oldAlbum)
         albumResult = newAlbum
@@ -44,7 +45,7 @@ class SearchAlbumAdapter : RecyclerView.Adapter<SearchAlbumAdapter.AlbumViewHold
     class AlbumViewHolder(
         private val binding: LayoutAlbumBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(albumResult: Item) {
+        fun bind(albumResult: Album) {
             with(binding) {
 
                 val image = albumResult.images.find { it.height == 640 && it.width == 640 }
@@ -55,10 +56,14 @@ class SearchAlbumAdapter : RecyclerView.Adapter<SearchAlbumAdapter.AlbumViewHold
                     error(R.drawable.album_error)
                 }
                 txtAlbum.text = albumResult.albumName
-                txtArtist.text = albumResult.artists[0].name
+                val artists : List<Album.Artist> = albumResult.artists
+                val artistNames = artists.joinToString(separator = ", ") { it.name }
+                txtArtist.text = artistNames
 
                 layoutAlbum.setOnClickListener {
-                    val action = SearchFragmentDirections.actionSearchFragmentToAlbumDetailFragment()
+                    val action = SearchFragmentDirections.actionSearchFragmentToAlbumDetailFragment(
+                        albumResult
+                    )
                     it.findNavController().navigate(action)
                 }
             }

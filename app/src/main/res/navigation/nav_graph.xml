@@ -21,7 +21,11 @@
         android:id="@+id/albumDetailFragment"
         android:name="com.example.vuey.ui.fragment.album.DetailAlbumFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_album_detail"/>
+        tools:layout="@layout/fragment_album_detail">
+        <argument
+            android:name="album"
+            app:argType="com.example.vuey.data.local.album.search.Album" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.vuey.ui.fragment.search.SearchFragment"
