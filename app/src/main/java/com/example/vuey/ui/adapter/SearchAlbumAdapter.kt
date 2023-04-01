@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
-import com.example.vuey.data.local.album.detail.Artist
+import com.example.vuey.data.database.model.AlbumEntity
 import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.ui.fragment.search.SearchFragmentDirections
@@ -61,9 +61,23 @@ class SearchAlbumAdapter : RecyclerView.Adapter<SearchAlbumAdapter.AlbumViewHold
                 txtArtist.text = artistNames
 
                 layoutAlbum.setOnClickListener {
-                    val action = SearchFragmentDirections.actionSearchFragmentToAlbumDetailFragment(
-                        albumResult
+                    val externalUrls = AlbumEntity.ExternalUrlsEntity(spotify = albumResult.external_urls.spotify)
+                    val trackList : List<AlbumEntity.TrackListEntity> = listOf()
+                    val albumEntity = AlbumEntity(
+                        albumName = albumResult.albumName,
+                        albumType = albumResult.album_type,
+                        artists = emptyList(),
+                        id = albumResult.id,
+                        release_date = "",
+                        totalTracks = 0,
+                        images = albumResult.images.map { image ->
+                            AlbumEntity.ImageEntity(url = image.url, height = image.height, width = image.width)
+                        },
+                        externalUrls = externalUrls,
+                        trackList = trackList
                     )
+                    val action = SearchFragmentDirections.actionSearchFragmentToAlbumDetailFragment(
+                        album = albumResult, albumEntity = albumEntity)
                     it.findNavController().navigate(action)
                 }
             }

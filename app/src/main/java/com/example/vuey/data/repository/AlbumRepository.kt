@@ -1,5 +1,8 @@
 package com.example.vuey.data.repository
 
+import androidx.lifecycle.LiveData
+import com.example.vuey.data.database.dao.AlbumDao
+import com.example.vuey.data.database.model.AlbumEntity
 import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.data.remote.api.AlbumApi
 import com.example.vuey.data.remote.api.SpotifyAuthInterceptor
@@ -9,8 +12,9 @@ import javax.inject.Inject
 
 class AlbumRepository @Inject constructor(
     private val albumApi: AlbumApi,
-    private val authInterceptor: SpotifyAuthInterceptor
+    private val authInterceptor: SpotifyAuthInterceptor,
 ) {
+
     suspend fun getAlbum(albumId : String) : Resource<AlbumDetailResponse> {
         return try {
             val response = albumApi.getAlbum(

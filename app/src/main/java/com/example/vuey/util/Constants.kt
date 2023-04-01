@@ -4,7 +4,7 @@ object Constants {
 
     const val DATABASE_NAME = "app_database"
     const val ALBUM_TABLE_NAME = "album_table"
-    const val DATABASE_VERSION = 1
+    const val DATABASE_VERSION = 3
 
     const val SPOTIFY_BASE_URL = "https://api.spotify.com/"
     const val SPOTIFY_CLIENT_ID = "SPOTIFY_CLIENT_ID"

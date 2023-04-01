@@ -15,7 +15,7 @@
         android:layout_height="160dp">
 
         <ImageView
-            tools:src="@drawable/album_test"
+            tools:src="@drawable/album_error"
             android:id="@+id/imgAlbum"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"

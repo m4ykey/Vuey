@@ -63,6 +63,17 @@ class SearchAlbumFragment : Fragment() {
                     } else {
                         viewModel.searchAlbum(etSearch.text.toString())
                     }
+                    if (etSearch.text.isNotEmpty()) {
+                        imgClear.apply {
+                            setOnClickListener {
+                                etSearch.setText("")
+                                imgClear.visibility = View.GONE
+                            }
+                            visibility = View.VISIBLE
+                        }
+                    } else {
+                        imgClear.visibility = View.GONE
+                    }
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -91,10 +102,12 @@ class SearchAlbumFragment : Fragment() {
     }
 
     private fun hideLoading() {
+        binding.progressBar.visibility = View.GONE
     }
 
 
     private fun showLoading() {
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun setupRecyclerView() {

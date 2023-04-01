@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".ui.fragment.album.DetailAlbumFragment">
@@ -81,14 +80,34 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearLayoutInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtInfo"
+                android:textSize="15sp"
+                android:fontFamily="@font/cabin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/imgSave"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/ic_favorite_border"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@id/linearLayoutInfo"
             app:tint="@color/white" />
 
         <LinearLayout

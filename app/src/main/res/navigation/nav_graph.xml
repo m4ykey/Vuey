@@ -25,6 +25,9 @@
         <argument
             android:name="album"
             app:argType="com.example.vuey.data.local.album.search.Album" />
+        <argument
+            android:name="albumEntity"
+            app:argType="com.example.vuey.data.database.model.AlbumEntity" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

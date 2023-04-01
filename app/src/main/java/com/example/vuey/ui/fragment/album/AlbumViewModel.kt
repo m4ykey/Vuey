@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vuey.data.database.AppDatabase
+import com.example.vuey.data.database.dao.AlbumDao
+import com.example.vuey.data.database.model.AlbumEntity
 import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.data.remote.response.AlbumDetailResponse
 import com.example.vuey.data.repository.AlbumRepository
@@ -15,14 +18,31 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val albumRepository: AlbumRepository
+    private val albumRepository: AlbumRepository,
+    private val appDatabase: AppDatabase
 ) : ViewModel() {
+
+    private var albumDao: AlbumDao = appDatabase.albumDao()
 
     private val _albumSearch = MutableLiveData<Resource<List<Album>>>()
     val albumSearch : LiveData<Resource<List<Album>>> get() = _albumSearch
 
     private val _albumDetail = MutableLiveData<Resource<AlbumDetailResponse>>()
     val albumDetail : LiveData<Resource<AlbumDetailResponse>> get() = _albumDetail
+
+    val getAllAlbums : LiveData<List<AlbumEntity>> = albumDao.getAllAlbums()
+
+    fun insertAlbum(albumEntity: AlbumEntity) {
+        viewModelScope.launch {
+            albumDao.insertAlbum(albumEntity)
+        }
+    }
+
+    fun deleteAlbum(albumEntity: AlbumEntity) {
+        viewModelScope.launch {
+            albumDao.deleteAlbum(albumEntity)
+        }
+    }
 
     fun getAlbum(albumId : String) {
         viewModelScope.launch {
