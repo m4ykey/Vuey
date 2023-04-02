@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,11 +18,11 @@ import com.example.vuey.data.database.model.AlbumEntity
 import com.example.vuey.data.local.album.detail.AlbumItem
 import com.example.vuey.data.local.album.detail.Artist
 import com.example.vuey.data.local.album.detail.ExternalUrls
-import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.ui.adapter.TrackListAdapter
 import com.example.vuey.util.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,6 +62,8 @@ class DetailAlbumFragment : Fragment() {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val outputDateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
 
+        val totalTracks = getString(R.string.total_tracks)
+
         with(binding) {
             recyclerViewTracks.apply {
                 adapter = trackListAdapter
@@ -80,8 +81,8 @@ class DetailAlbumFragment : Fragment() {
             val artistNameDatabase = artistsDatabase.joinToString(separator = ", ") { it.name }
             txtArtist.text = artistNameDatabase
             txtInfo.text =
-                "${databaseArguments.albumType.toUpperCase(Locale.getDefault())} • " +
-                        "${databaseArguments.release_date} • Total tracks: ${databaseArguments.totalTracks}"
+                "${databaseArguments.albumType.replaceFirstChar { it.uppercase() }} • " +
+                        "${databaseArguments.release_date} • $totalTracks ${databaseArguments.totalTracks}"
             btnAlbum.setOnClickListener {
                 val intent =
                     Intent(Intent.ACTION_VIEW, Uri.parse(databaseArguments.externalUrls.spotify))
@@ -97,7 +98,7 @@ class DetailAlbumFragment : Fragment() {
             val trackList = databaseArguments.trackList.map { trackEntity ->
                 AlbumItem(
                     id = arguments.album.id + trackEntity.trackNumber,
-                    name =  trackEntity.albumName,
+                    name = trackEntity.albumName,
                     artists = trackEntity.artists.map { artistEntity ->
                         Artist(
                             id = artistEntity.id,
@@ -113,6 +114,7 @@ class DetailAlbumFragment : Fragment() {
             }
             trackListAdapter.submitTrack(trackList)
         }
+
 
         viewModel.albumDetail.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -168,14 +170,7 @@ class DetailAlbumFragment : Fragment() {
                     )
 
                     // save album in database
-                    binding.imgSave.setOnClickListener {
-                        viewModel.insertAlbum(saveAlbumToDatabase)
-                        Toast.makeText(
-                            requireContext(),
-                            "dodano do bazy danych",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    viewModel.insertAlbum(saveAlbumToDatabase)
 
                     with(binding) {
 
@@ -191,9 +186,8 @@ class DetailAlbumFragment : Fragment() {
                         txtArtist.text = artistNames
 
                         txtInfo.text =
-                            "${albumDetail.album_type.toUpperCase(Locale.getDefault())} • " +
-                                    "$formattedDate • " +
-                                    "Total tracks: ${albumDetail.total_tracks}"
+                            "${albumDetail.album_type.replaceFirstChar { it.uppercase() }} • " +
+                                    "$formattedDate • " + totalTracks + " ${albumDetail.total_tracks}"
 
                         btnAlbum.setOnClickListener {
                             val intent = Intent(
@@ -217,7 +211,11 @@ class DetailAlbumFragment : Fragment() {
                 }
                 is Resource.Failure -> {
                     hideLoading()
-                    Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+                    val errorAlert = MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Error")
+                        .setMessage(response.message)
+                        .setPositiveButton("Ok") {_, _ -> }
+                    errorAlert.show()
                 }
                 is Resource.Loading -> {
                     showLoading()
@@ -230,7 +228,7 @@ class DetailAlbumFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
     }
 
-    private fun AlbumEntity.ExternalUrlsEntity.toExternalUrls() : ExternalUrls {
+    private fun AlbumEntity.ExternalUrlsEntity.toExternalUrls(): ExternalUrls {
         return ExternalUrls(
             spotify = this.spotify
         )

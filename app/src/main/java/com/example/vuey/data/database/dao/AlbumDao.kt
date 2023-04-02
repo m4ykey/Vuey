@@ -3,7 +3,6 @@ package com.example.vuey.data.database.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.vuey.data.database.model.AlbumEntity
-import retrofit2.http.DELETE
 
 @Dao
 interface AlbumDao {

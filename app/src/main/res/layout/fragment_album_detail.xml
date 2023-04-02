@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    tools:background="@color/black"
     tools:context=".ui.fragment.album.DetailAlbumFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,35 +81,16 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayoutInfo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_marginStart="10dp"
+            android:id="@+id/txtInfo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txtInfo"
-                android:textSize="15sp"
-                android:fontFamily="@font/cabin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/imgSave"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_favorite_border"
+            android:fontFamily="@font/cabin"
+            android:textSize="15sp"
+            tools:text="Random text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayoutInfo"
-            app:tint="@color/white" />
+            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
 
         <LinearLayout
             android:id="@+id/linearLayoutButtons"
@@ -117,19 +99,19 @@
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgSave">
+            app:layout_constraintTop_toBottomOf="@id/txtInfo">
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/btnArtist"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="15dp"
                 android:layout_weight="1"
                 android:backgroundTint="#7EE081"
                 android:elevation="0dp"
                 android:fontFamily="@font/cabin_semibold"
-                android:text="Artist Site"
+                android:text="@string/artist"
                 android:textColor="@color/white"
                 app:elevation="0dp"
                 app:icon="@drawable/ic_artist"
@@ -137,15 +119,15 @@
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/btnAlbum"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
+                android:layout_marginStart="15dp"
                 android:backgroundTint="#7EE081"
                 android:elevation="0dp"
                 android:fontFamily="@font/cabin_semibold"
-                android:text="Album Site"
+                android:text="@string/album"
                 android:textColor="@color/white"
                 app:elevation="0dp"
                 app:icon="@drawable/ic_album"

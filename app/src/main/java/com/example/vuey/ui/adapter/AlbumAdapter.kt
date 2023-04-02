@@ -11,9 +11,13 @@ import com.example.vuey.data.database.model.AlbumEntity
 import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.ui.fragment.album.AlbumFragmentDirections
+import com.example.vuey.ui.fragment.album.AlbumViewModel
 import com.example.vuey.util.DiffUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
+class AlbumAdapter(
+    private val viewModel: AlbumViewModel
+) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
     private var albumResult = listOf<AlbumEntity>()
 
@@ -24,8 +28,9 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
         result.dispatchUpdatesTo(this)
     }
 
-    class AlbumViewHolder(private val binding : LayoutAlbumBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(albumResult : AlbumEntity) {
+    class AlbumViewHolder(private val binding: LayoutAlbumBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(albumResult: AlbumEntity, viewModel: AlbumViewModel) {
             with(binding) {
 
                 val image = albumResult.images.find { it.height == 640 && it.width == 640 }
@@ -36,7 +41,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                     error(R.drawable.album_error)
                 }
                 txtAlbum.text = albumResult.albumName
-                val artists : List<AlbumEntity.ArtistEntity> = albumResult.artists
+                val artists: List<AlbumEntity.ArtistEntity> = albumResult.artists
                 val artistNames = artists.joinToString(separator = ", ") { it.name }
                 txtArtist.text = artistNames
 
@@ -66,30 +71,22 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                         album_type = albumResult.albumType,
                         total_tracks = albumResult.totalTracks
                     )
-                    val trackList = albumResult.trackList.map { tracks ->
-                        AlbumEntity.TrackListEntity(
-                            durationMs = tracks.durationMs,
-                            trackNumber = tracks.trackNumber,
-                            albumName = tracks.albumName,
-                            artists = tracks.artists
-                        )
-                    }
-                    val albumEntity = AlbumEntity(
-                        albumName = albumResult.albumName,
-                        albumType = albumResult.albumType,
-                        release_date = albumResult.release_date,
-                        artists = artists,
-                        id = albumResult.id,
-                        totalTracks = albumResult.totalTracks,
-                        images = albumResult.images,
-                        trackList = trackList,
-                        externalUrls = albumResult.externalUrls,
-                    )
                     val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(
-                        albumEntity = albumEntity,
+                        albumEntity = albumResult,
                         album = album
                     )
                     it.findNavController().navigate(action)
+                }
+                layoutAlbum.setOnLongClickListener {
+                    MaterialAlertDialogBuilder(root.context)
+                        .setTitle(R.string.delete_album)
+                        .setMessage(root.context.resources.getString(R.string.delete_album_message) + " " + albumResult.albumName + "?")
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            viewModel.deleteAlbum(albumResult)
+                        }
+                        .setNegativeButton(R.string.no) { _, _ -> }
+                        .show()
+                    true
                 }
             }
         }
@@ -107,6 +104,6 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        holder.bind(albumResult[position])
+        holder.bind(albumResult[position], viewModel)
     }
 }

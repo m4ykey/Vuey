@@ -13,7 +13,12 @@ import javax.inject.Inject
 class AlbumRepository @Inject constructor(
     private val albumApi: AlbumApi,
     private val authInterceptor: SpotifyAuthInterceptor,
+    private val albumDao: AlbumDao
 ) {
+
+    suspend fun insertAlbum(albumEntity: AlbumEntity) = albumDao.insertAlbum(albumEntity)
+    suspend fun deleteAlbum(albumEntity: AlbumEntity) = albumDao.deleteAlbum(albumEntity)
+    fun getAllAlbums() : LiveData<List<AlbumEntity>> = albumDao.getAllAlbums()
 
     suspend fun getAlbum(albumId : String) : Resource<AlbumDetailResponse> {
         return try {

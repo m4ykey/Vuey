@@ -1,7 +1,5 @@
 package com.example.vuey.ui.adapter
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -33,11 +31,6 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
                 val seconds = trackResult.duration_ms / 1000
                 val formattedDuration = String.format("%d:%02d", seconds / 60, seconds % 60)
                 txtDuration.text = formattedDuration
-
-                linearLayoutTracks.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(trackResult.external_urls.spotify))
-                    root.context.startActivity(intent)
-                }
             }
         }
     }
