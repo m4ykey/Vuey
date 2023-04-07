@@ -2,8 +2,8 @@ package com.example.vuey.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.vuey.data.remote.api.SpotifyAuthInterceptor
-import com.example.vuey.data.remote.token.AuthApi
+import com.example.vuey.data.remote.api.album.SpotifyAuthInterceptor
+import com.example.vuey.data.remote.response.album.token.AuthApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

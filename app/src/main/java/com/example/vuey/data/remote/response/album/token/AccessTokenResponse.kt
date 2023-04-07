@@ -1,4 +1,4 @@
-package com.example.vuey.data.remote.token
+package com.example.vuey.data.remote.response.album.token
 
 import com.google.gson.annotations.SerializedName
 

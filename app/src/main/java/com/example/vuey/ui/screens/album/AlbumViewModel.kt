@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.data.database.model.AlbumEntity
 import com.example.vuey.data.local.album.search.Album
-import com.example.vuey.data.remote.response.AlbumDetailResponse
+import com.example.vuey.data.remote.response.album.AlbumDetailResponse
 import com.example.vuey.data.repository.AlbumRepository
 import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,9 +1,9 @@
-package com.example.vuey.data.remote.api
+package com.example.vuey.data.remote.api.album
 
 import android.content.SharedPreferences
 import android.util.Base64
 import androidx.core.content.edit
-import com.example.vuey.data.remote.token.AuthApi
+import com.example.vuey.data.remote.response.album.token.AuthApi
 import com.example.vuey.util.Constants.SPOTIFY_CLIENT_ID
 import com.example.vuey.util.Constants.SPOTIFY_CLIENT_SECRET
 import kotlinx.coroutines.runBlocking

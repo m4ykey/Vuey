@@ -63,13 +63,14 @@
         <com.google.android.material.chip.Chip
             app:chipIcon="@drawable/ic_album"
             android:id="@+id/chipAlbum"
-            app:chipIconTint="@color/album_btn_color"
+            app:chipIconTint="@color/album_green"
             android:text="@string/album"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.chip.Chip
             app:chipIcon="@drawable/ic_movie"
+            app:chipIconTint="@color/movie_blue"
             android:id="@+id/chipMovie"
             android:text="@string/movie"
             android:layout_marginStart="10dp"

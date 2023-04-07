@@ -10,5 +10,6 @@
     <color name="search_edit_text_text_color">#CCCCCC</color>
     <color name="search_edit_text_icon">#CCCCCC</color>
 
-    <color name="album_btn_color">#32E875</color>
+    <color name="album_green">#32E875</color>
+    <color name="movie_blue">#357DED</color>
 </resources>

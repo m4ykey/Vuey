@@ -11,6 +11,7 @@
             android:visibility="gone"
             tools:visibility="visible"
             android:id="@+id/progressBar"
+            android:indeterminateTint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +106,7 @@
                     android:fontFamily="@font/cabin_semibold"
                     app:icon="@drawable/ic_artist"
                     android:layout_marginEnd="20dp"
-                    android:backgroundTint="@color/album_btn_color"
+                    android:backgroundTint="@color/album_green"
                     android:text="@string/artist"/>
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -117,7 +118,7 @@
                     android:fontFamily="@font/cabin_semibold"
                     android:id="@+id/btnAlbum"
                     android:textColor="@color/white"
-                    android:backgroundTint="@color/album_btn_color"
+                    android:backgroundTint="@color/album_green"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

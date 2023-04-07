@@ -10,4 +10,8 @@ object Constants {
     const val SPOTIFY_CLIENT_ID = "SPOTIFY_CLIENT_ID"
     const val SPOTIFY_CLIENT_SECRET = "SPOTIFY_CLIENT_SECRET"
 
+    const val TMDB_BASE_URL = "https://api.themoviedb.org/3/"
+    const val TMDB_API_KEY = "TMDB_API_KEY"
+    const val TMDB_IMAGE = "https://image.tmdb.org/t/p/w500/"
+
 }

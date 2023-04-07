@@ -1,7 +1,7 @@
-package com.example.vuey.data.remote.api
+package com.example.vuey.data.remote.api.album
 
-import com.example.vuey.data.remote.response.AlbumDetailResponse
-import com.example.vuey.data.remote.response.SearchAlbumResponse
+import com.example.vuey.data.remote.response.album.AlbumDetailResponse
+import com.example.vuey.data.remote.response.album.SearchAlbumResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
