@@ -1,4 +1,4 @@
-package com.example.vuey.ui.fragment.album
+package com.example.vuey.ui.screens.album
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import com.example.vuey.data.database.model.AlbumEntity
 import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.data.remote.response.AlbumDetailResponse
 import com.example.vuey.data.repository.AlbumRepository
-import com.example.vuey.util.Resource
+import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

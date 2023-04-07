@@ -7,7 +7,7 @@ import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.data.remote.api.AlbumApi
 import com.example.vuey.data.remote.api.SpotifyAuthInterceptor
 import com.example.vuey.data.remote.response.AlbumDetailResponse
-import com.example.vuey.util.Resource
+import com.example.vuey.util.network.Resource
 import javax.inject.Inject
 
 class AlbumRepository @Inject constructor(

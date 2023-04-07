@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/albumFragment"
-        android:name="com.example.vuey.ui.fragment.album.AlbumFragment"
+        android:name="com.example.vuey.ui.screens.album.AlbumFragment"
         android:label="fragment_album"
         tools:layout="@layout/fragment_album" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumDetailFragment"
-        android:name="com.example.vuey.ui.fragment.album.DetailAlbumFragment"
+        android:name="com.example.vuey.ui.screens.album.DetailAlbumFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_album_detail">
         <argument
@@ -30,21 +30,52 @@
             app:argType="com.example.vuey.data.database.model.AlbumEntity" />
     </fragment>
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.example.vuey.ui.fragment.search.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        android:id="@+id/searchAlbumFragment"
+        android:name="com.example.vuey.ui.screens.search.SearchAlbumFragment"
+        android:label="fragment_search_album"
+        tools:layout="@layout/fragment_search_album" >
+        <argument
+            android:name="searchQuery"
+            app:argType="string" />
         <action
-            android:id="@+id/action_searchFragment_to_albumDetailFragment"
+            android:id="@+id/action_searchAlbumFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchAlbumFragment"
-        android:name="com.example.vuey.ui.fragment.search.SearchAlbumFragment"
-        android:label="fragment_search_album"
-        tools:layout="@layout/fragment_search_album" >
+        android:id="@+id/movieFragment"
+        android:name="com.example.vuey.ui.screens.movie.MovieFragment"
+        android:label="fragment_movie"
+        tools:layout="@layout/fragment_movie" >
         <action
-            android:id="@+id/action_searchAlbumFragment_to_albumFragment"
-            app:destination="@id/albumFragment" />
+            android:id="@+id/action_movieFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/searchMovieFragment"
+        android:name="com.example.vuey.ui.screens.search.SearchMovieFragment"
+        android:label="fragment_search_movie"
+        tools:layout="@layout/fragment_search_movie" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.vuey.ui.screens.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_searchAlbumFragment"
+            app:destination="@id/searchAlbumFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchMovieFragment"
+            app:destination="@id/searchMovieFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_tvShowSearchFragment"
+            app:destination="@id/tvShowSearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tvShowSearchFragment"
+        android:name="com.example.vuey.ui.screens.search.TvShowSearchFragment"
+        android:label="fragment_tv_show_search"
+        tools:layout="@layout/fragment_tv_show_search" />
 </navigation>

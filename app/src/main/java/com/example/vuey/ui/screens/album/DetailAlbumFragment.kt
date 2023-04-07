@@ -1,4 +1,4 @@
-package com.example.vuey.ui.fragment.album
+package com.example.vuey.ui.screens.album
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -20,7 +20,7 @@ import com.example.vuey.data.local.album.detail.Artist
 import com.example.vuey.data.local.album.detail.ExternalUrls
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.ui.adapter.TrackListAdapter
-import com.example.vuey.util.Resource
+import com.example.vuey.util.network.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,10 +53,6 @@ class DetailAlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val bottomNavigationView: BottomNavigationView =
-            requireActivity().findViewById(R.id.bottomNavigation)
-        bottomNavigationView.visibility = View.GONE
-
         viewModel.getAlbum(arguments.album.id)
 
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -76,7 +72,7 @@ class DetailAlbumFragment : Fragment() {
             val imageDatabase =
                 databaseArguments.images.find { it.width == 640 && it.height == 640 }
             imgAlbum.load(imageDatabase?.url)
-            txtAlbum.text = databaseArguments.albumName
+            txtAlbumName.text = databaseArguments.albumName
             val artistsDatabase: List<AlbumEntity.ArtistEntity> = databaseArguments.artists
             val artistNameDatabase = artistsDatabase.joinToString(separator = ", ") { it.name }
             txtArtist.text = artistNameDatabase
@@ -180,7 +176,7 @@ class DetailAlbumFragment : Fragment() {
                             crossfade(true)
                             crossfade(1000)
                         }
-                        txtAlbum.text = albumDetail.albumName
+                        txtAlbumName.text = albumDetail.albumName
                         val artists: List<Artist> = albumDetail.artists
                         val artistNames = artists.joinToString(separator = ", ") { it.name }
                         txtArtist.text = artistNames
@@ -207,14 +203,13 @@ class DetailAlbumFragment : Fragment() {
                             trackListAdapter.submitTrack(trackList.tracks.items)
                         }
                     }
-
                 }
                 is Resource.Failure -> {
                     hideLoading()
                     val errorAlert = MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Error")
                         .setMessage(response.message)
-                        .setPositiveButton("Ok") {_, _ -> }
+                        .setPositiveButton("Ok") { _, _ -> }
                     errorAlert.show()
                 }
                 is Resource.Loading -> {

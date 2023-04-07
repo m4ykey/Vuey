@@ -1,21 +1,20 @@
-package com.example.vuey.ui.fragment.search
+package com.example.vuey.ui.screens.search
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchBinding
-import com.example.vuey.ui.adapter.SearchViewPagerAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    private var _binding: FragmentSearchBinding? = null
+    private var _binding : FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -29,23 +28,19 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val bottomNavigationView : BottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
-        bottomNavigationView.visibility = View.GONE
-
         with(binding) {
-
-            val categories = arrayListOf<Fragment>(
-                SearchAlbumFragment()
-            )
-
-            val viewPagerAdapter =
-                SearchViewPagerAdapter(categories, childFragmentManager, lifecycle)
-            viewPager.adapter = viewPagerAdapter
-            TabLayoutMediator(tabLayout, viewPager) { tab, position, ->
-                when (position) {
-                    0 -> tab.text = "Album"
-                }
-            }.attach()
+            toolBar.setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
+            chipAlbum.setOnClickListener {
+                findNavController().navigate(R.id.action_searchFragment_to_searchAlbumFragment)
+            }
+            chipMovie.setOnClickListener {
+                findNavController().navigate(R.id.action_searchFragment_to_searchMovieFragment)
+            }
+            chipTvShow.setOnClickListener {
+                findNavController().navigate(R.id.action_searchFragment_to_tvShowSearchFragment)
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vuey.data.local.album.detail.AlbumItem
 import com.example.vuey.databinding.LayoutAlbumTrackListBinding
-import com.example.vuey.util.DiffUtils
+import com.example.vuey.util.views.DiffUtils
 
 class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
 

@@ -1,5 +1,6 @@
 package com.example.vuey.data.local.album.search
 
+import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
@@ -15,12 +16,14 @@ data class Album(
     val albumName: String,
     val total_tracks: Int
 ) : Parcelable {
+
     @Parcelize
     data class Artist(
         val external_urls: ExternalUrls,
         val id: String,
         val name: String,
     ) : Parcelable
+
 
     @Parcelize
     data class ExternalUrls(

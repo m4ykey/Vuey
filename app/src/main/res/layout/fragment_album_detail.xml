@@ -1,151 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:background="@color/black"
-    tools:context=".ui.fragment.album.DetailAlbumFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    tools:context=".ui.screens.album.DetailAlbumFragment">
 
         <ProgressBar
+            android:visibility="gone"
+            tools:visibility="visible"
             android:id="@+id/progressBar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/imgBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@drawable/ic_arrow_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgBack">
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imgAlbum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/imgBack"
+                app:tint="@color/white"
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="@string/back" />
+
+            <ImageView
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:scaleType="centerCrop" />
+                android:layout_gravity="center"
+                tools:src="@drawable/album_error"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="5dp"
+                android:id="@+id/imgAlbum"
+                android:contentDescription="@string/album" />
 
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardView">
-
-            <TextView
-                android:id="@+id/txtAlbum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/cabin_semibold"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                tools:text="$outh $ide $uicide" />
-
-            <TextView
-                android:id="@+id/txtArtist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/cabin"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                tools:text="$uicideBoy$" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_marginStart="10dp"
-            android:id="@+id/txtInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/cabin"
-            android:textSize="15sp"
-            tools:text="Random text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
-
-        <LinearLayout
-            android:id="@+id/linearLayoutButtons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtInfo">
-
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/btnArtist"
+            <LinearLayout
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Przykładowa nazwa albumu"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:textColor="@color/white"
+                    android:id="@+id/txtAlbumName"/>
+
+                <TextView
+                    android:fontFamily="@font/cabin"
+                    android:id="@+id/txtArtist"
+                    android:textColor="@color/search_edit_text_text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="Przykładowy artsyta"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtInfo"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="15dp"
-                android:layout_weight="1"
-                android:backgroundTint="#7EE081"
-                android:elevation="0dp"
-                android:fontFamily="@font/cabin_semibold"
-                android:text="@string/artist"
-                android:textColor="@color/white"
-                app:elevation="0dp"
-                app:icon="@drawable/ic_artist"
-                app:iconTint="@color/white" />
+                tools:text="Album • 2022 • Total tracks: 15"
+                android:layout_width="wrap_content"
+                android:textSize="15sp"
+                android:fontFamily="@font/cabin"
+                android:textColor="@color/search_edit_text_text_color"
+                android:layout_height="wrap_content"/>
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/btnAlbum"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:layout_marginStart="15dp"
-                android:backgroundTint="#7EE081"
-                android:elevation="0dp"
-                android:fontFamily="@font/cabin_semibold"
-                android:text="@string/album"
-                android:textColor="@color/white"
-                app:elevation="0dp"
-                app:icon="@drawable/ic_album"
-                app:iconTint="@color/white" />
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnArtist"
+                    app:iconTint="@color/white"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/cabin_semibold"
+                    app:icon="@drawable/ic_artist"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="@color/album_btn_color"
+                    android:text="@string/artist"/>
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    app:icon="@drawable/ic_album"
+                    app:iconTint="@color/white"
+                    android:layout_weight="1"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/album"
+                    android:fontFamily="@font/cabin_semibold"
+                    android:id="@+id/btnAlbum"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/album_btn_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:overScrollMode="never"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                tools:listitem="@layout/layout_album_track_list"
+                android:id="@+id/recyclerViewTracks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewTracks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayoutButtons" />
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

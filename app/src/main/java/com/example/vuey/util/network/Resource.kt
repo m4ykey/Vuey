@@ -1,4 +1,4 @@
-package com.example.vuey.util
+package com.example.vuey.util.network
 
 sealed class Resource<T>(
     val data : T? = null,

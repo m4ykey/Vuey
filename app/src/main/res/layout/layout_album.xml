@@ -38,7 +38,7 @@
         tools:text="Camila Cabello"
         android:fontFamily="@font/cabin"
         android:textSize="13sp"
-        android:textColor="@color/text_color"
+        android:textColor="@color/white"
         android:id="@+id/txtArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
