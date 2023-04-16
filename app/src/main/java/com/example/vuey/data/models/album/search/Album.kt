@@ -1,6 +1,5 @@
-package com.example.vuey.data.local.album.search
+package com.example.vuey.data.models.album.search
 
-import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize

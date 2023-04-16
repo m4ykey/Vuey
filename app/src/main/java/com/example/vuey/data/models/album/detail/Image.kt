@@ -1,4 +1,4 @@
-package com.example.vuey.data.local.album.detail
+package com.example.vuey.data.models.album.detail
 
 data class Image(
     val height: Int,

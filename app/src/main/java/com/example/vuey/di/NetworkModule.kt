@@ -1,9 +1,9 @@
 package com.example.vuey.di
 
-import com.example.vuey.data.remote.api.album.AlbumApi
-import com.example.vuey.data.remote.api.album.SpotifyAuthInterceptor
-import com.example.vuey.data.remote.api.movie.MovieApi
-import com.example.vuey.data.remote.api.movie.MovieInterceptor
+import com.example.vuey.data.remote.api.AlbumApi
+import com.example.vuey.data.remote.api.interceptors.SpotifyAuthInterceptor
+import com.example.vuey.data.remote.api.MovieApi
+import com.example.vuey.data.remote.api.interceptors.TMDBInterceptor
 import com.example.vuey.util.Constants.SPOTIFY_BASE_URL
 import com.example.vuey.util.Constants.TMDB_BASE_URL
 import com.google.gson.GsonBuilder
@@ -26,12 +26,12 @@ object NetworkModule {
     fun provideHttpClient(
         authInterceptor: SpotifyAuthInterceptor,
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        movieInterceptor: MovieInterceptor
+        TMDBInterceptor: TMDBInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .addInterceptor(httpLoggingInterceptor)
-            .addInterceptor(movieInterceptor)
+            .addInterceptor(TMDBInterceptor)
             .build()
     }
 
@@ -80,7 +80,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMovieInterceptor() : MovieInterceptor {
-        return MovieInterceptor()
+    fun provideMovieInterceptor() : TMDBInterceptor {
+        return TMDBInterceptor()
     }
 }

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vuey.data.local.album.detail.AlbumItem
+import com.example.vuey.data.models.album.detail.AlbumItem
 import com.example.vuey.databinding.LayoutAlbumTrackListBinding
 import com.example.vuey.util.views.DiffUtils
 

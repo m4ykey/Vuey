@@ -7,7 +7,7 @@
     <color name="app_bar_color">#242424</color>
 
     <color name="search_edit_text_background">#0C0C0C</color>
-    <color name="search_edit_text_text_color">#CCCCCC</color>
+    <color name="text_grey">#CCCCCC</color>
     <color name="search_edit_text_icon">#CCCCCC</color>
 
     <color name="album_green">#32E875</color>

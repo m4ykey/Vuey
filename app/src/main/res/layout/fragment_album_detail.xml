@@ -22,6 +22,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +70,7 @@
                 <TextView
                     android:fontFamily="@font/cabin"
                     android:id="@+id/txtArtist"
-                    android:textColor="@color/search_edit_text_text_color"
+                    android:textColor="@color/text_grey"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -84,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="15sp"
                 android:fontFamily="@font/cabin"
-                android:textColor="@color/search_edit_text_text_color"
+                android:textColor="@color/text_grey"
                 android:layout_height="wrap_content"/>
 
             <LinearLayout

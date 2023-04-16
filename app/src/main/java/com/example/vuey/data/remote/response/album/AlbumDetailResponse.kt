@@ -1,6 +1,6 @@
 package com.example.vuey.data.remote.response.album
 
-import com.example.vuey.data.local.album.detail.*
+import com.example.vuey.data.models.album.detail.*
 import com.google.gson.annotations.SerializedName
 
 data class AlbumDetailResponse(

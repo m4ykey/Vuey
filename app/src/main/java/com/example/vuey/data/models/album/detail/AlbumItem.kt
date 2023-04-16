@@ -1,4 +1,4 @@
-package com.example.vuey.data.local.album.detail
+package com.example.vuey.data.models.album.detail
 
 data class AlbumItem(
     val artists: List<Artist>,

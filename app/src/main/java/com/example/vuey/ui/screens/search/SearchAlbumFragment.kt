@@ -1,6 +1,5 @@
 package com.example.vuey.ui.screens.search
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
-import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.ui.adapter.AlbumAdapter
 import com.example.vuey.ui.screens.album.AlbumViewModel
 import com.example.vuey.util.network.Resource
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 

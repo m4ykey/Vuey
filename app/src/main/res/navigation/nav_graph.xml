@@ -11,11 +11,11 @@
         android:label="fragment_album"
         tools:layout="@layout/fragment_album" >
         <action
-            android:id="@+id/action_albumFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
             android:id="@+id/action_albumFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
+        <action
+            android:id="@+id/action_albumFragment_to_searchAlbumFragment"
+            app:destination="@id/searchAlbumFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumDetailFragment"
@@ -47,11 +47,11 @@
         android:label="fragment_movie"
         tools:layout="@layout/fragment_movie" >
         <action
-            android:id="@+id/action_movieFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
             android:id="@+id/action_movieFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+        <action
+            android:id="@+id/action_movieFragment_to_searchMovieFragment"
+            app:destination="@id/searchMovieFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchMovieFragment"
@@ -61,24 +61,6 @@
         <action
             android:id="@+id/action_searchMovieFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.example.vuey.ui.screens.search.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_searchFragment_to_searchAlbumFragment"
-            app:destination="@id/searchAlbumFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_albumDetailFragment"
-            app:destination="@id/albumDetailFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_searchMovieFragment"
-            app:destination="@id/searchMovieFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_tvShowSearchFragment"
-            app:destination="@id/tvShowSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/tvShowSearchFragment"
@@ -93,5 +75,8 @@
         <argument
             android:name="searchMovie"
             app:argType="com.example.vuey.data.local.movie.search.SearchMovie" />
+        <argument
+            android:name="movieEntity"
+            app:argType="com.example.vuey.data.database.model.MovieEntity" />
     </fragment>
 </navigation>

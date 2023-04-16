@@ -1,4 +1,4 @@
-package com.example.vuey.data.remote.api.album
+package com.example.vuey.data.remote.api
 
 import com.example.vuey.data.remote.response.album.AlbumDetailResponse
 import com.example.vuey.data.remote.response.album.SearchAlbumResponse

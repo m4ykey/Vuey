@@ -15,6 +15,7 @@ import com.example.vuey.databinding.FragmentSearchMovieBinding
 import com.example.vuey.ui.adapter.MovieAdapter
 import com.example.vuey.ui.screens.movie.MovieViewModel
 import com.example.vuey.util.network.Resource
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,11 +36,14 @@ class SearchMovieFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        movieAdapter = MovieAdapter()
+        movieAdapter = MovieAdapter(isFromApi = true, viewModel = viewModel)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val bottomNavigationView : BottomNavigationView = requireActivity().findViewById(R.id.bottomMenu)
+        bottomNavigationView.visibility = View.GONE
 
         with(binding) {
 

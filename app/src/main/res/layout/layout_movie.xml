@@ -36,20 +36,46 @@
         android:layout_height="0dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txtReleaseDate"
-            tools:text="2022"
-            android:textSize="12sp"
-            android:textColor="@color/movie_blue"
-            android:fontFamily="@font/cabin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtReleaseDate"
+                tools:text="2022"
+                android:textSize="12sp"
+                android:textColor="@color/movie_blue"
+                android:layout_weight="1"
+                android:fontFamily="@font/cabin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:layout_width="18dp"
+                app:tint="@color/movie_blue"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_round_star"/>
+
+            <TextView
+                android:id="@+id/txtVoteAverage"
+                tools:text="8.5"
+                android:textSize="12sp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/movie_blue"
+                android:fontFamily="@font/cabin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Nazwa filmu"
             android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textColor="@color/white"
             android:id="@+id/txtMovieTitle"
             android:fontFamily="@font/cabin_semibold"/>
@@ -60,7 +86,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/cabin"
             android:textSize="12sp"
-            android:textColor="@color/search_edit_text_text_color"
+            android:textColor="@color/text_grey"
             tools:text="Set more than a decade after the events of the first film, learn the story of the Sully family (Jake, Neytiri, and their kids), the trouble that follows them, the lengths they go to keep each other safe, the battles they fight to stay alive, and the tragedies they endure."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

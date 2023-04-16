@@ -1,4 +1,4 @@
-package com.example.vuey.data.remote.api.album
+package com.example.vuey.data.remote.api.interceptors
 
 import android.content.SharedPreferences
 import android.util.Base64

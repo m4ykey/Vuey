@@ -9,8 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
-import com.example.vuey.data.database.model.AlbumEntity
-import com.example.vuey.data.local.album.search.Album
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.ui.adapter.AlbumAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +48,7 @@ class AlbumFragment : Fragment() {
             }
 
             fabSearch.setOnClickListener {
-                findNavController().navigate(R.id.action_albumFragment_to_searchFragment)
+                findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
             }
         }
     }

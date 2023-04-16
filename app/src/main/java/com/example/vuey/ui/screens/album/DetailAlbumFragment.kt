@@ -15,13 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.data.database.model.AlbumEntity
-import com.example.vuey.data.local.album.detail.AlbumItem
-import com.example.vuey.data.local.album.detail.Artist
-import com.example.vuey.data.local.album.detail.ExternalUrls
+import com.example.vuey.data.models.album.detail.AlbumItem
+import com.example.vuey.data.models.album.detail.Artist
+import com.example.vuey.data.models.album.detail.ExternalUrls
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.ui.adapter.TrackListAdapter
 import com.example.vuey.util.network.Resource
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -69,16 +68,20 @@ class DetailAlbumFragment : Fragment() {
 
             // get data from database
             val databaseArguments = arguments.albumEntity
+
             val imageDatabase =
                 databaseArguments.images.find { it.width == 640 && it.height == 640 }
             imgAlbum.load(imageDatabase?.url)
+
             txtAlbumName.text = databaseArguments.albumName
             val artistsDatabase: List<AlbumEntity.ArtistEntity> = databaseArguments.artists
+
             val artistNameDatabase = artistsDatabase.joinToString(separator = ", ") { it.name }
             txtArtist.text = artistNameDatabase
             txtInfo.text =
                 "${databaseArguments.albumType.replaceFirstChar { it.uppercase() }} • " +
                         "${databaseArguments.release_date} • $totalTracks ${databaseArguments.totalTracks}"
+
             btnAlbum.setOnClickListener {
                 val intent =
                     Intent(Intent.ACTION_VIEW, Uri.parse(databaseArguments.externalUrls.spotify))

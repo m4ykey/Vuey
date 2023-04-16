@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.data.database.model.AlbumEntity
-import com.example.vuey.data.local.album.search.Album
+import com.example.vuey.data.models.album.search.Album
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.ui.screens.album.AlbumFragmentDirections
 import com.example.vuey.ui.screens.album.AlbumViewModel
@@ -136,7 +136,7 @@ class AlbumAdapter(
                 layoutAlbum.setOnLongClickListener {
                     MaterialAlertDialogBuilder(root.context)
                         .setTitle(R.string.delete_album)
-                        .setMessage(root.context.getString(R.string.delete_album_message) + " " + albumResultEntity.albumName + "?")
+                        .setMessage(root.context.getString(R.string.delete_album_message) + " ${albumResultEntity.albumName}?")
                         .setPositiveButton(R.string.yes) { _, _ ->
                             viewModel.deleteAlbum(albumResultEntity)
                         }
