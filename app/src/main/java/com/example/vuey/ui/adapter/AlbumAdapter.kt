@@ -12,7 +12,7 @@ import com.example.vuey.data.models.album.search.Album
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.ui.screens.album.AlbumFragmentDirections
 import com.example.vuey.ui.screens.album.AlbumViewModel
-import com.example.vuey.ui.screens.search.SearchAlbumFragmentDirections
+import com.example.vuey.ui.screens.album.SearchAlbumFragmentDirections
 import com.example.vuey.util.views.DiffUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -46,29 +46,30 @@ class AlbumAdapter(
             val albumEntity = AlbumEntity(
                 albumName = albumResult.albumName,
                 albumType = albumResult.album_type,
-                artists = albumResult.artists.map {
+                artists = albumResult.artists.map { artist ->
                     AlbumEntity.ArtistEntity(
                         externalUrls = AlbumEntity.ExternalUrlsEntity(
-                            spotify = it.external_urls.spotify
+                            spotify = artist.external_urls.spotify
                         ),
-                        id = it.id,
-                        name = it.name
+                        id = artist.id,
+                        name = artist.name
                     )
                 },
                 externalUrls = AlbumEntity.ExternalUrlsEntity(
                     spotify = albumResult.external_urls.spotify
                 ),
                 id = albumResult.id,
-                images = albumResult.images.map {
+                images = albumResult.images.map { image ->
                     AlbumEntity.ImageEntity(
-                        height = it.height,
-                        url = it.url,
-                        width = it.width
+                        height = image.height,
+                        url = image.url,
+                        width = image.width
                     )
                 },
                 totalTracks = albumResult.total_tracks,
                 trackList = emptyList(),
-                release_date = ""
+                release_date = "",
+                albumLength = ""
             )
 
             val image = albumResult.images.find { it.width == 640 && it.height == 640 }
@@ -95,7 +96,7 @@ class AlbumAdapter(
         }
         fun bind(albumResultEntity : AlbumEntity) {
 
-            val image = albumResultEntity.images.find { it.width == 640 && it.height == 640 }
+            val images = albumResultEntity.images.find { it.width == 640 && it.height == 640 }
             val artists : List<AlbumEntity.ArtistEntity> = albumResultEntity.artists
             val artistNames = artists.joinToString(separator = ", ") { it.name }
 
@@ -104,29 +105,29 @@ class AlbumAdapter(
                 album_type = albumResultEntity.albumType,
                 id = albumResultEntity.id,
                 total_tracks = albumResultEntity.totalTracks,
-                artists = albumResultEntity.artists.map {
+                artists = albumResultEntity.artists.map { artist ->
                     Album.Artist(
-                        id = it.id,
-                        name = it.name,
+                        id = artist.id,
+                        name = artist.name,
                         external_urls = Album.ExternalUrls(
-                            spotify = it.externalUrls.spotify
+                            spotify = artist.externalUrls.spotify
                         )
                     )
                 },
                 external_urls = Album.ExternalUrls(
                     spotify = albumResultEntity.externalUrls.spotify
                 ),
-                images = albumResultEntity.images.map {
+                images = albumResultEntity.images.map { image ->
                     Album.Image(
-                        height = it.height,
-                        width = it.width,
-                        url = it.url
+                        height = image.height,
+                        width = image.width,
+                        url = image.url
                     )
                 }
             )
 
             with(binding) {
-                imgAlbum.load(image?.url) {
+                imgAlbum.load(images?.url) {
                     crossfade(true)
                     crossfade(500)
                     error(R.drawable.album_error)

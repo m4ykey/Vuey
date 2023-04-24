@@ -1,4 +1,4 @@
-package com.example.vuey.ui.screens.search
+package com.example.vuey.ui.screens.album
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
+import com.example.vuey.data.database.model.AlbumEntity
+import com.example.vuey.data.models.album.search.Album
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.ui.adapter.AlbumAdapter
-import com.example.vuey.ui.screens.album.AlbumViewModel
 import com.example.vuey.util.network.Resource
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,11 +38,15 @@ class SearchAlbumFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        albumAdapter = AlbumAdapter(viewModel, isFromApi = true)
+        albumAdapter = AlbumAdapter(viewModel, true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val bottomNavigationView: BottomNavigationView =
+            requireActivity().findViewById(R.id.bottomMenu)
+        bottomNavigationView.visibility = View.GONE
 
         with(binding) {
             toolBar.setNavigationOnClickListener { findNavController().navigateUp() }

@@ -12,11 +12,13 @@
     <string name="search">Search</string>
     <string name="empty_search_query">Enter at least 1 character</string>
     <string name="back">Back</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="top_cast">Top Cast</string>
     <string name="spoken_languages">Spoken Languages</string>
     <string name="cast_is_empty">Cast list is empty</string>
     <string name="languages_empty">Spoken Language list is empty</string>
     <string name="delete_movie">Delete movie?</string>
     <string name="delete_movie_message">Are you sure you want delete </string>
+    <string name="seasons">Seasons</string>
+    <string name="season">Season</string>
+    <string name="episode">Episode</string>
 </resources>

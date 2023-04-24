@@ -13,7 +13,7 @@ import com.example.vuey.data.models.movie.search.SearchMovie
 import com.example.vuey.databinding.LayoutMovieBinding
 import com.example.vuey.ui.screens.movie.MovieFragmentDirections
 import com.example.vuey.ui.screens.movie.MovieViewModel
-import com.example.vuey.ui.screens.search.SearchMovieFragmentDirections
+import com.example.vuey.ui.screens.movie.SearchMovieFragmentDirections
 import com.example.vuey.util.Constants.TMDB_IMAGE
 import com.example.vuey.util.views.DiffUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MovieAdapter(
-    private val viewModel: MovieViewModel,
-    private val isFromApi: Boolean
+    private val isFromApi: Boolean,
+    private val viewModel: MovieViewModel
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     private var movieResult = listOf<SearchMovie>()
@@ -45,7 +45,7 @@ class MovieAdapter(
     class MovieViewHolder(private val binding: LayoutMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movieEntityResult: MovieEntity) {
+        fun bind(movieEntityResult: MovieEntity, viewModel: MovieViewModel) {
 
             with(binding) {
 
@@ -60,26 +60,6 @@ class MovieAdapter(
                     vote_count = movieEntityResult.vote_count
                 )
 
-                layoutMovie.setOnClickListener {
-                    val action =
-                        MovieFragmentDirections.actionMovieFragmentToMovieDetailFragment(
-                            searchMovie = searchMovie,
-                            movieEntity = movieEntityResult
-                        )
-                    it.findNavController().navigate(action)
-                }
-                layoutMovie.setOnLongClickListener {
-                    MaterialAlertDialogBuilder(root.context)
-                        .setTitle(R.string.delete_movie)
-                        .setMessage(root.context.getString(R.string.delete_movie_message) + " ${movieEntityResult.title}?")
-                        .setPositiveButton(R.string.yes) { _, _ ->
-
-                        }
-                        .setNegativeButton(R.string.no) { _, _ -> }
-                        .show()
-                    true
-                }
-
                 txtMovieTitle.text = movieEntityResult.title
                 txtDescription.text = movieEntityResult.overview
                 txtReleaseDate.text = movieEntityResult.release_date
@@ -92,6 +72,27 @@ class MovieAdapter(
                     }
                 } else {
                     imgMovie.setImageResource(R.drawable.ic_movie_error)
+                }
+
+                layoutMovie.setOnLongClickListener {
+                    MaterialAlertDialogBuilder(root.context)
+                        .setTitle(R.string.delete_movie)
+                        .setMessage(root.context.getString(R.string.delete_movie_message) + " ${movieEntityResult.title}?")
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            viewModel.deleteMovie(movieEntityResult)
+                        }
+                        .setNegativeButton(R.string.no) { _, _ -> }
+                        .show()
+                    true
+                }
+
+                layoutMovie.setOnClickListener {
+                    val action =
+                        MovieFragmentDirections.actionMovieFragmentToMovieDetailFragment(
+                            searchMovie = searchMovie,
+                            movieEntity = movieEntityResult
+                        )
+                    it.findNavController().navigate(action)
                 }
             }
         }
@@ -165,7 +166,7 @@ class MovieAdapter(
         if (isFromApi) {
             holder.bind(movieResult[position])
         } else {
-            holder.bind(movieEntityResult[position])
+            holder.bind(movieEntityResult[position], viewModel)
         }
     }
 
@@ -176,6 +177,4 @@ class MovieAdapter(
             movieEntityResult.size
         }
     }
-
 }
-

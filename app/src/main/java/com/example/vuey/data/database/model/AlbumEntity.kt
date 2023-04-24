@@ -19,7 +19,8 @@ data class AlbumEntity(
     val id: String,
     val images: List<ImageEntity>,
     val albumName: String,
-    val totalTracks: Int
+    val totalTracks: Int,
+    val albumLength : String
 ) : Parcelable {
 
     @Parcelize
@@ -27,7 +28,8 @@ data class AlbumEntity(
         val durationMs: Int,
         val trackNumber: Int,
         val albumName: String,
-        val artists: List<ArtistEntity>
+        val artists: List<ArtistEntity>,
+        val discNumber : Int
     ) : Parcelable
 
     @Parcelize

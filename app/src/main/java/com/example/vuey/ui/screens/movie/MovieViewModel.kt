@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.data.database.model.MovieEntity
 import com.example.vuey.data.models.movie.search.SearchMovie
-import com.example.vuey.data.remote.response.movie.MovieCreditsResponse
+import com.example.vuey.data.remote.response.movie.MovieTvShowCreditsResponse
 import com.example.vuey.data.remote.response.movie.MovieDetailResponse
 import com.example.vuey.data.repository.MovieRepository
 import com.example.vuey.util.network.Resource
@@ -25,8 +25,8 @@ class MovieViewModel @Inject constructor(
     private val _movieDetail = MutableLiveData<Resource<MovieDetailResponse>>()
     val movieDetail : LiveData<Resource<MovieDetailResponse>> get() = _movieDetail
 
-    private val _movieCredits = MutableLiveData<Resource<MovieCreditsResponse>>()
-    val movieCredits : LiveData<Resource<MovieCreditsResponse>> get() = _movieCredits
+    private val _movieCredits = MutableLiveData<Resource<MovieTvShowCreditsResponse>>()
+    val movieCredits : LiveData<Resource<MovieTvShowCreditsResponse>> get() = _movieCredits
 
     val getAllMovies : LiveData<List<MovieEntity>> = movieRepository.getAllMovies()
 

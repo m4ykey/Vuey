@@ -7,4 +7,7 @@
     <item android:id="@+id/movieFragment"
         android:title="@string/movie"
         android:icon="@drawable/select_movie"/>
+    <item android:id="@+id/tvShowFragment"
+        android:title="@string/tv_show"
+        android:icon="@drawable/ic_tv"/>
 </menu>

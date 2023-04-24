@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.ui.adapter.AlbumAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,18 +38,23 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bottomNavigationView: BottomNavigationView =
+            requireActivity().findViewById(R.id.bottomMenu)
+        bottomNavigationView.visibility = View.VISIBLE
+
         binding.apply {
+
+            fabSearch.setOnClickListener {
+                findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
+            }
 
             viewModel.getAllAlbums.observe(viewLifecycleOwner) { albumList ->
                 albumAdapter.submitAlbumEntity(albumList)
             }
+
             recyclerView.apply {
                 layoutManager = GridLayoutManager(requireContext(), 2)
                 adapter = albumAdapter
-            }
-
-            fabSearch.setOnClickListener {
-                findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
             }
         }
     }

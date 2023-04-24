@@ -5,7 +5,7 @@ import com.example.vuey.data.database.dao.MovieDao
 import com.example.vuey.data.database.model.MovieEntity
 import com.example.vuey.data.models.movie.search.SearchMovie
 import com.example.vuey.data.remote.api.MovieApi
-import com.example.vuey.data.remote.response.movie.MovieCreditsResponse
+import com.example.vuey.data.remote.response.movie.MovieTvShowCreditsResponse
 import com.example.vuey.data.remote.response.movie.MovieDetailResponse
 import com.example.vuey.util.network.Resource
 import javax.inject.Inject
@@ -65,7 +65,7 @@ class MovieRepository @Inject constructor(
         }
     }
 
-    suspend fun movieCredits(movieId : Int) : Resource<MovieCreditsResponse> {
+    suspend fun movieCredits(movieId : Int) : Resource<MovieTvShowCreditsResponse> {
         return try {
             val response = movieApi.movieCredits(movieId)
             if (response.isSuccessful) {

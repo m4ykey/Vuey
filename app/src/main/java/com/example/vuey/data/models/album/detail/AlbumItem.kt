@@ -8,4 +8,5 @@ data class AlbumItem(
     val name: String,
     val track_number: Int,
     val type: String,
+    val disc_number: Int
 )

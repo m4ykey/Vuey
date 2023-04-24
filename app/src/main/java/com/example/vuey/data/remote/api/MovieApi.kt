@@ -1,6 +1,6 @@
 package com.example.vuey.data.remote.api
 
-import com.example.vuey.data.remote.response.movie.MovieCreditsResponse
+import com.example.vuey.data.remote.response.movie.MovieTvShowCreditsResponse
 import com.example.vuey.data.remote.response.movie.MovieDetailResponse
 import com.example.vuey.data.remote.response.movie.MovieSearchResponse
 import retrofit2.Response
@@ -14,8 +14,7 @@ interface MovieApi {
     @GET("search/movie")
     suspend fun searchMovie(
         @Query("query") query : String,
-        @Query("language") language : String = Locale.getDefault().language,
-        @Query("include_adult") adult : Boolean = false
+        @Query("language") language : String = Locale.getDefault().language
     ) : Response<MovieSearchResponse>
 
     @GET("movie/{movie_id}")
@@ -27,6 +26,6 @@ interface MovieApi {
     @GET("movie/{movie_id}/credits")
     suspend fun movieCredits(
         @Path("movie_id") id : Int
-    ) : Response<MovieCreditsResponse>
+    ) : Response<MovieTvShowCreditsResponse>
 
 }

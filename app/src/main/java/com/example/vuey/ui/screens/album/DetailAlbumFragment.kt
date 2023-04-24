@@ -1,9 +1,11 @@
 package com.example.vuey.ui.screens.album
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +23,9 @@ import com.example.vuey.data.models.album.detail.ExternalUrls
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.ui.adapter.TrackListAdapter
 import com.example.vuey.util.network.Resource
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,7 +56,9 @@ class DetailAlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getAlbum(arguments.album.id)
+        val bottomNavigationView: BottomNavigationView =
+            requireActivity().findViewById(R.id.bottomMenu)
+        bottomNavigationView.visibility = View.GONE
 
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val outputDateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
@@ -108,70 +114,152 @@ class DetailAlbumFragment : Fragment() {
                     duration_ms = trackEntity.durationMs,
                     track_number = trackEntity.trackNumber,
                     external_urls = arguments.albumEntity.externalUrls.toExternalUrls(),
-                    type = arguments.albumEntity.albumType
+                    type = arguments.albumEntity.albumType,
+                    disc_number = trackEntity.discNumber
                 )
             }
             trackListAdapter.submitTrack(trackList)
+            txtAlbumTime.text = databaseArguments.albumLength
+
+            val saveAlbumToDatabase = AlbumEntity(
+                albumLength = databaseArguments.albumLength,
+                albumName = databaseArguments.albumName,
+                albumType = databaseArguments.albumType,
+                id = databaseArguments.id,
+                artists = databaseArguments.artists,
+                externalUrls = databaseArguments.externalUrls,
+                images = databaseArguments.images,
+                release_date = databaseArguments.release_date,
+                totalTracks = databaseArguments.totalTracks,
+                trackList = databaseArguments.trackList
+            )
+
+            val sharedPref = context?.getSharedPreferences("album_pref", Context.MODE_PRIVATE)
+            var isAlbumLiked = sharedPref?.getBoolean("isAlbumLiked", false)
+
+            if (isAlbumLiked == true) {
+                imgSave.setImageResource(R.drawable.ic_save)
+            } else {
+                imgSave.setImageResource(R.drawable.ic_save_outlined)
+            }
+
+            imgSave.setOnClickListener {
+                isAlbumLiked = !isAlbumLiked!!
+
+                sharedPref?.edit()?.putBoolean("isAlbumLiked", isAlbumLiked!!)?.apply()
+
+                if (isAlbumLiked as Boolean) {
+                    Snackbar.make(view, "Dodano do biblioteki", Snackbar.LENGTH_SHORT).show()
+                    imgSave.setImageResource(R.drawable.ic_save)
+                    viewModel.insertAlbum(saveAlbumToDatabase)
+                } else {
+                    Snackbar.make(view, "Usunięto z biblioteki", Snackbar.LENGTH_SHORT).show()
+                    imgSave.setImageResource(R.drawable.ic_save_outlined)
+                    viewModel.deleteAlbum(saveAlbumToDatabase)
+                }
+            }
+
         }
 
-
+        viewModel.getAlbum(arguments.album.id)
+        Log.i("AlbumId", "onViewCreated: ${arguments.album.id}")
         viewModel.albumDetail.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
                     hideLoading()
 
-                    // Get response data
-                    val albumDetail = response.data
+                    with(binding) {
 
-                    // find album image
-                    val albumImage =
-                        albumDetail!!.images.find { it.width == 640 && it.height == 640 }
+                        // Get response data
+                        val albumDetail = response.data!!
 
-                    // format album year
-                    val albumYear = sdf.parse(albumDetail.release_date)
-                    val formattedDate = outputDateFormat.format(albumYear!!)
+                        // find album image
+                        val albumImage =
+                            albumDetail.images.find { it.width == 640 && it.height == 640 }
 
-                    // get data to save in database
-                    val artistList = albumDetail.artists.map { artist ->
-                        AlbumEntity.ArtistEntity(
-                            name = artist.name,
-                            id = artist.id,
-                            externalUrls = AlbumEntity.ExternalUrlsEntity(
-                                spotify = artist.external_urls.spotify
-                            )
-                        )
-                    }
-                    val saveAlbumToDatabase = AlbumEntity(
-                        albumType = albumDetail.album_type,
-                        id = arguments.album.id,
-                        albumName = albumDetail.albumName,
-                        totalTracks = albumDetail.total_tracks,
-                        artists = artistList,
-                        images = albumDetail.images.map { image ->
-                            AlbumEntity.ImageEntity(
-                                width = image.width,
-                                height = image.height,
-                                url = image.url
-                            )
-                        },
-                        externalUrls = AlbumEntity.ExternalUrlsEntity(
-                            spotify = albumDetail.external_urls.spotify
-                        ),
-                        release_date = formattedDate,
-                        trackList = albumDetail.tracks.items.map { tracks ->
-                            AlbumEntity.TrackListEntity(
-                                durationMs = tracks.duration_ms,
-                                trackNumber = tracks.track_number,
-                                albumName = tracks.name,
-                                artists = artistList
+                        var albumTime = 0
+                        for (track in albumDetail.tracks.items) {
+                            albumTime += track.duration_ms
+                        }
+
+                        val albumTimeHour = albumTime / (1000 * 60 * 60)
+                        val albumTimeMinute = (albumTime / (1000 * 60)) % 60
+
+                        val formattedAlbumTime = if (albumTimeHour == 0) {
+                            String.format("%d min", albumTimeMinute)
+                        } else {
+                            String.format("%d h %d min", albumTimeHour, albumTimeMinute)
+                        }
+                        txtAlbumTime.text = formattedAlbumTime
+
+                        // format album year
+                        val albumYear = sdf.parse(albumDetail.release_date)
+                        val formattedDate = outputDateFormat.format(albumYear!!)
+
+                        // get data to save in database
+                        val artistList = albumDetail.artists.map { artist ->
+                            AlbumEntity.ArtistEntity(
+                                name = artist.name,
+                                id = artist.id,
+                                externalUrls = AlbumEntity.ExternalUrlsEntity(
+                                    spotify = artist.external_urls.spotify
+                                )
                             )
                         }
-                    )
 
-                    // save album in database
-                    viewModel.insertAlbum(saveAlbumToDatabase)
+                        val saveAlbumToDatabase = AlbumEntity(
+                            albumType = albumDetail.album_type,
+                            id = arguments.album.id,
+                            albumName = albumDetail.albumName,
+                            totalTracks = albumDetail.total_tracks,
+                            artists = artistList,
+                            images = albumDetail.images.map { image ->
+                                AlbumEntity.ImageEntity(
+                                    width = image.width,
+                                    height = image.height,
+                                    url = image.url
+                                )
+                            },
+                            externalUrls = AlbumEntity.ExternalUrlsEntity(
+                                spotify = albumDetail.external_urls.spotify
+                            ),
+                            release_date = formattedDate,
+                            trackList = albumDetail.tracks.items.map { tracks ->
+                                AlbumEntity.TrackListEntity(
+                                    durationMs = tracks.duration_ms,
+                                    trackNumber = tracks.track_number,
+                                    albumName = tracks.name,
+                                    artists = artistList,
+                                    discNumber = tracks.disc_number
+                                )
+                            },
+                            albumLength = formattedAlbumTime
+                        )
 
-                    with(binding) {
+                        val sharedPref = context?.getSharedPreferences("album_pref", Context.MODE_PRIVATE)
+                        var isAlbumLiked = sharedPref?.getBoolean("isAlbumLiked", false)
+
+                        if (isAlbumLiked == true) {
+                            imgSave.setImageResource(R.drawable.ic_save)
+                        } else {
+                            imgSave.setImageResource(R.drawable.ic_save_outlined)
+                        }
+
+                        imgSave.setOnClickListener {
+                            isAlbumLiked = !isAlbumLiked!!
+
+                            sharedPref?.edit()?.putBoolean("isAlbumLiked", isAlbumLiked!!)?.apply()
+
+                            if (isAlbumLiked as Boolean) {
+                                Snackbar.make(view, "Dodano do biblioteki", Snackbar.LENGTH_SHORT).show()
+                                imgSave.setImageResource(R.drawable.ic_save)
+                                viewModel.insertAlbum(saveAlbumToDatabase)
+                            } else {
+                                Snackbar.make(view, "Usunięto z biblioteki", Snackbar.LENGTH_SHORT).show()
+                                imgSave.setImageResource(R.drawable.ic_save_outlined)
+                                viewModel.deleteAlbum(saveAlbumToDatabase)
+                            }
+                        }
 
                         // Display data from API
                         imgAlbum.load(albumImage?.url) {
@@ -202,11 +290,10 @@ class DetailAlbumFragment : Fragment() {
                             )
                             startActivity(intent)
                         }
-                        albumDetail.let { trackList ->
-                            trackListAdapter.submitTrack(trackList.tracks.items)
-                        }
+                        albumDetail.let { trackList -> trackListAdapter.submitTrack(trackList.tracks.items) }
                     }
                 }
+
                 is Resource.Failure -> {
                     hideLoading()
                     val errorAlert = MaterialAlertDialogBuilder(requireContext())
@@ -215,6 +302,7 @@ class DetailAlbumFragment : Fragment() {
                         .setPositiveButton("Ok") { _, _ -> }
                     errorAlert.show()
                 }
+
                 is Resource.Loading -> {
                     showLoading()
                 }

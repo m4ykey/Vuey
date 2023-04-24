@@ -24,14 +24,14 @@
         tools:layout="@layout/fragment_album_detail">
         <argument
             android:name="album"
-            app:argType="com.example.vuey.data.local.album.search.Album" />
+            app:argType="com.example.vuey.data.models.album.search.Album" />
         <argument
             android:name="albumEntity"
             app:argType="com.example.vuey.data.database.model.AlbumEntity" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
-        android:name="com.example.vuey.ui.screens.search.SearchAlbumFragment"
+        android:name="com.example.vuey.ui.screens.album.SearchAlbumFragment"
         android:label="fragment_search_album"
         tools:layout="@layout/fragment_search_album" >
         <argument
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchMovieFragment"
-        android:name="com.example.vuey.ui.screens.search.SearchMovieFragment"
+        android:name="com.example.vuey.ui.screens.movie.SearchMovieFragment"
         android:label="fragment_search_movie"
         tools:layout="@layout/fragment_search_movie" >
         <action
@@ -64,9 +64,13 @@
     </fragment>
     <fragment
         android:id="@+id/tvShowSearchFragment"
-        android:name="com.example.vuey.ui.screens.search.TvShowSearchFragment"
+        android:name="com.example.vuey.ui.screens.tv_show.TvShowSearchFragment"
         android:label="fragment_tv_show_search"
-        tools:layout="@layout/fragment_tv_show_search" />
+        tools:layout="@layout/fragment_tv_show_search" >
+        <action
+            android:id="@+id/action_tvShowSearchFragment_to_tvShowDetailFragment"
+            app:destination="@id/tvShowDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"
         android:name="com.example.vuey.ui.screens.movie.MovieDetailFragment"
@@ -74,9 +78,45 @@
         tools:layout="@layout/fragment_movie_detail" >
         <argument
             android:name="searchMovie"
-            app:argType="com.example.vuey.data.local.movie.search.SearchMovie" />
+            app:argType="com.example.vuey.data.models.movie.search.SearchMovie" />
         <argument
             android:name="movieEntity"
             app:argType="com.example.vuey.data.database.model.MovieEntity" />
+    </fragment>
+    <fragment
+        android:id="@+id/tvShowFragment"
+        android:name="com.example.vuey.ui.screens.tv_show.TvShowFragment"
+        android:label="fragment_tv_show"
+        tools:layout="@layout/fragment_tv_show" >
+        <action
+            android:id="@+id/action_tvShowFragment_to_tvShowSearchFragment"
+            app:destination="@id/tvShowSearchFragment" />
+        <action
+            android:id="@+id/action_tvShowFragment_to_tvShowDetailFragment"
+            app:destination="@id/tvShowDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tvShowDetailFragment"
+        android:name="com.example.vuey.ui.screens.tv_show.TvShowDetailFragment"
+        android:label="fragment_tv_show_detail"
+        tools:layout="@layout/fragment_tv_show_detail" >
+        <argument
+            android:name="tvShow"
+            app:argType="com.example.vuey.data.models.tv_show.SearchTvShow" />
+        <action
+            android:id="@+id/action_tvShowDetailFragment_to_tvShowSeasonsFragment"
+            app:destination="@id/tvShowSeasonsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tvShowSeasonsFragment"
+        android:name="com.example.vuey.ui.screens.tv_show.TvShowSeasonsFragment"
+        android:label="fragment_tv_show_seasons"
+        tools:layout="@layout/fragment_tv_show_seasons" >
+        <argument
+            android:name="tvShowId"
+            app:argType="integer" />
+        <argument
+            android:name="season"
+            app:argType="com.example.vuey.data.models.tv_show.Season" />
     </fragment>
 </navigation>

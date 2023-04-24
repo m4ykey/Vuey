@@ -122,20 +122,16 @@ class MovieDetailFragment : Fragment() {
                 }
             }
 
-            Log.i("MovieDetailId", "onViewCreated: ${databaseArguments.id}")
             viewModel.getCast(databaseArguments.id)
             val castList = databaseArguments.cast.map { cast ->
                 Cast(
-                    id = cast.id,
                     character = cast.character,
                     name = cast.name,
-                    profile_path = cast.profile_path.toString()
+                    profile_path = cast.profile_path.toString(),
+                    id = cast.id
                 )
             }
-            Log.i("MovieDetailCast", "onViewCreated: $castList")
             castAdapter.submitCast(castList)
-
-            Log.i("MovieDetailDatabaseInfo", "onViewCreated: $databaseArguments")
         }
 
         viewModel.movieDetail(arguments.searchMovie.id)
@@ -147,9 +143,9 @@ class MovieDetailFragment : Fragment() {
 
                         hideLoading()
 
-                        val movieDetail = response.data
+                        val movieDetail = response.data!!
 
-                        val movieYear = sdf.parse(movieDetail!!.release_date)
+                        val movieYear = sdf.parse(movieDetail.release_date)
                         val formattedDate = outputDateFormat.format(movieYear!!)
 
                         val genres: List<Genre> = movieDetail.genres
@@ -172,20 +168,20 @@ class MovieDetailFragment : Fragment() {
                         val formattedVoteAverage = String.format("%.1f", voteAverage)
 
                         imgSave.setOnClickListener {
-                            val cast = viewModel.movieCredits.value?.data?.cast?.map {
+                            val cast = viewModel.movieCredits.value?.data?.cast?.map { cast ->
                                 MovieEntity.CastEntity(
-                                    character = it.character,
-                                    profile_path = it.profile_path,
-                                    id = it.id,
-                                    name = it.name,
-                                    movieId = arguments.searchMovie.id
+                                    character = cast.character,
+                                    profile_path = cast.profile_path,
+                                    name = cast.name,
+                                    movieId = arguments.searchMovie.id,
+                                    id = cast.id
                                 )
                             }
                             val saveMovieToDatabase = MovieEntity(
                                 id = arguments.searchMovie.id,
                                 overview = arguments.searchMovie.overview,
-                                poster_path = movieDetail.poster_path,
-                                backdrop_path = movieDetail.backdrop_path,
+                                poster_path = movieDetail.poster_path.toString(),
+                                backdrop_path = movieDetail.backdrop_path.toString(),
                                 release_date = formattedDate,
                                 runtime = formattedRuntime,
                                 title = movieDetail.title,
@@ -205,14 +201,7 @@ class MovieDetailFragment : Fragment() {
                             )
                             viewModel.insertCast(cast)
                             viewModel.insertMovie(saveMovieToDatabase)
-                            Log.i(
-                                "MovieDetailSaveToDatabase",
-                                "onViewCreated: $saveMovieToDatabase + $cast"
-                            )
                         }
-
-                        Log.e("MovieDetail", "Error: ${viewModel.movieDetail.value?.message}")
-                        Log.i("MovieDetail", "Movie ID: ${movieDetail.id}")
 
                         if (!movieDetail.backdrop_path.isNullOrEmpty()) {
                             imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdrop_path) {
@@ -269,15 +258,16 @@ class MovieDetailFragment : Fragment() {
                 is Resource.Success -> {
                     hideLoading()
 
-                    val movieCredits = response.data
+                    val movieCredits = response.data!!
 
-                    if (movieCredits!!.cast.isEmpty()) {
+                    if (movieCredits.cast.isEmpty()) {
                         binding.recyclerViewTopCast.visibility = View.GONE
                         binding.txtEmptyCast.visibility = View.VISIBLE
                     }
                     movieCredits.let { castEntries ->
                         castAdapter.submitCast(castEntries.cast)
                     }
+                    Log.i("CastEntries", "onViewCreated: ${movieCredits.cast}")
                 }
 
                 is Resource.Failure -> {

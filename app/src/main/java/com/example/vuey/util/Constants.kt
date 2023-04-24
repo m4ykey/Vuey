@@ -6,11 +6,12 @@ object Constants {
     const val ALBUM_TABLE_NAME = "album_table"
     const val MOVIE_TABLE_NAME = "movie_table"
     const val CAST_TABLE_NAME = "cast_table"
-    const val DATABASE_VERSION = 8
+    const val DATABASE_VERSION = 11
 
     const val SPOTIFY_BASE_URL = "https://api.spotify.com/"
     const val SPOTIFY_CLIENT_ID = "SPOTIFY_CLIENT_ID"
     const val SPOTIFY_CLIENT_SECRET = "SPOTIFY_CLIENT_SECRET"
+    const val SPOTIFY_AUTH_URL = "https://accounts.spotify.com/"
 
     const val TMDB_BASE_URL = "https://api.themoviedb.org/3/"
     const val TMDB_API_KEY = "TMDB_API_KEY"

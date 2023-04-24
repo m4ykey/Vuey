@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.vuey.data.remote.api.interceptors.SpotifyAuthInterceptor
 import com.example.vuey.data.remote.response.album.token.AuthApi
+import com.example.vuey.util.Constants.SPOTIFY_AUTH_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +30,7 @@ object AuthModule {
     @Provides
     fun provideAuthInstance() : AuthApi {
         return Retrofit.Builder()
-            .baseUrl("https://accounts.spotify.com")
+            .baseUrl(SPOTIFY_AUTH_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)

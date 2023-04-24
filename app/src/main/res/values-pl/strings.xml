@@ -19,4 +19,7 @@
     <string name="languages_empty">Lista języków jest pusta</string>
     <string name="delete_movie">Usunąć film?</string>
     <string name="delete_movie_message">Jesteś pewien, że chcesz usunąć </string>
+    <string name="seasons">Sezony</string>
+    <string name="season">Sezon</string>
+    <string name="episode">Odcinek</string>
 </resources>

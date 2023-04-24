@@ -3,6 +3,7 @@ package com.example.vuey.di
 import com.example.vuey.data.remote.api.AlbumApi
 import com.example.vuey.data.remote.api.interceptors.SpotifyAuthInterceptor
 import com.example.vuey.data.remote.api.MovieApi
+import com.example.vuey.data.remote.api.TvShowApi
 import com.example.vuey.data.remote.api.interceptors.TMDBInterceptor
 import com.example.vuey.util.Constants.SPOTIFY_BASE_URL
 import com.example.vuey.util.Constants.TMDB_BASE_URL
@@ -76,6 +77,20 @@ object NetworkModule {
             .client(httpClient)
             .build()
             .create(MovieApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTvShowInstance(
+        httpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ) : TvShowApi {
+        return Retrofit.Builder()
+            .baseUrl(TMDB_BASE_URL)
+            .addConverterFactory(gsonConverterFactory)
+            .client(httpClient)
+            .build()
+            .create(TvShowApi::class.java)
     }
 
     @Provides

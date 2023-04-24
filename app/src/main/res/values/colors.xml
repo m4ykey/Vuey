@@ -12,4 +12,5 @@
 
     <color name="album_green">#32E875</color>
     <color name="movie_blue">#357DED</color>
+    <color name="tv_show_red">#F44336</color>
 </resources>

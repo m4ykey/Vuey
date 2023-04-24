@@ -1,6 +1,7 @@
-package com.example.vuey.ui.screens.search
+package com.example.vuey.ui.screens.tv_show
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,32 +12,32 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vuey.R
-import com.example.vuey.databinding.FragmentSearchMovieBinding
-import com.example.vuey.ui.adapter.MovieAdapter
-import com.example.vuey.ui.screens.movie.MovieViewModel
+import com.example.vuey.databinding.FragmentTvShowSearchBinding
+import com.example.vuey.ui.adapter.TvShowAdapter
 import com.example.vuey.util.network.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchMovieFragment : Fragment() {
+class TvShowSearchFragment : Fragment() {
 
-    private var _binding : FragmentSearchMovieBinding? = null
+    private var _binding : FragmentTvShowSearchBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : MovieViewModel by viewModels()
-    private lateinit var movieAdapter: MovieAdapter
+    private val viewModel : TvShowViewModel by viewModels()
+    private lateinit var tvShowAdapter: TvShowAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchMovieBinding.inflate(inflater, container, false)
+        _binding = FragmentTvShowSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        movieAdapter = MovieAdapter(isFromApi = true, viewModel = viewModel)
+        tvShowAdapter = TvShowAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,8 +48,8 @@ class SearchMovieFragment : Fragment() {
 
         with(binding) {
 
-            recyclerViewMovie.apply {
-                adapter = movieAdapter
+            recyclerViewTvShow.apply {
+                adapter = tvShowAdapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
 
@@ -58,44 +59,54 @@ class SearchMovieFragment : Fragment() {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     val searchQuery = etSearch.text.toString()
                     if (searchQuery.isEmpty()) {
-                        Toast.makeText(requireContext(), getString(R.string.empty_search_query), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.empty_search_query),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-                        viewModel.movieSearch(searchQuery)
+                        viewModel.tvShowSearch(searchQuery)
                     }
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
             }
 
-            viewModel.movieSearch.observe(viewLifecycleOwner) { response ->
+            viewModel.searchTvShow.observe(viewLifecycleOwner) { response ->
                 when (response) {
-                    is Resource.Success -> {
-                        hideLoading()
-                        response.data?.let { movieList ->
-                            movieAdapter.submitMovie(movieList)
-                        }
-                    }
                     is Resource.Loading -> {
                         showLoading()
                     }
+                    is Resource.Success -> {
+                        hideLoading()
+                        response.data?.let { tvShowList ->
+                            tvShowAdapter.submitTvShow(tvShowList)
+                        }
+                    }
                     is Resource.Failure -> {
                         hideLoading()
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage("Unexpected error: ${response.message}")
+                            .setPositiveButton("Close") { _, _ -> }
+                            .show()
                     }
                 }
             }
         }
     }
 
-    private fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
     private fun hideLoading() {
         binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showLoading() {
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
 }
