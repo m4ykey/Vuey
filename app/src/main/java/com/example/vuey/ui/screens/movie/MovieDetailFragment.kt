@@ -1,6 +1,7 @@
 package com.example.vuey.ui.screens.movie
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -24,6 +25,7 @@ import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.network.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -132,6 +134,58 @@ class MovieDetailFragment : Fragment() {
                 )
             }
             castAdapter.submitCast(castList)
+
+            val saveMovieToDatabase = MovieEntity(
+                id = databaseArguments.id,
+                backdrop_path = databaseArguments.backdrop_path,
+                cast = databaseArguments.cast,
+                genre = databaseArguments.genre,
+                overview = databaseArguments.overview,
+                poster_path = databaseArguments.poster_path,
+                release_date = databaseArguments.release_date,
+                runtime = databaseArguments.runtime,
+                spokenLanguage = databaseArguments.spokenLanguage,
+                title = databaseArguments.title,
+                vote_average = databaseArguments.vote_average,
+                vote_count = databaseArguments.vote_count
+            )
+
+            val cast = databaseArguments.cast.map { cast ->
+                MovieEntity.CastEntity(
+                    movieId = cast.movieId,
+                    profile_path = cast.profile_path,
+                    character = cast.character,
+                    id = cast.id,
+                    name = cast.name
+                )
+            }
+
+            val sharedPref = context?.getSharedPreferences("movie_pref", Context.MODE_PRIVATE)
+            var isMovieLiked = sharedPref?.getBoolean("isMovieLiked", false)
+
+            if (isMovieLiked == true) {
+                imgSave.setImageResource(R.drawable.ic_save)
+            } else {
+                imgSave.setImageResource(R.drawable.ic_save_outlined)
+            }
+
+            imgSave.setOnClickListener {
+                isMovieLiked = !isMovieLiked!!
+
+                sharedPref?.edit()?.putBoolean("isMovieLiked", isMovieLiked!!)?.apply()
+
+                if (isMovieLiked as Boolean) {
+                    Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
+                    imgSave.setImageResource(R.drawable.ic_save)
+                    viewModel.insertMovie(saveMovieToDatabase)
+                    viewModel.insertCast(cast)
+                } else {
+                    Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
+                    imgSave.setImageResource(R.drawable.ic_save_outlined)
+                    viewModel.deleteMovie(saveMovieToDatabase)
+                    viewModel.deleteCast(cast)
+                }
+            }
         }
 
         viewModel.movieDetail(arguments.searchMovie.id)
@@ -167,42 +221,6 @@ class MovieDetailFragment : Fragment() {
                         val voteAverage = movieDetail.vote_average
                         val formattedVoteAverage = String.format("%.1f", voteAverage)
 
-                        imgSave.setOnClickListener {
-                            val cast = viewModel.movieCredits.value?.data?.cast?.map { cast ->
-                                MovieEntity.CastEntity(
-                                    character = cast.character,
-                                    profile_path = cast.profile_path,
-                                    name = cast.name,
-                                    movieId = arguments.searchMovie.id,
-                                    id = cast.id
-                                )
-                            }
-                            val saveMovieToDatabase = MovieEntity(
-                                id = arguments.searchMovie.id,
-                                overview = arguments.searchMovie.overview,
-                                poster_path = movieDetail.poster_path.toString(),
-                                backdrop_path = movieDetail.backdrop_path.toString(),
-                                release_date = formattedDate,
-                                runtime = formattedRuntime,
-                                title = movieDetail.title,
-                                vote_average = formattedVoteAverage,
-                                vote_count = movieDetail.vote_count,
-                                genre = movieDetail.genres.map { genre ->
-                                    MovieEntity.GenreEntity(
-                                        name = genre.name
-                                    )
-                                },
-                                spokenLanguage = movieDetail.spoken_languages.map { language ->
-                                    MovieEntity.SpokenLanguageEntity(
-                                        name = language.name
-                                    )
-                                },
-                                cast = cast!!
-                            )
-                            viewModel.insertCast(cast)
-                            viewModel.insertMovie(saveMovieToDatabase)
-                        }
-
                         if (!movieDetail.backdrop_path.isNullOrEmpty()) {
                             imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdrop_path) {
                                 crossfade(true)
@@ -233,6 +251,66 @@ class MovieDetailFragment : Fragment() {
                             } else {
                                 txtOverview.visibility = View.VISIBLE
                                 txtOverviewFull.visibility = View.GONE
+                            }
+                        }
+
+                        val sharedPref = context?.getSharedPreferences("movie_pref", Context.MODE_PRIVATE)
+                        var isMovieLiked = sharedPref?.getBoolean("isMovieLiked", false)
+
+                        if (isMovieLiked == true) {
+                            imgSave.setImageResource(R.drawable.ic_save)
+                        } else {
+                            imgSave.setImageResource(R.drawable.ic_save_outlined)
+                        }
+
+                        val cast = viewModel.movieCredits.value?.data?.cast?.map { cast ->
+                            MovieEntity.CastEntity(
+                                character = cast.character,
+                                profile_path = cast.profile_path,
+                                name = cast.name,
+                                movieId = arguments.searchMovie.id,
+                                id = cast.id
+                            )
+                        }
+
+                        val saveMovieToDatabase = MovieEntity(
+                            id = arguments.searchMovie.id,
+                            overview = arguments.searchMovie.overview,
+                            poster_path = movieDetail.poster_path.toString(),
+                            backdrop_path = movieDetail.backdrop_path.toString(),
+                            release_date = formattedDate,
+                            runtime = formattedRuntime,
+                            title = movieDetail.title,
+                            vote_average = formattedVoteAverage,
+                            vote_count = movieDetail.vote_count,
+                            genre = movieDetail.genres.map { genre ->
+                                MovieEntity.GenreEntity(
+                                    name = genre.name
+                                )
+                            },
+                            spokenLanguage = movieDetail.spoken_languages.map { language ->
+                                MovieEntity.SpokenLanguageEntity(
+                                    name = language.name
+                                )
+                            },
+                            cast = cast!!
+                        )
+
+                        imgSave.setOnClickListener {
+                            isMovieLiked = !isMovieLiked!!
+
+                            sharedPref?.edit()?.putBoolean("isMovieLiked", isMovieLiked!!)?.apply()
+
+                            if (isMovieLiked as Boolean) {
+                                Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
+                                imgSave.setImageResource(R.drawable.ic_save)
+                                viewModel.insertMovie(saveMovieToDatabase)
+                                viewModel.insertCast(cast)
+                            } else {
+                                Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
+                                imgSave.setImageResource(R.drawable.ic_save_outlined)
+                                viewModel.deleteMovie(saveMovieToDatabase)
+                                viewModel.deleteCast(cast)
                             }
                         }
                     }
@@ -267,7 +345,6 @@ class MovieDetailFragment : Fragment() {
                     movieCredits.let { castEntries ->
                         castAdapter.submitCast(castEntries.cast)
                     }
-                    Log.i("CastEntries", "onViewCreated: ${movieCredits.cast}")
                 }
 
                 is Resource.Failure -> {

@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imgBackdrop"
-                android:src="@drawable/ic_round_star"/>
+                android:src="@drawable/ic_save_outlined"/>
 
             <ImageView
                 tools:src="@drawable/movie_test"

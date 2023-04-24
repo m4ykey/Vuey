@@ -52,6 +52,12 @@ class MovieViewModel @Inject constructor(
         return movieRepository.getCast(movieId)
     }
 
+    fun deleteCast(castEntity: List<MovieEntity.CastEntity>) {
+        viewModelScope.launch {
+            movieRepository.deleteCast(castEntity)
+        }
+    }
+
     fun movieCredit(movieId: Int) {
         viewModelScope.launch {
             _movieCredits.value = Resource.Loading()

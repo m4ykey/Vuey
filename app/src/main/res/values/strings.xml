@@ -21,4 +21,6 @@
     <string name="seasons">Seasons</string>
     <string name="season">Season</string>
     <string name="episode">Episode</string>
+    <string name="added_to_library">Added to library</string>
+    <string name="removed_from_library">Removed from library</string>
 </resources>

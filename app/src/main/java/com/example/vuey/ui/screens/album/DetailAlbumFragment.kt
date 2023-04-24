@@ -149,16 +149,15 @@ class DetailAlbumFragment : Fragment() {
                 sharedPref?.edit()?.putBoolean("isAlbumLiked", isAlbumLiked!!)?.apply()
 
                 if (isAlbumLiked as Boolean) {
-                    Snackbar.make(view, "Dodano do biblioteki", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
                     imgSave.setImageResource(R.drawable.ic_save)
                     viewModel.insertAlbum(saveAlbumToDatabase)
                 } else {
-                    Snackbar.make(view, "Usunięto z biblioteki", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                     viewModel.deleteAlbum(saveAlbumToDatabase)
                 }
             }
-
         }
 
         viewModel.getAlbum(arguments.album.id)
@@ -207,6 +206,37 @@ class DetailAlbumFragment : Fragment() {
                             )
                         }
 
+                        // Display data from API
+                        imgAlbum.load(albumImage?.url) {
+                            error(R.drawable.album_error)
+                            crossfade(true)
+                            crossfade(1000)
+                        }
+                        txtAlbumName.text = albumDetail.albumName
+                        val artists: List<Artist> = albumDetail.artists
+                        val artistNames = artists.joinToString(separator = ", ") { it.name }
+                        txtArtist.text = artistNames
+
+                        txtInfo.text =
+                            "${albumDetail.album_type.replaceFirstChar { it.uppercase() }} • " +
+                                    "$formattedDate • " + totalTracks + " ${albumDetail.total_tracks}"
+
+                        btnAlbum.setOnClickListener {
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(arguments.album.external_urls.spotify)
+                            )
+                            startActivity(intent)
+                        }
+                        btnArtist.setOnClickListener {
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(albumDetail.artists[0].external_urls.spotify)
+                            )
+                            startActivity(intent)
+                        }
+                        albumDetail.let { trackList -> trackListAdapter.submitTrack(trackList.tracks.items) }
+
                         val saveAlbumToDatabase = AlbumEntity(
                             albumType = albumDetail.album_type,
                             id = arguments.album.id,
@@ -251,46 +281,16 @@ class DetailAlbumFragment : Fragment() {
                             sharedPref?.edit()?.putBoolean("isAlbumLiked", isAlbumLiked!!)?.apply()
 
                             if (isAlbumLiked as Boolean) {
-                                Snackbar.make(view, "Dodano do biblioteki", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
                                 imgSave.setImageResource(R.drawable.ic_save)
                                 viewModel.insertAlbum(saveAlbumToDatabase)
                             } else {
-                                Snackbar.make(view, "Usunięto z biblioteki", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
                                 imgSave.setImageResource(R.drawable.ic_save_outlined)
                                 viewModel.deleteAlbum(saveAlbumToDatabase)
                             }
                         }
 
-                        // Display data from API
-                        imgAlbum.load(albumImage?.url) {
-                            error(R.drawable.album_error)
-                            crossfade(true)
-                            crossfade(1000)
-                        }
-                        txtAlbumName.text = albumDetail.albumName
-                        val artists: List<Artist> = albumDetail.artists
-                        val artistNames = artists.joinToString(separator = ", ") { it.name }
-                        txtArtist.text = artistNames
-
-                        txtInfo.text =
-                            "${albumDetail.album_type.replaceFirstChar { it.uppercase() }} • " +
-                                    "$formattedDate • " + totalTracks + " ${albumDetail.total_tracks}"
-
-                        btnAlbum.setOnClickListener {
-                            val intent = Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(arguments.album.external_urls.spotify)
-                            )
-                            startActivity(intent)
-                        }
-                        btnArtist.setOnClickListener {
-                            val intent = Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(albumDetail.artists[0].external_urls.spotify)
-                            )
-                            startActivity(intent)
-                        }
-                        albumDetail.let { trackList -> trackListAdapter.submitTrack(trackList.tracks.items) }
                     }
                 }
 

@@ -22,4 +22,7 @@ interface MovieDao {
     @Delete
     suspend fun deleteMovie(movieEntity: MovieEntity)
 
+    @Delete
+    suspend fun deleteCast(castEntity: List<MovieEntity.CastEntity>)
+
 }

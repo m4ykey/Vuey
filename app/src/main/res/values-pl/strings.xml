@@ -22,4 +22,6 @@
     <string name="seasons">Sezony</string>
     <string name="season">Sezon</string>
     <string name="episode">Odcinek</string>
+    <string name="added_to_library">Dodano do biblioteki</string>
+    <string name="removed_from_library">Usunięto z biblioteki</string>
 </resources>

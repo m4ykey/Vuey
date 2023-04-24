@@ -35,6 +35,10 @@ class MovieRepository @Inject constructor(
         return movieDao.getCast(movieId)
     }
 
+    suspend fun deleteCast(cast : List<MovieEntity.CastEntity>) {
+        return movieDao.deleteCast(cast)
+    }
+
     suspend fun searchMovie(movieName : String) : Resource<List<SearchMovie>> {
         return try {
             val response = movieApi.searchMovie(query = movieName)
