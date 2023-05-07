@@ -35,7 +35,7 @@ class TvShowFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tvShowAdapter = TvShowAdapter(isFromApi = false)
+        tvShowAdapter = TvShowAdapter(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,9 +55,7 @@ class TvShowFragment : Fragment() {
 
             viewModel.getAllTvShows.observe(viewLifecycleOwner) { tvShowList ->
                 tvShowAdapter.submitTvShowEntity(tvShowList)
-                Log.i("TvShowList", "onViewCreated: $tvShowList")
             }
-
         }
     }
 

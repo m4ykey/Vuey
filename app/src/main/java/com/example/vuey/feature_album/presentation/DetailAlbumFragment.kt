@@ -22,8 +22,8 @@ import com.example.vuey.feature_album.data.database.entity.AlbumEntity
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.Resource
-import com.example.vuey.util.views.DateUtils
-import com.example.vuey.util.views.showSnackbar
+import com.example.vuey.util.utils.DateUtils
+import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

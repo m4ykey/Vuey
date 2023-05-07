@@ -7,12 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
-import com.example.vuey.feature_tv_show.data.api.season.Episode
 import com.example.vuey.databinding.LayoutEpisodeBinding
+import com.example.vuey.feature_tv_show.data.api.season.Episode
 import com.example.vuey.util.Constants
-import com.example.vuey.util.views.DiffUtils
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.vuey.util.utils.DateUtils
+import com.example.vuey.util.utils.DiffUtils
 
 class EpisodeAdapter : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
 
@@ -31,18 +30,13 @@ class EpisodeAdapter : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() 
         @SuppressLint("SetTextI18n")
         fun bind(episodeResult: Episode) {
 
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val outputDateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
-
             with(binding) {
                 txtName.text = episodeResult.name
                 txtEpisodeNumber.text =
                     root.context.getString(R.string.episode) + " ${episodeResult.episode_number}"
 
                 if (episodeResult.air_date != null && !episodeResult.air_date.isNullOrEmpty()) {
-                    val episodeYear = sdf.parse(episodeResult.air_date)
-                    val formattedDate = outputDateFormat.format(episodeYear!!)
-                    txtInfo.text = formattedDate + " • " + episodeResult.runtime + "min"
+                    txtInfo.text = DateUtils.formatAirDate(episodeResult.air_date) + " • " + episodeResult.runtime + "min"
                 } else {
                     txtInfo.text = "${episodeResult.runtime}min"
                 }

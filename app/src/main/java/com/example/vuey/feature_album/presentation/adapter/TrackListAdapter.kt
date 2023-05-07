@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vuey.feature_album.data.api.detail.AlbumItem
 import com.example.vuey.feature_album.data.api.detail.Artist
 import com.example.vuey.databinding.LayoutAlbumTrackListBinding
-import com.example.vuey.util.views.DiffUtils
+import com.example.vuey.util.utils.DiffUtils
 
 class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
 

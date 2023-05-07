@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +21,6 @@ import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_tv_show.data.api.detail.Genre
 import com.example.vuey.feature_tv_show.data.api.detail.Season
 import com.example.vuey.feature_tv_show.data.api.detail.SpokenLanguage
-import com.example.vuey.feature_tv_show.data.api.season.Episode
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowCastEntity
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEpisodeEntity
@@ -34,9 +32,9 @@ import com.example.vuey.feature_tv_show.presentation.adapter.SeasonsAdapter
 import com.example.vuey.feature_tv_show.presentation.viewmodel.TvShowViewModel
 import com.example.vuey.util.Constants
 import com.example.vuey.util.network.Resource
-import com.example.vuey.util.views.DateUtils
-import com.example.vuey.util.views.formatVoteAverage
-import com.example.vuey.util.views.showSnackbar
+import com.example.vuey.util.utils.DateUtils
+import com.example.vuey.util.utils.formatVoteAverage
+import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

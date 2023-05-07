@@ -14,11 +14,11 @@ import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
 import com.example.vuey.feature_tv_show.presentation.TvShowFragmentDirections
 import com.example.vuey.feature_tv_show.presentation.TvShowSearchFragmentDirections
 import com.example.vuey.util.Constants.TMDB_IMAGE
-import com.example.vuey.util.views.DateUtils
-import com.example.vuey.util.views.DiffUtils
-import com.example.vuey.util.views.formatVoteAverage
-import com.example.vuey.util.views.toSearchTv
-import com.example.vuey.util.views.toTvShowEntity
+import com.example.vuey.util.utils.DateUtils
+import com.example.vuey.util.utils.DiffUtils
+import com.example.vuey.util.utils.formatVoteAverage
+import com.example.vuey.util.utils.toSearchTv
+import com.example.vuey.util.utils.toTvShowEntity
 
 class TvShowAdapter(
     private val isFromApi : Boolean

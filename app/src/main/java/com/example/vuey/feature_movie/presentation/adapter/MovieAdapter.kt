@@ -14,11 +14,11 @@ import com.example.vuey.databinding.LayoutMovieBinding
 import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
 import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections
 import com.example.vuey.util.Constants.TMDB_IMAGE
-import com.example.vuey.util.views.DateUtils
-import com.example.vuey.util.views.DiffUtils
-import com.example.vuey.util.views.formatVoteAverage
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.vuey.util.utils.DateUtils
+import com.example.vuey.util.utils.DiffUtils
+import com.example.vuey.util.utils.formatVoteAverage
+import com.example.vuey.util.utils.toMovieEntity
+import com.example.vuey.util.utils.toSearchMovie
 
 class MovieAdapter(
     private val isFromApi: Boolean
@@ -32,6 +32,7 @@ class MovieAdapter(
         val result = DiffUtil.calculateDiff(oldMovie)
         movieResult = newMovie
         result.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     fun submitMovieEntity(newMovie: List<MovieEntity>) {
@@ -48,16 +49,6 @@ class MovieAdapter(
 
             with(binding) {
 
-                val searchMovie = SearchMovie(
-                    backdrop_path = movieEntityResult.movieBackdropPath,
-                    id = movieEntityResult.id,
-                    overview = movieEntityResult.movieOverview,
-                    poster_path = movieEntityResult.moviePosterPath,
-                    release_date = movieEntityResult.movieReleaseDate,
-                    title = movieEntityResult.movieTitle,
-                    vote_average = movieEntityResult.movieVoteAverage.replace(",", ".").toDouble(),
-                )
-
                 txtMovieTitle.text = movieEntityResult.movieTitle
                 txtDescription.text = movieEntityResult.movieOverview
                 txtReleaseDate.text = movieEntityResult.movieReleaseDate
@@ -72,7 +63,7 @@ class MovieAdapter(
                     imgMovie.setImageResource(R.drawable.ic_movie_error)
                 }
 
-                if (!movieEntityResult.movieReleaseDate.isNullOrEmpty() && movieEntityResult.movieReleaseDate != null) {
+                if (movieEntityResult.movieReleaseDate.isNullOrEmpty().not() && movieEntityResult.movieReleaseDate != null) {
                     txtReleaseDate.text = DateUtils.formatAirDate(movieEntityResult.movieReleaseDate)
                 } else {
                     txtReleaseDate.visibility = View.GONE
@@ -81,7 +72,7 @@ class MovieAdapter(
                 layoutMovie.setOnClickListener {
                     val action =
                         MovieFragmentDirections.actionMovieFragmentToMovieDetailFragment(
-                            searchMovie = searchMovie,
+                            searchMovie = movieEntityResult.toSearchMovie(),
                             movieEntity = movieEntityResult
                         )
                     it.findNavController().navigate(action)
@@ -111,25 +102,11 @@ class MovieAdapter(
                     imgMovie.setImageResource(R.drawable.ic_movie_error)
                 }
 
-                val movieEntity = MovieEntity(
-                    movieBackdropPath = movieResult.backdrop_path.toString(),
-                    id = movieResult.id,
-                    movieOverview = movieResult.overview,
-                    moviePosterPath = movieResult.poster_path.toString(),
-                    movieReleaseDate = DateUtils.formatAirDate(movieResult.release_date).toString(),
-                    movieRuntime = "",
-                    movieTitle = movieResult.title,
-                    movieVoteAverage = movieResult.vote_average.formatVoteAverage(),
-                    movieSpokenLanguageList = emptyList(),
-                    movieGenreList = emptyList(),
-                    movieCastList = emptyList()
-                )
-
                 layoutMovie.setOnClickListener {
                     val action =
                         SearchMovieFragmentDirections.actionSearchMovieFragmentToMovieDetailFragment(
                             searchMovie = movieResult,
-                            movieEntity = movieEntity
+                            movieEntity = movieResult.toMovieEntity()
                         )
                     it.findNavController().navigate(action)
                 }

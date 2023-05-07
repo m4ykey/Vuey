@@ -33,7 +33,7 @@ class AlbumFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        albumAdapter = AlbumAdapter(viewModel, false)
+        albumAdapter = AlbumAdapter(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

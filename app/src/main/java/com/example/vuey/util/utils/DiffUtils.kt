@@ -1,4 +1,4 @@
-package com.example.vuey.util.views
+package com.example.vuey.util.utils
 
 import androidx.recyclerview.widget.DiffUtil
 

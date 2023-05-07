@@ -88,17 +88,6 @@
                     android:textColor="@color/white"
                     android:fontFamily="@font/cabin"/>
 
-                <TextView
-                    android:layout_marginStart="2dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="| 26142"
-                    android:textSize="13sp"
-                    android:gravity="center"
-                    android:id="@+id/txtVoteCount"
-                    android:textColor="@color/text_grey"
-                    android:fontFamily="@font/cabin"/>
-
             </LinearLayout>
 
             <ImageView
@@ -117,9 +106,7 @@
                 app:layout_constraintStart_toStartOf="@id/linearLayoutRating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_margin="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:orientation="vertical">
 

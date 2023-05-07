@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,7 +14,9 @@ import com.example.vuey.databinding.FragmentSearchMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.util.network.Resource
+import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +37,7 @@ class SearchMovieFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        movieAdapter = MovieAdapter(isFromApi = true)
+        movieAdapter = MovieAdapter(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +59,7 @@ class SearchMovieFragment : Fragment() {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     val searchQuery = etSearch.text.toString()
                     if (searchQuery.isEmpty()) {
-                        Toast.makeText(requireContext(), getString(R.string.empty_search_query), Toast.LENGTH_SHORT).show()
+                        showSnackbar(requireView(), getString(R.string.empty_search_query))
                     } else {
                         viewModel.movieSearch(searchQuery)
                     }
@@ -79,6 +80,7 @@ class SearchMovieFragment : Fragment() {
                         showLoading()
                     }
                     is Resource.Failure -> {
+                        showSnackbar(requireView(), "${response.message}", Snackbar.LENGTH_LONG)
                         hideLoading()
                     }
                 }

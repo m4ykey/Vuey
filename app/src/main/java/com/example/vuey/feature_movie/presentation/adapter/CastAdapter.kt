@@ -8,9 +8,8 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.feature_movie.data.api.detail.Cast
 import com.example.vuey.databinding.LayoutCastBinding
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowCastEntity
 import com.example.vuey.util.Constants.TMDB_IMAGE
-import com.example.vuey.util.views.DiffUtils
+import com.example.vuey.util.utils.DiffUtils
 
 class CastAdapter : RecyclerView.Adapter<CastAdapter.CreditViewHolder>() {
 
@@ -43,7 +42,6 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CreditViewHolder>() {
         fun bind(castResult : Cast) {
             with(binding) {
                 txtActorName.text = castResult.name
-                txtCharacterName.text = castResult.character
                 if (castResult.profile_path != null) {
                     imgCast.load(TMDB_IMAGE + castResult.profile_path) {
                         crossfade(true)

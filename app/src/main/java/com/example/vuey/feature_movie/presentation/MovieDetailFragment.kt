@@ -26,11 +26,12 @@ import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.network.Resource
+import com.example.vuey.util.utils.DateUtils
+import com.example.vuey.util.utils.formatVoteAverage
+import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -59,9 +60,6 @@ class MovieDetailFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val outputDateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
 
         val bottomNavigationView: BottomNavigationView =
             requireActivity().findViewById(R.id.bottomMenu)
@@ -97,8 +95,15 @@ class MovieDetailFragment : Fragment() {
             }
 
             txtMovieTitle.text = databaseArguments.movieTitle
-            txtInfo.text =
-                "${databaseArguments.movieRuntime} • $genresList • ${databaseArguments.movieReleaseDate}"
+
+            if (genres.isEmpty()) {
+                txtInfo.text =
+                    "${databaseArguments.movieRuntime} • ${databaseArguments.movieReleaseDate}"
+            } else {
+                txtInfo.text =
+                    "${databaseArguments.movieRuntime} • $genresList • ${databaseArguments.movieReleaseDate}"
+            }
+
             txtVoteAverage.text = databaseArguments.movieVoteAverage
 
             txtOverview.text = databaseArguments.movieOverview
@@ -150,16 +155,6 @@ class MovieDetailFragment : Fragment() {
                 movieVoteAverage = databaseArguments.movieVoteAverage,
             )
 
-            val castEntity = databaseArguments.movieCastList.map { cast ->
-                MovieCastEntity(
-                    character = cast.character,
-                    id = cast.id,
-                    movieId = cast.movieId,
-                    name = cast.name,
-                    profile_path = cast.profile_path
-                )
-            }
-
             viewModel.getMovieById(arguments.movieEntity.id)
                 .observe(viewLifecycleOwner) { movie ->
                     isMovieSaved = if (movie == null) {
@@ -174,14 +169,12 @@ class MovieDetailFragment : Fragment() {
             imgSave.setOnClickListener {
                 isMovieSaved = !isMovieSaved
                 if (isMovieSaved) {
-                    Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
+                    showSnackbar(requireView(), getString(R.string.added_to_library))
                     viewModel.insertMovie(movieEntity)
-                    viewModel.insertCast(castEntity)
                     imgSave.setImageResource(R.drawable.ic_save)
                 } else {
-                    Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
+                    showSnackbar(requireView(), getString(R.string.removed_from_library))
                     viewModel.deleteMovie(movieEntity)
-                    viewModel.deleteCast(castEntity)
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                 }
             }
@@ -205,10 +198,7 @@ class MovieDetailFragment : Fragment() {
                 }
 
                 is Resource.Failure -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Cast Error")
-                        .setMessage("${response.message}")
-                        .show()
+                    showSnackbar(requireView(), "${response.message}", Snackbar.LENGTH_LONG)
                     hideLoading()
                 }
 
@@ -229,9 +219,6 @@ class MovieDetailFragment : Fragment() {
 
                         val movieDetail = response.data!!
 
-                        val movieYear = sdf.parse(movieDetail.release_date)
-                        val formattedDate = outputDateFormat.format(movieYear!!)
-
                         val genres: List<Genre> = movieDetail.genres
                         val genresList = genres.joinToString(separator = ", ") { it.name }
 
@@ -248,10 +235,7 @@ class MovieDetailFragment : Fragment() {
                             "${hour}h ${minute}min"
                         }
 
-                        val voteAverage = movieDetail.vote_average
-                        val formattedVoteAverage = String.format("%.1f", voteAverage)
-
-                        if (!movieDetail.backdrop_path.isNullOrEmpty()) {
+                        if (movieDetail.backdrop_path.isNullOrEmpty().not()) {
                             imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdrop_path) {
                                 crossfade(true)
                                 crossfade(500)
@@ -262,17 +246,27 @@ class MovieDetailFragment : Fragment() {
                                 crossfade(500)
                             }
                         }
-                        txtVoteAverage.text = formattedVoteAverage
+                        txtVoteAverage.text = movieDetail.vote_average.formatVoteAverage()
                         txtMovieTitle.text = movieDetail.title
-                        txtInfo.text = "$formattedRuntime • $genresList • $formattedDate"
+
+                        if (genresList.isEmpty()) {
+                            txtInfo.text = "$formattedRuntime • ${DateUtils.formatAirDate(movieDetail.release_date)}"
+                        } else {
+                            txtInfo.text = "$formattedRuntime • $genresList • ${DateUtils.formatAirDate(movieDetail.release_date)}"
+                        }
+
                         if (languagesList.isEmpty()) {
                             txtSpokenLanguages.text = getString(R.string.languages_empty)
                         } else {
                             txtSpokenLanguages.text = languagesList
                         }
 
-                        txtOverview.text = arguments.searchMovie.overview
-                        txtOverviewFull.text = arguments.searchMovie.overview
+                        val movieOverview = movieDetail.overview.ifEmpty {
+                            arguments.searchMovie.overview
+                        }
+                        txtOverview.text = movieOverview
+                        txtOverviewFull.text = movieOverview
+
                         linearLayoutOverview.setOnClickListener {
                             if (txtOverviewFull.visibility == View.GONE) {
                                 txtOverview.visibility = View.GONE
@@ -289,20 +283,20 @@ class MovieDetailFragment : Fragment() {
                                     character = cast.character,
                                     profile_path = cast.profile_path,
                                     name = cast.name,
-                                    movieId = arguments.searchMovie.id,
+                                    movieId = movieDetail.id,
                                     id = cast.id
                                 )
                             }
 
-                        val saveMovieToDatabase = MovieEntity(
-                            id = arguments.searchMovie.id,
-                            movieOverview = arguments.searchMovie.overview,
+                        val movieEntity = MovieEntity(
+                            id = movieDetail.id,
+                            movieOverview = movieOverview,
                             moviePosterPath = movieDetail.poster_path.toString(),
                             movieBackdropPath = movieDetail.backdrop_path.toString(),
-                            movieReleaseDate = formattedDate,
+                            movieReleaseDate = DateUtils.formatAirDate(movieDetail.release_date).toString(),
                             movieRuntime = formattedRuntime,
                             movieTitle = movieDetail.title,
-                            movieVoteAverage = formattedVoteAverage,
+                            movieVoteAverage = movieDetail.vote_average.formatVoteAverage(),
                             movieGenreList = movieDetail.genres.map { genre ->
                                 MovieGenreEntity(
                                     name = genre.name
@@ -317,8 +311,8 @@ class MovieDetailFragment : Fragment() {
                         )
 
                         viewModel.getMovieById(arguments.movieEntity.id)
-                            .observe(viewLifecycleOwner) { movieEntity ->
-                                isMovieSaved = if (movieEntity == null) {
+                            .observe(viewLifecycleOwner) { movie ->
+                                isMovieSaved = if (movie == null) {
                                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                                     false
                                 } else {
@@ -330,14 +324,14 @@ class MovieDetailFragment : Fragment() {
                         imgSave.setOnClickListener {
                             isMovieSaved = !isMovieSaved
                             if (isMovieSaved) {
-                                Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
-                                viewModel.insertMovie(saveMovieToDatabase)
-                                viewModel.insertCast(castEntity)
+                                showSnackbar(requireView(), getString(R.string.added_to_library))
+                                viewModel.insertMovie(movieEntity)
+                                //viewModel.insertCast(castEntity)
                                 imgSave.setImageResource(R.drawable.ic_save)
                             } else {
-                                Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
-                                viewModel.deleteMovie(saveMovieToDatabase)
-                                viewModel.deleteCast(castEntity)
+                                showSnackbar(requireView(), getString(R.string.removed_from_library))
+                                viewModel.deleteMovie(movieEntity)
+                                //viewModel.deleteCast(castEntity)
                                 imgSave.setImageResource(R.drawable.ic_save_outlined)
                             }
                         }
@@ -345,10 +339,7 @@ class MovieDetailFragment : Fragment() {
                 }
 
                 is Resource.Failure -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Movie Detail Error")
-                        .setMessage("${response.message}")
-                        .show()
+                    showSnackbar(requireView(), "${response.message}", Snackbar.LENGTH_LONG)
                     hideLoading()
                 }
 
