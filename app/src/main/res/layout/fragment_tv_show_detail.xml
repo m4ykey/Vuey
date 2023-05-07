@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.screens.tv_show.TvShowDetailFragment">
+    tools:context=".feature_tv_show.presentation.TvShowDetailFragment">
 
     <ProgressBar
         app:layout_constraintTop_toTopOf="parent"
@@ -28,16 +28,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <ImageView
-                android:padding="10dp"
-                app:tint="@color/white"
-                android:id="@+id/imgSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imgBackdrop"
-                android:src="@drawable/ic_round_star"/>
 
             <ImageView
                 tools:src="@drawable/movie_test"
@@ -109,18 +99,17 @@
                     android:textColor="@color/white"
                     android:fontFamily="@font/cabin"/>
 
-                <TextView
-                    android:layout_marginStart="2dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="| 26142"
-                    android:textSize="13sp"
-                    android:gravity="center"
-                    android:id="@+id/txtVoteCount"
-                    android:textColor="@color/text_grey"
-                    android:fontFamily="@font/cabin"/>
-
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_save_outlined"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/txtStatus"
+                app:tint="@color/white" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutTvShowInfo"
@@ -253,40 +242,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <TextView
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/cabin_semibold"
-                android:textColor="@color/white"
-                android:id="@+id/txtSeasons"
-                android:layout_marginBottom="10dp"
+            <Spinner
+                android:layout_marginTop="10dp"
+                android:id="@+id/spinnerSeason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/recyclerViewTopCast"
                 app:layout_constraintStart_toStartOf="@id/recyclerViewTopCast"
-                app:layout_constraintBottom_toTopOf="@id/recyclerViewSeasons"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="@string/seasons" />
+                app:layout_constraintBottom_toTopOf="@id/epoxyRecyclerView"/>
 
-            <TextView
-                android:id="@+id/txtTvShowTime"
+            <LinearLayout
+                android:layout_marginEnd="10dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@id/epoxyRecyclerView"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewTopCast"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/cabin_semibold"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@id/recyclerViewSeasons"
-                app:layout_constraintEnd_toEndOf="@id/recyclerViewTopCast"
-                app:layout_constraintTop_toBottomOf="@id/recyclerViewTopCast"
-                tools:text="1h 20min" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/cabin"
+                    android:textColor="@color/white"
+                    android:text="@string/season"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/imgSaveSeason"
+                    app:tint="@color/white"
+                    android:src="@drawable/ic_save_outlined"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtSeasons"
+                app:layout_constraintTop_toBottomOf="@id/spinnerSeason"
                 android:layout_margin="10dp"
-                android:overScrollMode="never"
-                android:id="@+id/recyclerViewSeasons"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/layout_episode"
+                android:id="@+id/epoxyRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

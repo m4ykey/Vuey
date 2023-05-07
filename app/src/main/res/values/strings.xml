@@ -23,4 +23,9 @@
     <string name="episode">Episode</string>
     <string name="added_to_library">Added to library</string>
     <string name="removed_from_library">Removed from library</string>
+    <string name="statistics">Statistics</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="episodes">Episodes</string>
+    <string name="not_saved_album">You don\'t have any albums saved yet.</string>
 </resources>

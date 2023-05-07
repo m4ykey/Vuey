@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="@color/black"
-    tools:context=".ui.screens.album.DetailAlbumFragment">
+    tools:context=".feature_album.presentation.DetailAlbumFragment">
 
         <ProgressBar
             android:visibility="gone"
@@ -76,15 +76,16 @@
                     android:textSize="16sp"
                     tools:text="Przykładowy artsyta"/>
 
-                <ImageView
-                    android:layout_marginTop="10dp"
-                    app:tint="@color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imgSave"
-                    android:src="@drawable/ic_save_outlined"/>
-
             </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_save_outlined"
+                app:tint="@color/white"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/imgSave"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

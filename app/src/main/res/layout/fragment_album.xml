@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.album.AlbumFragment">
+    tools:context=".feature_album.presentation.AlbumFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:contentDescription="@string/search" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/albumRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="never"

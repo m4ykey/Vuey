@@ -1,7 +1,0 @@
-package com.example.vuey.data.models.album.detail
-
-data class Artist(
-    val external_urls: ExternalUrls,
-    val id: String,
-    val name: String
-)

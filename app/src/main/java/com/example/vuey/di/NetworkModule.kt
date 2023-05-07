@@ -1,10 +1,10 @@
 package com.example.vuey.di
 
-import com.example.vuey.data.remote.api.AlbumApi
-import com.example.vuey.data.remote.api.interceptors.SpotifyAuthInterceptor
-import com.example.vuey.data.remote.api.MovieApi
-import com.example.vuey.data.remote.api.TvShowApi
-import com.example.vuey.data.remote.api.interceptors.TMDBInterceptor
+import com.example.vuey.feature_album.data.api.AlbumApi
+import com.example.vuey.feature_album.data.api.SpotifyAuthInterceptor
+import com.example.vuey.feature_movie.data.api.MovieApi
+import com.example.vuey.feature_tv_show.data.api.TvShowApi
+import com.example.vuey.feature_movie.data.api.TMDBInterceptor
 import com.example.vuey.util.Constants.SPOTIFY_BASE_URL
 import com.example.vuey.util.Constants.TMDB_BASE_URL
 import com.google.gson.GsonBuilder

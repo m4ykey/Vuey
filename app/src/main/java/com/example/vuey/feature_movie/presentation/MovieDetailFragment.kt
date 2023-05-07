@@ -1,0 +1,374 @@
+package com.example.vuey.feature_movie.presentation
+
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import com.example.vuey.R
+import com.example.vuey.feature_movie.data.database.entity.MovieEntity
+import com.example.vuey.feature_movie.data.api.detail.Cast
+import com.example.vuey.feature_movie.data.api.detail.Genre
+import com.example.vuey.feature_movie.data.api.detail.SpokenLanguage
+import com.example.vuey.databinding.FragmentMovieDetailBinding
+import com.example.vuey.feature_movie.data.database.entity.MovieCastEntity
+import com.example.vuey.feature_movie.data.database.entity.MovieGenreEntity
+import com.example.vuey.feature_movie.data.database.entity.MovieSpokenLanguageEntity
+import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
+import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
+import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
+import com.example.vuey.util.network.Resource
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
+
+@AndroidEntryPoint
+class MovieDetailFragment : Fragment() {
+
+    private var _binding: FragmentMovieDetailBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: MovieViewModel by viewModels()
+    private val arguments: MovieDetailFragmentArgs by navArgs()
+    private lateinit var castAdapter: CastAdapter
+    private var isMovieSaved = false
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMovieDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        castAdapter = CastAdapter()
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputDateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+
+        val bottomNavigationView: BottomNavigationView =
+            requireActivity().findViewById(R.id.bottomMenu)
+        bottomNavigationView.visibility = View.GONE
+
+        with(binding) {
+
+            imgBack.setOnClickListener { findNavController().navigateUp() }
+
+            recyclerViewTopCast.apply {
+                adapter = castAdapter
+                layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            }
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                progressBar.visibility = View.GONE
+            }, 500)
+
+            val databaseArguments = arguments.movieEntity
+
+            val genres: List<MovieGenreEntity> = databaseArguments.movieGenreList
+            val genresList = genres.joinToString(separator = ", ") { it.name }
+
+            val spokenLanguage: List<MovieSpokenLanguageEntity> =
+                databaseArguments.movieSpokenLanguageList
+            val languageList = spokenLanguage.joinToString(separator = ", ") { it.name }
+
+            if (languageList.isEmpty()) {
+                txtSpokenLanguages.text = getString(R.string.languages_empty)
+            } else {
+                txtSpokenLanguages.text = languageList
+            }
+
+            txtMovieTitle.text = databaseArguments.movieTitle
+            txtInfo.text =
+                "${databaseArguments.movieRuntime} • $genresList • ${databaseArguments.movieReleaseDate}"
+            txtVoteAverage.text = databaseArguments.movieVoteAverage
+
+            txtOverview.text = databaseArguments.movieOverview
+            txtOverviewFull.text = databaseArguments.movieOverview
+            linearLayoutOverview.setOnClickListener {
+                if (txtOverviewFull.visibility == View.GONE) {
+                    txtOverview.visibility = View.GONE
+                    txtOverviewFull.visibility = View.VISIBLE
+                } else {
+                    txtOverview.visibility = View.VISIBLE
+                    txtOverviewFull.visibility = View.GONE
+                }
+            }
+
+            if (databaseArguments.movieBackdropPath.isNotEmpty()) {
+                imgBackdrop.load(TMDB_IMAGE_ORIGINAL + databaseArguments.movieBackdropPath) {
+                    crossfade(500)
+                    crossfade(true)
+                }
+            } else {
+                imgBackdrop.load(TMDB_IMAGE_ORIGINAL + databaseArguments.moviePosterPath) {
+                    crossfade(500)
+                    crossfade(true)
+                }
+            }
+
+            viewModel.getCast(databaseArguments.id)
+            val castList = databaseArguments.movieCastList.map { cast ->
+                Cast(
+                    character = cast.character,
+                    name = cast.name,
+                    profile_path = cast.profile_path,
+                    id = cast.id
+                )
+            }
+            castAdapter.submitCast(castList)
+
+            val movieEntity = MovieEntity(
+                movieBackdropPath = databaseArguments.movieBackdropPath,
+                movieGenreList = databaseArguments.movieGenreList,
+                movieCastList = databaseArguments.movieCastList,
+                id = databaseArguments.id,
+                movieOverview = databaseArguments.movieOverview,
+                moviePosterPath = databaseArguments.moviePosterPath,
+                movieReleaseDate = databaseArguments.movieReleaseDate,
+                movieRuntime = databaseArguments.movieRuntime,
+                movieSpokenLanguageList = databaseArguments.movieSpokenLanguageList,
+                movieTitle = databaseArguments.movieTitle,
+                movieVoteAverage = databaseArguments.movieVoteAverage,
+            )
+
+            val castEntity = databaseArguments.movieCastList.map { cast ->
+                MovieCastEntity(
+                    character = cast.character,
+                    id = cast.id,
+                    movieId = cast.movieId,
+                    name = cast.name,
+                    profile_path = cast.profile_path
+                )
+            }
+
+            viewModel.getMovieById(arguments.movieEntity.id)
+                .observe(viewLifecycleOwner) { movie ->
+                    isMovieSaved = if (movie == null) {
+                        imgSave.setImageResource(R.drawable.ic_save_outlined)
+                        false
+                    } else {
+                        imgSave.setImageResource(R.drawable.ic_save)
+                        true
+                    }
+                }
+
+            imgSave.setOnClickListener {
+                isMovieSaved = !isMovieSaved
+                if (isMovieSaved) {
+                    Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
+                    viewModel.insertMovie(movieEntity)
+                    viewModel.insertCast(castEntity)
+                    imgSave.setImageResource(R.drawable.ic_save)
+                } else {
+                    Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
+                    viewModel.deleteMovie(movieEntity)
+                    viewModel.deleteCast(castEntity)
+                    imgSave.setImageResource(R.drawable.ic_save_outlined)
+                }
+            }
+        }
+
+        viewModel.movieCredit(arguments.searchMovie.id)
+        viewModel.movieCredits.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideLoading()
+
+                    val movieCredits = response.data!!
+
+                    if (movieCredits.cast.isEmpty()) {
+                        binding.recyclerViewTopCast.visibility = View.GONE
+                        binding.txtEmptyCast.visibility = View.VISIBLE
+                    }
+                    movieCredits.let { castEntries ->
+                        castAdapter.submitCast(castEntries.cast)
+                    }
+                }
+
+                is Resource.Failure -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Cast Error")
+                        .setMessage("${response.message}")
+                        .show()
+                    hideLoading()
+                }
+
+                is Resource.Loading -> {
+                    showLoading()
+                }
+            }
+        }
+
+        viewModel.movieDetail(arguments.searchMovie.id)
+        viewModel.movieDetail.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+
+                    with(binding) {
+
+                        hideLoading()
+
+                        val movieDetail = response.data!!
+
+                        val movieYear = sdf.parse(movieDetail.release_date)
+                        val formattedDate = outputDateFormat.format(movieYear!!)
+
+                        val genres: List<Genre> = movieDetail.genres
+                        val genresList = genres.joinToString(separator = ", ") { it.name }
+
+                        val spokenLanguage: List<SpokenLanguage> = movieDetail.spoken_languages
+                        val languagesList =
+                            spokenLanguage.joinToString(separator = ", ") { it.name }
+
+                        val movieRuntime = movieDetail.runtime
+                        val hour = movieRuntime / 60
+                        val minute = movieRuntime % 60
+                        val formattedRuntime = if (hour == 0) {
+                            "${minute}min"
+                        } else {
+                            "${hour}h ${minute}min"
+                        }
+
+                        val voteAverage = movieDetail.vote_average
+                        val formattedVoteAverage = String.format("%.1f", voteAverage)
+
+                        if (!movieDetail.backdrop_path.isNullOrEmpty()) {
+                            imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdrop_path) {
+                                crossfade(true)
+                                crossfade(500)
+                            }
+                        } else {
+                            imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.poster_path) {
+                                crossfade(true)
+                                crossfade(500)
+                            }
+                        }
+                        txtVoteAverage.text = formattedVoteAverage
+                        txtMovieTitle.text = movieDetail.title
+                        txtInfo.text = "$formattedRuntime • $genresList • $formattedDate"
+                        if (languagesList.isEmpty()) {
+                            txtSpokenLanguages.text = getString(R.string.languages_empty)
+                        } else {
+                            txtSpokenLanguages.text = languagesList
+                        }
+
+                        txtOverview.text = arguments.searchMovie.overview
+                        txtOverviewFull.text = arguments.searchMovie.overview
+                        linearLayoutOverview.setOnClickListener {
+                            if (txtOverviewFull.visibility == View.GONE) {
+                                txtOverview.visibility = View.GONE
+                                txtOverviewFull.visibility = View.VISIBLE
+                            } else {
+                                txtOverview.visibility = View.VISIBLE
+                                txtOverviewFull.visibility = View.GONE
+                            }
+                        }
+
+                        val castEntity =
+                            viewModel.movieCredits.value?.data?.cast?.map { cast ->
+                                MovieCastEntity(
+                                    character = cast.character,
+                                    profile_path = cast.profile_path,
+                                    name = cast.name,
+                                    movieId = arguments.searchMovie.id,
+                                    id = cast.id
+                                )
+                            }
+
+                        val saveMovieToDatabase = MovieEntity(
+                            id = arguments.searchMovie.id,
+                            movieOverview = arguments.searchMovie.overview,
+                            moviePosterPath = movieDetail.poster_path.toString(),
+                            movieBackdropPath = movieDetail.backdrop_path.toString(),
+                            movieReleaseDate = formattedDate,
+                            movieRuntime = formattedRuntime,
+                            movieTitle = movieDetail.title,
+                            movieVoteAverage = formattedVoteAverage,
+                            movieGenreList = movieDetail.genres.map { genre ->
+                                MovieGenreEntity(
+                                    name = genre.name
+                                )
+                            },
+                            movieSpokenLanguageList = movieDetail.spoken_languages.map { language ->
+                                MovieSpokenLanguageEntity(
+                                    name = language.name
+                                )
+                            },
+                            movieCastList = castEntity!!
+                        )
+
+                        viewModel.getMovieById(arguments.movieEntity.id)
+                            .observe(viewLifecycleOwner) { movieEntity ->
+                                isMovieSaved = if (movieEntity == null) {
+                                    imgSave.setImageResource(R.drawable.ic_save_outlined)
+                                    false
+                                } else {
+                                    imgSave.setImageResource(R.drawable.ic_save)
+                                    true
+                                }
+                            }
+
+                        imgSave.setOnClickListener {
+                            isMovieSaved = !isMovieSaved
+                            if (isMovieSaved) {
+                                Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
+                                viewModel.insertMovie(saveMovieToDatabase)
+                                viewModel.insertCast(castEntity)
+                                imgSave.setImageResource(R.drawable.ic_save)
+                            } else {
+                                Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
+                                viewModel.deleteMovie(saveMovieToDatabase)
+                                viewModel.deleteCast(castEntity)
+                                imgSave.setImageResource(R.drawable.ic_save_outlined)
+                            }
+                        }
+                    }
+                }
+
+                is Resource.Failure -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Movie Detail Error")
+                        .setMessage("${response.message}")
+                        .show()
+                    hideLoading()
+                }
+
+                is Resource.Loading -> {
+                    showLoading()
+                }
+            }
+        }
+    }
+
+    private fun showLoading() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.progressBar.visibility = View.GONE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+}

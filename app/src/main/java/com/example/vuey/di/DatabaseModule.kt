@@ -2,10 +2,11 @@ package com.example.vuey.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.vuey.data.database.AppDatabase
-import com.example.vuey.data.database.dao.AlbumDao
-import com.example.vuey.data.database.dao.MovieDao
+import com.example.vuey.feature_album.data.database.dao.AlbumDao
+import com.example.vuey.feature_movie.data.database.dao.MovieDao
+import com.example.vuey.feature_tv_show.data.database.dao.TvShowDao
 import com.example.vuey.util.Constants.DATABASE_NAME
+import com.example.vuey.util.database.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,6 +37,12 @@ object DatabaseModule {
     @Singleton
     fun provideMovieDao(appDatabase: AppDatabase) : MovieDao {
         return appDatabase.movieDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTvShowDao(appDatabase: AppDatabase) : TvShowDao {
+        return appDatabase.tvShowDao()
     }
 
 }

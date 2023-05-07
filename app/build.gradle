@@ -19,12 +19,15 @@ android {
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "0.3.2-alpha"
+        versionName "0.4.1-beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        customDebugType {
+            debuggable true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -93,6 +96,5 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil:2.3.0")
-
 
 }

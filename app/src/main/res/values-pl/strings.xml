@@ -24,4 +24,9 @@
     <string name="episode">Odcinek</string>
     <string name="added_to_library">Dodano do biblioteki</string>
     <string name="removed_from_library">Usunięto z biblioteki</string>
+    <string name="statistics">Statystyki</string>
+    <string name="open">Otwórz</string>
+    <string name="close">Zamknij</string>
+    <string name="episodes">Odcinków</string>
+    <string name="not_saved_album">Nie masz jeszcze zapisanych albumów.</string>
 </resources>
