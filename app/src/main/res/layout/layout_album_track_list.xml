@@ -28,7 +28,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Album 1"
+            tools:text="Album 1"
             android:layout_marginStart="10dp"
             android:id="@+id/txtDiscNumber"
             android:fontFamily="@font/cabin"
@@ -44,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2"
+            tools:text="10"
             android:id="@+id/txtRank"
             android:padding="10dp"
             android:gravity="center"

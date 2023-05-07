@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -24,11 +22,11 @@ import com.example.vuey.feature_album.data.database.entity.AlbumEntity
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.Resource
+import com.example.vuey.util.views.DateUtils
+import com.example.vuey.util.views.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -62,9 +60,6 @@ class DetailAlbumFragment : Fragment() {
             requireActivity().findViewById(R.id.bottomMenu)
         bottomNavigationView.visibility = View.GONE
 
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val outputDateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
-
         val totalTracks = getString(R.string.total_tracks)
 
         with(binding) {
@@ -85,9 +80,10 @@ class DetailAlbumFragment : Fragment() {
 
             val artistNameDatabase = artistsDatabase.joinToString(separator = ", ") { it.name }
             txtArtist.text = artistNameDatabase
+
             txtInfo.text =
                 "${databaseArguments.albumType.replaceFirstChar { it.uppercase() }} • " +
-                        "${databaseArguments.release} • $totalTracks ${databaseArguments.totalTracks}"
+                        "${databaseArguments.release} • " + totalTracks + " ${databaseArguments.totalTracks}"
 
             btnAlbum.setOnClickListener {
                 val intent =
@@ -122,7 +118,7 @@ class DetailAlbumFragment : Fragment() {
             trackListAdapter.submitTrack(trackList)
             txtAlbumTime.text = databaseArguments.albumLength
 
-            val saveAlbumToDatabase = AlbumEntity(
+            val albumEntity = AlbumEntity(
                 albumLength = databaseArguments.albumLength,
                 albumName = databaseArguments.albumName,
                 albumType = databaseArguments.albumType,
@@ -136,8 +132,8 @@ class DetailAlbumFragment : Fragment() {
             )
 
             viewModel.getAlbumById(arguments.albumEntity.id)
-                .observe(viewLifecycleOwner) { albumEntity ->
-                    isAlbumSaved = if (albumEntity == null) {
+                .observe(viewLifecycleOwner) { album ->
+                    isAlbumSaved = if (album == null) {
                         imgSave.setImageResource(R.drawable.ic_save_outlined)
                         false
                     } else {
@@ -149,12 +145,12 @@ class DetailAlbumFragment : Fragment() {
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
                 if (isAlbumSaved) {
-                    Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
-                    viewModel.insertAlbum(saveAlbumToDatabase)
+                    showSnackbar(requireView(), getString(R.string.added_to_library))
+                    viewModel.insertAlbum(albumEntity)
                     imgSave.setImageResource(R.drawable.ic_save)
                 } else {
-                    Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
-                    viewModel.deleteAlbum(saveAlbumToDatabase)
+                    showSnackbar(requireView(), getString(R.string.removed_from_library))
+                    viewModel.deleteAlbum(albumEntity)
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                 }
             }
@@ -188,9 +184,6 @@ class DetailAlbumFragment : Fragment() {
                         }
                         txtAlbumTime.text = formattedAlbumTime
 
-                        val albumYear = sdf.parse(albumDetail.release_date)
-                        val formattedDate = outputDateFormat.format(albumYear!!)
-
                         imgAlbum.load(albumImage?.url) {
                             error(R.drawable.album_error)
                             crossfade(true)
@@ -203,7 +196,7 @@ class DetailAlbumFragment : Fragment() {
 
                         txtInfo.text =
                             "${albumDetail.album_type.replaceFirstChar { it.uppercase() }} • " +
-                                    "$formattedDate • " + totalTracks + " ${albumDetail.total_tracks}"
+                                    "${DateUtils.formatAirDate(albumDetail.release_date)} • " + totalTracks + " ${albumDetail.total_tracks}"
 
                         btnAlbum.setOnClickListener {
                             val intent = Intent(
@@ -231,14 +224,14 @@ class DetailAlbumFragment : Fragment() {
                                 )
                             )
                         }
-                        val saveAlbumToDatabase = AlbumEntity(
+                        val albumEntity = AlbumEntity(
                             albumType = albumDetail.album_type,
                             id = arguments.album.id,
                             albumName = albumDetail.albumName,
                             totalTracks = albumDetail.total_tracks,
                             artistList = artistList,
                             albumLength = formattedAlbumTime,
-                            release = formattedDate,
+                            release = DateUtils.formatAirDate(albumDetail.release_date).toString(),
                             imageList = albumDetail.images.map { image ->
                                 AlbumEntity.ImageEntity(
                                     width = image.width,
@@ -261,8 +254,8 @@ class DetailAlbumFragment : Fragment() {
                         )
 
                         viewModel.getAlbumById(arguments.albumEntity.id)
-                            .observe(viewLifecycleOwner) { albumEntity ->
-                                isAlbumSaved = if (albumEntity == null) {
+                            .observe(viewLifecycleOwner) { album ->
+                                isAlbumSaved = if (album == null) {
                                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                                     false
                                 } else {
@@ -274,12 +267,12 @@ class DetailAlbumFragment : Fragment() {
                         imgSave.setOnClickListener {
                             isAlbumSaved = !isAlbumSaved
                             if (isAlbumSaved) {
-                                Snackbar.make(view, R.string.added_to_library, Snackbar.LENGTH_SHORT).show()
-                                viewModel.insertAlbum(saveAlbumToDatabase)
+                                showSnackbar(requireView(), getString(R.string.added_to_library))
+                                viewModel.insertAlbum(albumEntity)
                                 imgSave.setImageResource(R.drawable.ic_save)
                             } else {
-                                Snackbar.make(view, R.string.removed_from_library, Snackbar.LENGTH_SHORT).show()
-                                viewModel.deleteAlbum(saveAlbumToDatabase)
+                                showSnackbar(requireView(), getString(R.string.removed_from_library))
+                                viewModel.deleteAlbum(albumEntity)
                                 imgSave.setImageResource(R.drawable.ic_save_outlined)
                             }
                         }
@@ -288,11 +281,7 @@ class DetailAlbumFragment : Fragment() {
 
                 is Resource.Failure -> {
                     hideLoading()
-                    val errorAlert = MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Error")
-                        .setMessage(response.message)
-                        .setPositiveButton("Ok") { _, _ -> }
-                    errorAlert.show()
+                    showSnackbar(requireView(), "${response.message}", Snackbar.LENGTH_LONG)
                 }
 
                 is Resource.Loading -> {

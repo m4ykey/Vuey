@@ -8,24 +8,29 @@ import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-fun Double.formatVoteAverage() : String = String.format("%.1f", this)
+fun Double.formatVoteAverage(): String = String.format("%.1f", this)
 
 object DateUtils {
     fun formatAirDate(airDate: String?): String? {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val outputDateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
-        val year = try {
-            sdf.parse(airDate!!)
-        } catch (e: Exception) {
-            null
-        }
-        return year?.let { date ->
-            outputDateFormat.format(date)
+        return airDate?.let {
+            val inputDateFormat = if (it.length > 4) SimpleDateFormat(
+                "yyyy-MM-dd",
+                Locale.getDefault()
+            ) else SimpleDateFormat("yyyy", Locale.getDefault())
+            val outputDateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+            val date = try {
+                inputDateFormat.parse(it)
+            } catch (e: Exception) {
+                null
+            }
+            date?.let { d ->
+                outputDateFormat.format(d)
+            }
         }
     }
 }
 
-fun SearchTvShow.toTvShowEntity() : TvShowEntity {
+fun SearchTvShow.toTvShowEntity(): TvShowEntity {
     return TvShowEntity(
         id = this.id,
         tvShowStatus = "",
@@ -43,7 +48,7 @@ fun SearchTvShow.toTvShowEntity() : TvShowEntity {
     )
 }
 
-fun TvShowEntity.toSearchTv() : SearchTvShow {
+fun TvShowEntity.toSearchTv(): SearchTvShow {
     return SearchTvShow(
         backdrop_path = this.tvShowBackdropPath,
         first_air_date = this.tvShowFirstAirDate,
@@ -56,6 +61,6 @@ fun TvShowEntity.toSearchTv() : SearchTvShow {
     )
 }
 
-fun showSnackbar(view : View, message : String, duration : Int = Snackbar.LENGTH_SHORT) {
+fun showSnackbar(view: View, message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     Snackbar.make(view, message, duration).show()
 }
