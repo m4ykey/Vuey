@@ -28,4 +28,6 @@
     <string name="close">Close</string>
     <string name="episodes">Episodes</string>
     <string name="not_saved_album">You don\'t have any albums saved yet.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

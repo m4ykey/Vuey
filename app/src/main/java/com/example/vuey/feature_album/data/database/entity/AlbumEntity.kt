@@ -10,15 +10,15 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = ALBUM_TABLE_NAME)
 data class AlbumEntity(
-    @ColumnInfo("trackList") val trackList: List<TrackListEntity>,
+    @ColumnInfo("trackList") val trackList: List<TrackListEntity> = emptyList(),
     @ColumnInfo("saveTime") val saveTime: Long = System.currentTimeMillis(),
     @ColumnInfo("albumType") val albumType: String,
     @ColumnInfo("releaseDate") val release: String,
-    @ColumnInfo("artistList") val artistList: List<ArtistEntity>,
+    @ColumnInfo("artistList") val artistList: List<ArtistEntity> = emptyList(),
     @ColumnInfo("externalUrls") val externalUrls: ExternalUrlsEntity,
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo("id") val id: String,
-    @ColumnInfo("imageList") val imageList: List<ImageEntity>,
+    @ColumnInfo("imageList") val imageList: List<ImageEntity> = emptyList(),
     @ColumnInfo("albumName") val albumName: String,
     @ColumnInfo("totalTracks") val totalTracks: Int,
     @ColumnInfo("albumLength") val albumLength : String
@@ -29,7 +29,7 @@ data class AlbumEntity(
         @ColumnInfo("durationMs") val durationMs: Int,
         @ColumnInfo("trackNumber") val trackNumber: Int,
         @ColumnInfo("albumName") val albumName: String,
-        @ColumnInfo("artistList") val artistList: List<ArtistEntity>,
+        @ColumnInfo("artistList") val artistList: List<ArtistEntity> = emptyList(),
         @ColumnInfo("discNumber") val discNumber : Int
     ) : Parcelable
 

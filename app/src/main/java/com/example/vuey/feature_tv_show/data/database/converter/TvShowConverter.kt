@@ -1,68 +1,64 @@
 package com.example.vuey.feature_tv_show.data.database.converter
 
 import androidx.room.TypeConverter
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowCastEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowEpisodeEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowGenreEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowSeasonEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowSpokenLanguageEntity
+import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class TvShowConverter {
 
     @TypeConverter
-    fun fromGenreListJson(json : String) : List<TvShowGenreEntity> {
-        val type = object : TypeToken<List<TvShowGenreEntity>>() {}.type
+    fun fromGenreListJson(json : String) : List<TvShowEntity.TvShowGenreEntity> {
+        val type = object : TypeToken<List<TvShowEntity.TvShowGenreEntity>>() {}.type
         return Gson().fromJson(json, type)
     }
 
     @TypeConverter
-    fun toGenreListJson(genreList : List<TvShowGenreEntity>) : String {
+    fun toGenreListJson(genreList : List<TvShowEntity.TvShowGenreEntity>) : String {
         return Gson().toJson(genreList)
     }
 
     @TypeConverter
-    fun fromSpokenLanguageListJson(json : String) : List<TvShowSpokenLanguageEntity> {
-        val type = object : TypeToken<List<TvShowSpokenLanguageEntity>>() {}.type
+    fun fromSpokenLanguageListJson(json : String) : List<TvShowEntity.TvShowSpokenLanguageEntity> {
+        val type = object : TypeToken<List<TvShowEntity.TvShowSpokenLanguageEntity>>() {}.type
         return Gson().fromJson(json, type)
     }
 
     @TypeConverter
-    fun toSpokenLanguageListJson(spokenLanguageList : List<TvShowSpokenLanguageEntity>) : String {
+    fun toSpokenLanguageListJson(spokenLanguageList : List<TvShowEntity.TvShowSpokenLanguageEntity>) : String {
         return Gson().toJson(spokenLanguageList)
     }
 
     @TypeConverter
-    fun fromCastListJson(json : String) : List<TvShowCastEntity> {
-        val type = object : TypeToken<List<TvShowCastEntity>>() {}.type
+    fun fromCastListJson(json : String) : List<TvShowEntity.TvShowCastEntity> {
+        val type = object : TypeToken<List<TvShowEntity.TvShowCastEntity>>() {}.type
         return Gson().fromJson(json, type)
     }
 
     @TypeConverter
-    fun toCastListJson(castList : List<TvShowCastEntity>) : String {
+    fun toCastListJson(castList : List<TvShowEntity.TvShowCastEntity>) : String {
         return Gson().toJson(castList)
     }
 
     @TypeConverter
-    fun fromSeasonListJson(json : String) : List<TvShowSeasonEntity> {
-        val type = object : TypeToken<List<TvShowSeasonEntity>>() {}.type
+    fun fromSeasonListJson(json : String) : List<TvShowEntity.TvShowSeasonEntity> {
+        val type = object : TypeToken<List<TvShowEntity.TvShowSeasonEntity>>() {}.type
         return Gson().fromJson(json, type)
     }
 
     @TypeConverter
-    fun toSeasonListJson(seasonList : List<TvShowSeasonEntity>) : String {
+    fun toSeasonListJson(seasonList : List<TvShowEntity.TvShowSeasonEntity>) : String {
         return Gson().toJson(seasonList)
     }
 
     @TypeConverter
-    fun fromEpisodeListJson(json : String) : List<TvShowEpisodeEntity> {
-        val type = object : TypeToken<List<TvShowEpisodeEntity>>() {}.type
+    fun fromEpisodeListJson(json : String) : List<TvShowEntity.TvShowEpisodeEntity> {
+        val type = object : TypeToken<List<TvShowEntity.TvShowEpisodeEntity>>() {}.type
         return Gson().fromJson(json, type)
     }
 
     @TypeConverter
-    fun toEpisodeListJson(episodeList : List<TvShowEpisodeEntity>) : String {
+    fun toEpisodeListJson(episodeList : List<TvShowEntity.TvShowEpisodeEntity>) : String {
         return Gson().toJson(episodeList)
     }
 

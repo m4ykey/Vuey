@@ -12,10 +12,7 @@ import com.example.vuey.feature_movie.data.database.entity.MovieCastEntity
 import com.example.vuey.feature_movie.data.database.entity.MovieEntity
 import com.example.vuey.feature_tv_show.data.database.converter.TvShowConverter
 import com.example.vuey.feature_tv_show.data.database.dao.TvShowDao
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowCastEntity
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowEpisodeEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowGenreEntity
 import com.example.vuey.util.Constants.DATABASE_VERSION
 
 @Database(
@@ -24,9 +21,9 @@ import com.example.vuey.util.Constants.DATABASE_VERSION
         MovieEntity::class,
         MovieCastEntity::class,
         TvShowEntity::class,
-        TvShowGenreEntity::class,
-        TvShowCastEntity::class,
-        TvShowEpisodeEntity::class
+        TvShowEntity.TvShowGenreEntity::class,
+        TvShowEntity.TvShowCastEntity::class,
+        TvShowEntity.TvShowEpisodeEntity::class
     ],
     version = DATABASE_VERSION,
     exportSchema = false

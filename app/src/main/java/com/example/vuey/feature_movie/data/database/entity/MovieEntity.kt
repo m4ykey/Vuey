@@ -12,9 +12,9 @@ import kotlinx.parcelize.Parcelize
 data class MovieEntity(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo("movieId") val id: Int,
-    @ColumnInfo("movieCastList") val movieCastList: List<MovieCastEntity>,
-    @ColumnInfo("movieSpokenLanguages") val movieSpokenLanguageList: List<MovieSpokenLanguageEntity>,
-    @ColumnInfo("movieGenreList") val movieGenreList: List<MovieGenreEntity>,
+    @ColumnInfo("movieCastList") val movieCastList: List<MovieCastEntity> = emptyList(),
+    @ColumnInfo("movieSpokenLanguages") val movieSpokenLanguageList: List<MovieSpokenLanguageEntity> = emptyList(),
+    @ColumnInfo("movieGenreList") val movieGenreList: List<MovieGenreEntity> = emptyList(),
     @ColumnInfo("movieBackdropPath") val movieBackdropPath: String,
     @ColumnInfo("movieOverview") val movieOverview: String,
     @ColumnInfo("moviePosterPath") val moviePosterPath: String,

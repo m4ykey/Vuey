@@ -106,5 +106,13 @@
         <argument
             android:name="tvShowEntity"
             app:argType="com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity" />
+        <action
+            android:id="@+id/action_tvShowDetailFragment_to_tvShowEpisodeFragment"
+            app:destination="@id/tvShowEpisodeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/tvShowEpisodeFragment"
+        android:name="com.example.vuey.feature_tv_show.presentation.TvShowEpisodeFragment"
+        android:label="fragment_tv_show_episode"
+        tools:layout="@layout/fragment_tv_show_episode" />
 </navigation>

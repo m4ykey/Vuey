@@ -8,5 +8,6 @@ data class Episode(
     val runtime: Int,
     val season_number: Int,
     val show_id: Int,
-    val still_path: String
+    val still_path: String,
+    val overview : String
 )

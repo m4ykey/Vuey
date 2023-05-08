@@ -17,11 +17,7 @@ fun SearchTvShow.toTvShowEntity(): TvShowEntity {
         tvShowPosterPath = this.poster_path.toString(),
         tvShowVoteAverage = this.vote_average.formatVoteAverage(),
         tvShowFirstAirDate = this.first_air_date,
-        tvShowGenreList = emptyList(),
-        tvShowEpisodeRun = 0,
-        tvShowSpokenLanguage = emptyList(),
-        tvShowCast = emptyList(),
-        tvShowSeason = emptyList()
+        tvShowEpisodeRun = 0
     )
 }
 
@@ -74,23 +70,6 @@ fun Album.toAlbumEntity() : AlbumEntity {
         id = this.id,
         release = "",
         totalTracks = this.total_tracks,
-        imageList = this.images.map { image ->
-            AlbumEntity.ImageEntity(
-                height = image.height,
-                width = image.width,
-                url = image.url
-            )
-        },
-        trackList = emptyList(),
-        artistList = this.artists.map { artist ->
-            AlbumEntity.ArtistEntity(
-                id = artist.id,
-                name = artist.name,
-                externalUrls = AlbumEntity.ExternalUrlsEntity(
-                    spotify = this.external_urls.spotify
-                )
-            )
-        },
         externalUrls = AlbumEntity.ExternalUrlsEntity(
             spotify = this.external_urls.spotify
         )
@@ -105,11 +84,8 @@ fun SearchMovie.toMovieEntity() : MovieEntity {
         movieRuntime = "",
         moviePosterPath = this.poster_path.toString(),
         movieTitle = this.title,
-        movieVoteAverage = this.vote_average.toString(),
-        movieReleaseDate = this.release_date,
-        movieCastList = emptyList(),
-        movieGenreList = emptyList(),
-        movieSpokenLanguageList = emptyList()
+        movieVoteAverage = this.vote_average.formatVoteAverage(),
+        movieReleaseDate = DateUtils.formatAirDate(this.release_date).toString()
     )
 }
 

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
@@ -21,12 +22,8 @@ import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_tv_show.data.api.detail.Genre
 import com.example.vuey.feature_tv_show.data.api.detail.Season
 import com.example.vuey.feature_tv_show.data.api.detail.SpokenLanguage
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowCastEntity
+import com.example.vuey.feature_tv_show.data.api.season.Episode
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowEpisodeEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowGenreEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowSeasonEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowSpokenLanguageEntity
 import com.example.vuey.feature_tv_show.presentation.adapter.EpisodeAdapter
 import com.example.vuey.feature_tv_show.presentation.adapter.SeasonsAdapter
 import com.example.vuey.feature_tv_show.presentation.viewmodel.TvShowViewModel
@@ -37,6 +34,7 @@ import com.example.vuey.util.utils.formatVoteAverage
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.api.Distribution.BucketOptions.Linear
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,7 +47,6 @@ class TvShowDetailFragment : Fragment() {
     private lateinit var castAdapter: CastAdapter
     private lateinit var episodeAdapter: EpisodeAdapter
     private var isTvShowSaved = false
-    private var isSeasonsSaved = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,13 +59,11 @@ class TvShowDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tvShowId = arguments.tvShow.id
-
         castAdapter = CastAdapter()
         episodeAdapter = EpisodeAdapter()
 
-        viewModel.tvShowCredit(tvShowId)
-        viewModel.getDetailTvShow(tvShowId)
+        viewModel.tvShowCredit(arguments.tvShow.id)
+        viewModel.getDetailTvShow(arguments.tvShow.id)
 
     }
 
@@ -90,95 +85,17 @@ class TvShowDetailFragment : Fragment() {
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
 
-            epoxyRecyclerView.adapter = episodeAdapter
+            recyclerViewEpisode.adapter = episodeAdapter
+
+            imgEpisodes.setOnClickListener {
+                findNavController().navigate(R.id.action_tvShowDetailFragment_to_tvShowEpisodeFragment)
+            }
 
             Handler(Looper.getMainLooper()).postDelayed({
                 progressBar.visibility = View.GONE
             }, 500)
 
             val databaseArguments = arguments.tvShowEntity
-
-            val castList = databaseArguments.tvShowCast.map { cast ->
-                Cast(
-                    character = cast.castCharacter,
-                    name = cast.castName,
-                    profile_path = cast.castProfilePath,
-                    id = cast.id
-                )
-            }
-
-            castAdapter.submitCast(castList)
-
-            val seasons: List<Season> = databaseArguments.tvShowSeason.map { season ->
-                Season(
-                    air_date = "",
-                    episode_count = season.seasonEpisodeCount,
-                    id = season.id,
-                    name = season.seasonName,
-                    overview = "",
-                    poster_path = "",
-                    season_number = season.seasonNumber
-                )
-            }
-            spinnerSeason.adapter = SeasonsAdapter(
-                requireContext(),
-                seasons,
-                tvShowId = databaseArguments.id
-            )
-            spinnerSeason.setSelection(0)
-            spinnerSeason.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        val selectedSeasonId =
-                            parent?.getItemAtPosition(position) as? TvShowSeasonEntity
-                        if (selectedSeasonId != null) {
-                            viewModel.tvShowSeason(
-                                databaseArguments.id,
-                                selectedSeasonId.seasonNumber
-                            )
-                        }
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {}
-                }
-
-            val genre: List<TvShowGenreEntity> = databaseArguments.tvShowGenreList
-            val genreList = genre.joinToString(separator = ", ") { it.tvShowGenreName }
-
-            val spokenLanguage: List<TvShowSpokenLanguageEntity> =
-                databaseArguments.tvShowSpokenLanguage
-            val spokenLanguageList =
-                spokenLanguage.joinToString(separator = ", ") { it.tvShowSpokenLanguageName }
-
-            txtTvShowTitle.text = databaseArguments.tvShowName
-            txtOverview.text = databaseArguments.tvShowOverview
-            txtOverviewFull.text = databaseArguments.tvShowOverview
-            txtStatus.text = "Status: ${databaseArguments.tvShowStatus}"
-            txtVoteAverage.text = databaseArguments.tvShowVoteAverage
-            txtInfo.text =
-                "${databaseArguments.tvShowEpisodeRun}min • $genreList • ${databaseArguments.tvShowFirstAirDate}"
-            if (spokenLanguageList.isEmpty()) {
-                txtSpokenLanguages.text = getString(R.string.languages_empty)
-            } else {
-                txtSpokenLanguages.text = spokenLanguageList
-            }
-
-            if (databaseArguments.tvShowBackdropPath.isNotEmpty()) {
-                imgBackdrop.load(Constants.TMDB_IMAGE_ORIGINAL + databaseArguments.tvShowBackdropPath) {
-                    crossfade(true)
-                    crossfade(500)
-                }
-            } else {
-                imgBackdrop.load(Constants.TMDB_IMAGE_ORIGINAL + databaseArguments.tvShowPosterPath) {
-                    crossfade(true)
-                    crossfade(500)
-                }
-            }
 
             val tvShowEntity = TvShowEntity(
                 id = databaseArguments.id,
@@ -219,6 +136,51 @@ class TvShowDetailFragment : Fragment() {
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                 }
             }
+
+            val castList = databaseArguments.tvShowCast.map { cast ->
+                Cast(
+                    character = cast.castCharacter,
+                    name = cast.castName,
+                    profile_path = cast.castProfilePath,
+                    id = cast.id
+                )
+            }
+
+            castAdapter.submitCast(castList)
+
+            val genre: List<TvShowEntity.TvShowGenreEntity> = databaseArguments.tvShowGenreList
+            val genreList = genre.joinToString(separator = ", ") { it.tvShowGenreName }
+
+            val spokenLanguage: List<TvShowEntity.TvShowSpokenLanguageEntity> =
+                databaseArguments.tvShowSpokenLanguage
+            val spokenLanguageList =
+                spokenLanguage.joinToString(separator = ", ") { it.tvShowSpokenLanguageName }
+
+            txtTvShowTitle.text = databaseArguments.tvShowName
+            txtOverview.text = databaseArguments.tvShowOverview
+            txtOverviewFull.text = databaseArguments.tvShowOverview
+            txtStatus.text = "Status: ${databaseArguments.tvShowStatus}"
+            txtVoteAverage.text = databaseArguments.tvShowVoteAverage
+            txtInfo.text =
+                "${databaseArguments.tvShowEpisodeRun}min • $genreList • ${databaseArguments.tvShowFirstAirDate}"
+
+            if (spokenLanguageList.isEmpty()) {
+                txtSpokenLanguages.text = getString(R.string.languages_empty)
+            } else {
+                txtSpokenLanguages.text = spokenLanguageList
+            }
+
+            if (databaseArguments.tvShowBackdropPath.isNotEmpty()) {
+                imgBackdrop.load(Constants.TMDB_IMAGE_ORIGINAL + databaseArguments.tvShowBackdropPath) {
+                    crossfade(true)
+                    crossfade(500)
+                }
+            } else {
+                imgBackdrop.load(Constants.TMDB_IMAGE_ORIGINAL + databaseArguments.tvShowPosterPath) {
+                    crossfade(true)
+                    crossfade(500)
+                }
+            }
         }
 
         viewModel.tvShowCredits.observe(viewLifecycleOwner) { response ->
@@ -253,9 +215,7 @@ class TvShowDetailFragment : Fragment() {
 
         viewModel.tvShowSeasons.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showLoading()
-                }
+                is Resource.Loading -> { showLoading() }
 
                 is Resource.Success -> {
 
@@ -266,35 +226,6 @@ class TvShowDetailFragment : Fragment() {
                     tvShowEpisode.let { episodeList ->
                         episodeAdapter.submitEpisode(episodeList.episodes)
                     }
-
-                    val episodeEntity = tvShowEpisode.episodes.map { episode ->
-                        TvShowEpisodeEntity(
-                            episodeStillPath = episode.still_path,
-                            episodeNumber = episode.episode_number,
-                            episodeRuntime = episode.runtime,
-                            episodeAirDate = episode.air_date,
-                            episodeName = episode.name,
-                            showId = arguments.tvShow.id,
-                            seasonNumber = episode.season_number,
-                            id = episode.id
-                        )
-                    }
-
-                    with(binding) {
-
-                        imgSaveSeason.setOnClickListener {
-                            isSeasonsSaved = !isSeasonsSaved
-                            if (isSeasonsSaved) {
-                                showSnackbar(requireView(), "Odcinki zapisane")
-                                viewModel.insertAllEpisodes(episodeEntity)
-                                imgSaveSeason.setImageResource(R.drawable.ic_save)
-                            } else {
-                                showSnackbar(requireView(), "Odcinki usunięte")
-                                imgSaveSeason.setImageResource(R.drawable.ic_save_outlined)
-                            }
-                        }
-                    }
-
                 }
 
                 is Resource.Failure -> {
@@ -368,28 +299,6 @@ class TvShowDetailFragment : Fragment() {
                             }
                         }
 
-                        spinnerSeason.adapter = SeasonsAdapter(
-                            requireContext(),
-                            tvShowDetail.seasons,
-                            tvShowId = tvShowDetail.id
-                        )
-                        spinnerSeason.setSelection(0)
-                        spinnerSeason.onItemSelectedListener =
-                            object : AdapterView.OnItemSelectedListener {
-                                override fun onItemSelected(
-                                    parent: AdapterView<*>?,
-                                    view: View?,
-                                    position: Int,
-                                    p3: Long
-                                ) {
-                                    val selectedSeasonId =
-                                        (spinnerSeason.adapter.getItem(position) as Season).season_number
-                                    viewModel.tvShowSeason(tvShowDetail.id, selectedSeasonId)
-                                }
-
-                                override fun onNothingSelected(p0: AdapterView<*>?) {}
-                            }
-
                         if (languagesList.isEmpty()) {
                             txtSpokenLanguages.text = getString(R.string.languages_empty)
                         } else {
@@ -397,8 +306,29 @@ class TvShowDetailFragment : Fragment() {
                         }
                         txtStatus.text = "Status: ${tvShowDetail.status}"
 
+                        spinnerSeason.adapter = SeasonsAdapter(
+                            requireContext(),
+                            tvShowDetail.seasons,
+                            tvShowId = tvShowDetail.id
+                        )
+                        spinnerSeason.setSelection(0)
+                        spinnerSeason.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position : Int,
+                                p3: Long
+                            ) {
+                                val selectedSeasonId =
+                                    (spinnerSeason.adapter.getItem(position) as Season).season_number
+                                viewModel.tvShowSeason(tvShowDetail.id, selectedSeasonId)
+                            }
+
+                            override fun onNothingSelected(p0: AdapterView<*>?) {}
+                        }
+
                         val seasonEntity = tvShowDetail.seasons.map { season ->
-                            TvShowSeasonEntity(
+                            TvShowEntity.TvShowSeasonEntity(
                                 id = season.id,
                                 seasonName = season.name,
                                 seasonNumber = season.season_number,
@@ -407,21 +337,21 @@ class TvShowDetailFragment : Fragment() {
                         }
 
                         val genreEntity = tvShowDetail.genres.map { genre ->
-                            TvShowGenreEntity(
+                            TvShowEntity.TvShowGenreEntity(
                                 tvShowGenreName = genre.name,
-                                tvShowGenreId = genre.id
+                                id = genre.id
                             )
                         }
 
                         val spokenLanguageEntity =
                             tvShowDetail.spoken_languages.map { spokenLanguage ->
-                                TvShowSpokenLanguageEntity(
+                                TvShowEntity.TvShowSpokenLanguageEntity(
                                     tvShowSpokenLanguageName = spokenLanguage.name
                                 )
                             }
 
                         val castEntity = viewModel.tvShowCredits.value!!.data!!.cast.map { cast ->
-                            TvShowCastEntity(
+                            TvShowEntity.TvShowCastEntity(
                                 castProfilePath = cast.profile_path,
                                 castCharacter = cast.character,
                                 castName = cast.name,

@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_movie.data.response.MovieTvShowCreditsResponse
 import com.example.vuey.feature_tv_show.data.api.search.SearchTvShow
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowCastEntity
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowEpisodeEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowSeasonEntity
 import com.example.vuey.feature_tv_show.data.repository.TvShowRepository
 import com.example.vuey.feature_tv_show.data.response.TvShowDetailResponse
 import com.example.vuey.feature_tv_show.data.response.TvShowSeasonResponse
@@ -51,16 +48,6 @@ class TvShowViewModel @Inject constructor(
         viewModelScope.launch {
             tvShowRepository.deleteTvShow(tvShowEntity)
         }
-    }
-
-    fun insertAllEpisodes(episodeList : List<TvShowEpisodeEntity>) {
-        viewModelScope.launch {
-            tvShowRepository.insertAllEpisodes(episodeList)
-        }
-    }
-
-    fun getEpisodesById(showId : Int, seasonNumber: Int) : LiveData<List<TvShowEpisodeEntity>> {
-        return tvShowRepository.getEpisodesById(showId, seasonNumber)
     }
 
     fun tvShowSeason(tvShowId: Int, seasonNumber : Int) {

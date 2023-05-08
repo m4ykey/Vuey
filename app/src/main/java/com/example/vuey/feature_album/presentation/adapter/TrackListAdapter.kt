@@ -21,6 +21,7 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
         val result = DiffUtil.calculateDiff(oldTrack)
         trackResult = newTrack
         result.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     class TrackViewHolder(private val binding: LayoutAlbumTrackListBinding) :

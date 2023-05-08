@@ -5,10 +5,7 @@ import com.example.vuey.feature_movie.data.response.MovieTvShowCreditsResponse
 import com.example.vuey.feature_tv_show.data.api.TvShowApi
 import com.example.vuey.feature_tv_show.data.api.search.SearchTvShow
 import com.example.vuey.feature_tv_show.data.database.dao.TvShowDao
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowCastEntity
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowEpisodeEntity
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowSeasonEntity
 import com.example.vuey.feature_tv_show.data.response.TvShowDetailResponse
 import com.example.vuey.feature_tv_show.data.response.TvShowSeasonResponse
 import com.example.vuey.util.network.Resource
@@ -33,18 +30,6 @@ class TvShowRepository @Inject constructor(
 
     fun getTvShowById(tvShowId: Int) : LiveData<TvShowEntity> {
         return tvShowDao.getTvShowById(tvShowId)
-    }
-
-    suspend fun insertAllEpisodes(episodeList : List<TvShowEpisodeEntity>) {
-        return tvShowDao.insertAllEpisodes(episodeList)
-    }
-
-    fun getEpisodesById(showId : Int, seasonNumber: Int) : LiveData<List<TvShowEpisodeEntity>> {
-        return tvShowDao.getEpisodesById(showId, seasonNumber)
-    }
-
-    fun deleteAllEpisodes(showId : Int) : Int {
-        return tvShowDao.deleteAllEpisodes(showId)
     }
 
     suspend fun searchTvShow(tvShowName : String) : Resource<List<SearchTvShow>> {

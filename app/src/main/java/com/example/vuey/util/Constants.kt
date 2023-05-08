@@ -15,7 +15,7 @@ object Constants {
     const val TV_SHOW_SEASON_TABLE = "tv_show_season_table"
     const val TV_SHOW_EPISODE_TABLE = "tv_show_episode_table"
 
-    const val DATABASE_VERSION = 20
+    const val DATABASE_VERSION = 21
 
     const val SPOTIFY_BASE_URL = "https://api.spotify.com/"
     const val SPOTIFY_CLIENT_ID = "SPOTIFY_CLIENT_ID"

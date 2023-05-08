@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
-import com.example.vuey.feature_movie.data.api.detail.Cast
 import com.example.vuey.databinding.LayoutCastBinding
+import com.example.vuey.feature_movie.data.api.detail.Cast
 import com.example.vuey.util.Constants.TMDB_IMAGE
 import com.example.vuey.util.utils.DiffUtils
 
@@ -20,6 +20,7 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CreditViewHolder>() {
         val result = DiffUtil.calculateDiff(oldCast)
         castResult = newCast
         result.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreditViewHolder {

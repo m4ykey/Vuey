@@ -10,14 +10,12 @@ import android.widget.SpinnerAdapter
 import android.widget.TextView
 import com.example.vuey.R
 import com.example.vuey.feature_tv_show.data.api.detail.Season
-import com.example.vuey.feature_tv_show.data.database.entity.TvShowSeasonEntity
-import java.lang.IndexOutOfBoundsException
 
 class SeasonsAdapter(
     private val context : Context,
     private val seasonResult : List<Season>,
     private val tvShowId : Int
-    ) : SpinnerAdapter {
+) : SpinnerAdapter {
 
     private val filterSeasons = seasonResult.filter { it.season_number != 0 }
 

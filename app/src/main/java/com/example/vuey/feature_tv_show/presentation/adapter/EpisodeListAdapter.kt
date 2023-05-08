@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutEpisodeBinding
+import com.example.vuey.databinding.LayoutEpisodeListBinding
 import com.example.vuey.feature_tv_show.data.api.season.Episode
 import com.example.vuey.util.Constants
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.DiffUtils
 
-class EpisodeAdapter : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
+class EpisodeListAdapter : RecyclerView.Adapter<EpisodeListAdapter.EpisodeViewHolder>() {
 
     private var episodeResult = listOf<Episode>()
 
@@ -25,20 +26,28 @@ class EpisodeAdapter : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() 
         notifyDataSetChanged()
     }
 
-    class EpisodeViewHolder(private val binding: LayoutEpisodeBinding) :
+    class EpisodeViewHolder(private val binding: LayoutEpisodeListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(episodeResult: Episode) {
 
             with(binding) {
-                txtEpisodeName.text = "${episodeResult.episode_number}. " + episodeResult.name
-                txtEpisodeRuntime.text = "${episodeResult.runtime}min"
-                txtOverview.text = episodeResult.overview
+
+                txtName.text = episodeResult.name
+                txtEpisodeNumber.text =
+                    root.context.getString(R.string.episode) + " ${episodeResult.episode_number}"
+
+                if (episodeResult.air_date != null && !episodeResult.air_date.isNullOrEmpty()) {
+                    txtInfo.text = DateUtils.formatAirDate(episodeResult.air_date) + " • " + episodeResult.runtime + "min"
+                } else {
+                    txtInfo.text = "${episodeResult.runtime}min"
+                }
+
 
                 if (episodeResult.still_path != null) {
                     imgEpisodePoster.load(Constants.TMDB_IMAGE + episodeResult.still_path) {
                         crossfade(true)
-                        crossfade(2000)
+                        crossfade(500)
                     }
                 } else {
                     imgEpisodePoster.setImageResource(R.drawable.ic_movie_error)
@@ -51,7 +60,7 @@ class EpisodeAdapter : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() 
         parent: ViewGroup,
         viewType: Int
     ): EpisodeViewHolder {
-        val binding = LayoutEpisodeBinding.inflate(
+        val binding = LayoutEpisodeListBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -64,10 +73,6 @@ class EpisodeAdapter : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() 
     }
 
     override fun getItemCount(): Int {
-        return if (episodeResult.size > 10) {
-            10
-        } else {
-            episodeResult.size
-        }
+        return episodeResult.size
     }
 }

@@ -32,6 +32,7 @@ class TvShowAdapter(
         val result = DiffUtil.calculateDiff(oldTvShow)
         tvShowResultEntity = newTvShow
         result.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     fun submitTvShow(newTvShow : List<SearchTvShow>) {
@@ -58,7 +59,7 @@ class TvShowAdapter(
                     }
                 }
                 if (tvShowEntity.tvShowFirstAirDate != null && !tvShowEntity.tvShowFirstAirDate.isNullOrEmpty()) {
-                    txtReleaseDate.text = tvShowEntity.tvShowFirstAirDate ?: ""
+                    txtReleaseDate.text = DateUtils.formatAirDate(tvShowEntity.tvShowFirstAirDate)
                 } else {
                     txtReleaseDate.visibility = View.GONE
                 }

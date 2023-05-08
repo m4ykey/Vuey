@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
-import com.example.vuey.feature_movie.data.database.entity.MovieEntity
-import com.example.vuey.feature_movie.data.api.search.SearchMovie
 import com.example.vuey.databinding.LayoutMovieBinding
+import com.example.vuey.feature_movie.data.api.search.SearchMovie
+import com.example.vuey.feature_movie.data.database.entity.MovieEntity
 import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
 import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections
 import com.example.vuey.util.Constants.TMDB_IMAGE
@@ -40,6 +40,7 @@ class MovieAdapter(
         val result = DiffUtil.calculateDiff(oldMovie)
         movieEntityResult = newMovie
         result.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     class MovieViewHolder(private val binding: LayoutMovieBinding) :

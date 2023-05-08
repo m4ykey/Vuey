@@ -36,6 +36,7 @@ class AlbumAdapter(
         val result = DiffUtil.calculateDiff(oldAlbum)
         albumResultEntity = newAlbum
         result.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     inner class AlbumViewHolder(private val binding: LayoutAlbumBinding) :
