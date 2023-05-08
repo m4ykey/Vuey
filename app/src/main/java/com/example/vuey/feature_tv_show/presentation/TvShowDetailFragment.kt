@@ -1,7 +1,6 @@
 package com.example.vuey.feature_tv_show.presentation
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
@@ -24,7 +25,6 @@ import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_tv_show.data.api.detail.Genre
 import com.example.vuey.feature_tv_show.data.api.detail.Season
 import com.example.vuey.feature_tv_show.data.api.detail.SpokenLanguage
-import com.example.vuey.feature_tv_show.data.api.season.Episode
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
 import com.example.vuey.feature_tv_show.presentation.adapter.EpisodeAdapter
 import com.example.vuey.feature_tv_show.presentation.adapter.SeasonsAdapter
@@ -36,7 +36,6 @@ import com.example.vuey.util.utils.formatVoteAverage
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.api.Distribution.BucketOptions.Linear
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,6 +48,7 @@ class TvShowDetailFragment : Fragment() {
     private lateinit var castAdapter: CastAdapter
     private lateinit var episodeAdapter: EpisodeAdapter
     private var isTvShowSaved = false
+    private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +72,8 @@ class TvShowDetailFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        navController = findNavController()
 
         val bottomNavigationView: BottomNavigationView =
             requireActivity().findViewById(R.id.bottomMenu)
@@ -149,6 +151,44 @@ class TvShowDetailFragment : Fragment() {
             }
 
             castAdapter.submitCast(castList)
+
+            val seasonList = databaseArguments.tvShowSeason.map { season ->
+                Season(
+                    air_date = "",
+                    episode_count = season.seasonEpisodeCount,
+                    id = season.id,
+                    name = season.seasonName,
+                    poster_path = "",
+                    season_number = season.seasonNumber,
+                    overview = ""
+                )
+            }
+            spinnerSeason.adapter = SeasonsAdapter(
+                requireContext(),
+                seasonList,
+                tvShowId = databaseArguments.id
+            )
+            spinnerSeason.setSelection(0)
+            spinnerSeason.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        p3: Long
+                    ) {
+                        val selectedSeason = spinnerSeason.adapter.getItem(position)
+                        if (selectedSeason is TvShowEntity.TvShowSeasonEntity) {
+                            val selectedSeasonId = selectedSeason.seasonNumber
+                            viewModel.tvShowSeason(databaseArguments.id, selectedSeasonId)
+
+                            setupEpisodeFragment(databaseArguments.id, selectedSeasonId)
+                        }
+
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {}
+                }
 
             val genre: List<TvShowEntity.TvShowGenreEntity> = databaseArguments.tvShowGenreList
             val genreList = genre.joinToString(separator = ", ") { it.tvShowGenreName }
@@ -323,6 +363,9 @@ class TvShowDetailFragment : Fragment() {
                                     val selectedSeasonId =
                                         (spinnerSeason.adapter.getItem(position) as Season).season_number
                                     viewModel.tvShowSeason(tvShowDetail.id, selectedSeasonId)
+
+                                    setupEpisodeFragment(tvShowDetail.id, selectedSeasonId)
+
                                 }
 
                                 override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -415,6 +458,17 @@ class TvShowDetailFragment : Fragment() {
         }
     }
 
+    private fun setupEpisodeFragment(tvShowId: Int, seasonNumber: Int) {
+        binding.imgEpisodes.setOnClickListener {
+            val action =
+                TvShowDetailFragmentDirections.actionTvShowDetailFragmentToTvShowEpisodeFragment(
+                    tvShowId = tvShowId,
+                    seasonNumber = seasonNumber
+                )
+            navController.navigate(action)
+        }
+    }
+
     private fun hideLoading() {
         binding.progressBar.visibility = View.GONE
     }
@@ -422,7 +476,7 @@ class TvShowDetailFragment : Fragment() {
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
     }
-    
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

@@ -13,7 +13,7 @@ import com.example.vuey.feature_tv_show.data.api.search.SearchTvShow
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
 import com.example.vuey.feature_tv_show.presentation.TvShowFragmentDirections
 import com.example.vuey.feature_tv_show.presentation.TvShowSearchFragmentDirections
-import com.example.vuey.util.Constants.TMDB_IMAGE
+import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.DiffUtils
 import com.example.vuey.util.utils.formatVoteAverage
@@ -53,7 +53,7 @@ class TvShowAdapter(
                 txtDescription.text = tvShowEntity.tvShowOverview
                 txtVoteAverage.text = tvShowEntity.tvShowVoteAverage
                 if (tvShowEntity.tvShowPosterPath.isNotEmpty()) {
-                    imgTvShow.load(TMDB_IMAGE + tvShowEntity.tvShowPosterPath) {
+                    imgTvShow.load(TMDB_IMAGE_ORIGINAL + tvShowEntity.tvShowPosterPath) {
                         crossfade(true)
                         crossfade(500)
                     }
@@ -78,7 +78,7 @@ class TvShowAdapter(
             with(binding) {
 
                 if (tvShowResult.poster_path != null) {
-                    imgTvShow.load(TMDB_IMAGE + tvShowResult.poster_path) {
+                    imgTvShow.load(TMDB_IMAGE_ORIGINAL + tvShowResult.poster_path) {
                         crossfade(true)
                         crossfade(500)
                     }

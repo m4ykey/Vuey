@@ -6,42 +6,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".feature_tv_show.presentation.TvShowEpisodeFragment">
 
-    <LinearLayout
-        android:id="@+id/linearLayoutSeason"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/progressBar"
+        android:indeterminateTint="@color/white"
+        android:visibility="gone"/>
 
-        <ImageView
-            android:src="@drawable/ic_arrow_back"
-            app:tint="@color/white"
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imgBack"/>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:background="@null"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:textSize="20sp"
-            android:fontFamily="@font/cabin"
-            android:textColor="@color/white"
-            android:layout_marginStart="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Season 1"/>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIconTint="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Season 1"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:id="@+id/txtSeasonNumber"
+                android:fontFamily="@font/cabin"/>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/recyclerViewEpisodes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSeason"/>
+        app:layout_constraintTop_toBottomOf="@+id/appBar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_movie.data.database.entity.MovieEntity
 import com.example.vuey.feature_movie.data.api.search.SearchMovie
-import com.example.vuey.feature_movie.data.database.entity.MovieCastEntity
 import com.example.vuey.feature_movie.data.response.MovieTvShowCreditsResponse
 import com.example.vuey.feature_movie.data.response.MovieDetailResponse
 import com.example.vuey.feature_movie.data.repository.MovieRepository
@@ -47,21 +46,21 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    fun insertCast(castEntity: List<MovieCastEntity>) {
-        viewModelScope.launch {
-            movieRepository.insertCast(castEntity)
-        }
-    }
-
-    fun getCast(movieId : Int) : LiveData<List<MovieCastEntity>> {
-        return movieRepository.getCast(movieId)
-    }
-
-    fun deleteCast(castEntity: List<MovieCastEntity>) {
-        viewModelScope.launch {
-            movieRepository.deleteCast(castEntity)
-        }
-    }
+//    fun insertCast(castEntity: List<MovieCastEntity>) {
+//        viewModelScope.launch {
+//            movieRepository.insertCast(castEntity)
+//        }
+//    }
+//
+//    fun getCast(movieId : Int) : LiveData<List<MovieCastEntity>> {
+//        return movieRepository.getCast(movieId)
+//    }
+//
+//    fun deleteCast(castEntity: List<MovieCastEntity>) {
+//        viewModelScope.launch {
+//            movieRepository.deleteCast(castEntity)
+//        }
+//    }
 
     fun movieCredit(movieId: Int) {
         viewModelScope.launch {

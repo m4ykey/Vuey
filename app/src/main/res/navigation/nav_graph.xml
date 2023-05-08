@@ -114,5 +114,12 @@
         android:id="@+id/tvShowEpisodeFragment"
         android:name="com.example.vuey.feature_tv_show.presentation.TvShowEpisodeFragment"
         android:label="fragment_tv_show_episode"
-        tools:layout="@layout/fragment_tv_show_episode" />
+        tools:layout="@layout/fragment_tv_show_episode" >
+        <argument
+            android:name="tvShowId"
+            app:argType="integer" />
+        <argument
+            android:name="seasonNumber"
+            app:argType="integer" />
+    </fragment>
 </navigation>

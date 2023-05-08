@@ -13,7 +13,7 @@ import com.example.vuey.feature_movie.data.api.search.SearchMovie
 import com.example.vuey.feature_movie.data.database.entity.MovieEntity
 import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
 import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections
-import com.example.vuey.util.Constants.TMDB_IMAGE
+import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.DiffUtils
 import com.example.vuey.util.utils.formatVoteAverage
@@ -56,7 +56,7 @@ class MovieAdapter(
                 txtVoteAverage.text = movieEntityResult.movieVoteAverage
 
                 if (movieEntityResult.moviePosterPath != null) {
-                    imgMovie.load(TMDB_IMAGE + movieEntityResult.moviePosterPath) {
+                    imgMovie.load(TMDB_IMAGE_ORIGINAL + movieEntityResult.moviePosterPath) {
                         crossfade(true)
                         crossfade(500)
                     }
@@ -95,7 +95,7 @@ class MovieAdapter(
                 txtVoteAverage.text = movieResult.vote_average.formatVoteAverage()
 
                 if (movieResult.poster_path != null) {
-                    imgMovie.load(TMDB_IMAGE + movieResult.poster_path) {
+                    imgMovie.load(TMDB_IMAGE_ORIGINAL + movieResult.poster_path) {
                         crossfade(true)
                         crossfade(500)
                     }

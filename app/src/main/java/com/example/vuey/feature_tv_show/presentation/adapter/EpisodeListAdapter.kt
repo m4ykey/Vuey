@@ -11,6 +11,7 @@ import com.example.vuey.databinding.LayoutEpisodeBinding
 import com.example.vuey.databinding.LayoutEpisodeListBinding
 import com.example.vuey.feature_tv_show.data.api.season.Episode
 import com.example.vuey.util.Constants
+import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.DiffUtils
 
@@ -45,7 +46,7 @@ class EpisodeListAdapter : RecyclerView.Adapter<EpisodeListAdapter.EpisodeViewHo
 
 
                 if (episodeResult.still_path != null) {
-                    imgEpisodePoster.load(Constants.TMDB_IMAGE + episodeResult.still_path) {
+                    imgEpisodePoster.load(TMDB_IMAGE_ORIGINAL + episodeResult.still_path) {
                         crossfade(true)
                         crossfade(500)
                     }

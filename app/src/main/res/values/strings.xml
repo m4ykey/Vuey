@@ -1,33 +1,21 @@
 <resources>
     <string name="app_name">Vuey</string>
     <string name="album">Albums</string>
-    <string name="delete_album">Delete album?</string>
-    <string name="delete_album_message">Are you sure you want delete </string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <string name="artist">Artist</string>
     <string name="total_tracks">Total tracks: </string>
     <string name="movie">Movies</string>
-    <string name="tv_show">Tv Shows</string>
+    <string name="tv_show">TV Shows</string>
     <string name="search">Search</string>
     <string name="empty_search_query">Enter at least 1 character</string>
     <string name="back">Back</string>
     <string name="top_cast">Top Cast</string>
     <string name="spoken_languages">Spoken Languages</string>
     <string name="cast_is_empty">Cast list is empty</string>
-    <string name="languages_empty">Spoken Language list is empty</string>
-    <string name="delete_movie">Delete movie?</string>
-    <string name="delete_movie_message">Are you sure you want delete </string>
+    <string name="languages_empty">Spoken language list is empty</string>
     <string name="seasons">Seasons</string>
     <string name="season">Season</string>
     <string name="episode">Episode</string>
     <string name="added_to_library">Added to library</string>
     <string name="removed_from_library">Removed from library</string>
-    <string name="statistics">Statistics</string>
-    <string name="open">Open</string>
-    <string name="close">Close</string>
     <string name="episodes">Episodes</string>
-    <string name="not_saved_album">You don\'t have any albums saved yet.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

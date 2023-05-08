@@ -81,7 +81,7 @@ fun SearchMovie.toMovieEntity() : MovieEntity {
         id = this.id,
         movieOverview = this.overview,
         movieBackdropPath = this.backdrop_path.toString(),
-        movieRuntime = "",
+        movieRuntime = 0,
         moviePosterPath = this.poster_path.toString(),
         movieTitle = this.title,
         movieVoteAverage = this.vote_average.formatVoteAverage(),

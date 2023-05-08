@@ -2,10 +2,6 @@
 <resources>
     <string name="app_name">Vuey</string>
     <string name="album">Album</string>
-    <string name="delete_album">Usunąć album?</string>
-    <string name="delete_album_message">Jesteś pewien, że chcesz usunąć </string>
-    <string name="yes">Tak</string>
-    <string name="no">Nie</string>
     <string name="artist">Artysta</string>
     <string name="total_tracks">Ilość utworów: </string>
     <string name="movie">Filmy</string>
@@ -17,16 +13,10 @@
     <string name="spoken_languages">Obsługiwane języki</string>
     <string name="cast_is_empty">Obsada jest pusta</string>
     <string name="languages_empty">Lista języków jest pusta</string>
-    <string name="delete_movie">Usunąć film?</string>
-    <string name="delete_movie_message">Jesteś pewien, że chcesz usunąć </string>
     <string name="seasons">Sezony</string>
     <string name="season">Sezon</string>
     <string name="episode">Odcinek</string>
     <string name="added_to_library">Dodano do biblioteki</string>
     <string name="removed_from_library">Usunięto z biblioteki</string>
-    <string name="statistics">Statystyki</string>
-    <string name="open">Otwórz</string>
-    <string name="close">Zamknij</string>
     <string name="episodes">Odcinków</string>
-    <string name="not_saved_album">Nie masz jeszcze zapisanych albumów.</string>
 </resources>

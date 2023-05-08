@@ -19,9 +19,6 @@ import com.example.vuey.feature_movie.data.api.detail.Cast
 import com.example.vuey.feature_movie.data.api.detail.Genre
 import com.example.vuey.feature_movie.data.api.detail.SpokenLanguage
 import com.example.vuey.databinding.FragmentMovieDetailBinding
-import com.example.vuey.feature_movie.data.database.entity.MovieCastEntity
-import com.example.vuey.feature_movie.data.database.entity.MovieGenreEntity
-import com.example.vuey.feature_movie.data.database.entity.MovieSpokenLanguageEntity
 import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
@@ -126,20 +123,20 @@ class MovieDetailFragment : Fragment() {
 
             val castList = movieArguments.movieCastList.map { cast ->
                 Cast(
-                    character = cast.character,
-                    name = cast.name,
-                    profile_path = cast.profile_path,
+                    character = cast.castCharacter,
+                    name = cast.castName,
+                    profile_path = cast.castProfilePath,
                     id = cast.id
                 )
             }
             castAdapter.submitCast(castList)
 
-            val genres: List<MovieGenreEntity> = movieArguments.movieGenreList
-            val genresList = genres.joinToString(separator = ", ") { it.name }
+            val genres: List<MovieEntity.MovieGenreEntity> = movieArguments.movieGenreList
+            val genresList = genres.joinToString(separator = ", ") { it.genreName }
 
-            val spokenLanguage: List<MovieSpokenLanguageEntity> =
+            val spokenLanguage: List<MovieEntity.MovieSpokenLanguageEntity> =
                 movieArguments.movieSpokenLanguageList
-            val languageList = spokenLanguage.joinToString(separator = ", ") { it.name }
+            val languageList = spokenLanguage.joinToString(separator = ", ") { it.spokenLanguageName }
 
             if (languageList.isEmpty()) {
                 txtSpokenLanguages.text = getString(R.string.languages_empty)
@@ -149,8 +146,17 @@ class MovieDetailFragment : Fragment() {
 
             txtMovieTitle.text = movieArguments.movieTitle
 
+            val movieRuntime = movieArguments.movieRuntime
+            val hour = movieRuntime / 60
+            val minute = movieRuntime % 60
+            val formattedRuntime = if (hour == 0) {
+                "${minute}min"
+            } else {
+                "${hour}h ${minute}min"
+            }
+
             txtInfo.text =
-                "${movieArguments.movieRuntime} • $genresList • ${movieArguments.movieReleaseDate}"
+                "$formattedRuntime • $genresList • ${movieArguments.movieReleaseDate}"
 
             txtVoteAverage.text = movieArguments.movieVoteAverage
 
@@ -282,12 +288,11 @@ class MovieDetailFragment : Fragment() {
                         }
 
                         val castEntity =
-                            viewModel.movieCredits.value?.data?.cast?.map { cast ->
-                                MovieCastEntity(
-                                    character = cast.character,
-                                    profile_path = cast.profile_path,
-                                    name = cast.name,
-                                    movieId = movieDetail.id,
+                            viewModel.movieCredits.value!!.data!!.cast.map { cast ->
+                                MovieEntity.MovieCastEntity(
+                                    castCharacter = cast.character,
+                                    castProfilePath = cast.profile_path,
+                                    castName = cast.name,
                                     id = cast.id
                                 )
                             }
@@ -298,20 +303,20 @@ class MovieDetailFragment : Fragment() {
                             moviePosterPath = movieDetail.poster_path.toString(),
                             movieBackdropPath = movieDetail.backdrop_path.toString(),
                             movieReleaseDate = DateUtils.formatAirDate(movieDetail.release_date).toString(),
-                            movieRuntime = formattedRuntime,
+                            movieRuntime = movieDetail.runtime,
                             movieTitle = movieDetail.title,
                             movieVoteAverage = movieDetail.vote_average.formatVoteAverage(),
                             movieGenreList = movieDetail.genres.map { genre ->
-                                MovieGenreEntity(
-                                    name = genre.name
+                                MovieEntity.MovieGenreEntity(
+                                    genreName = genre.name
                                 )
                             },
                             movieSpokenLanguageList = movieDetail.spoken_languages.map { language ->
-                                MovieSpokenLanguageEntity(
-                                    name = language.name
+                                MovieEntity.MovieSpokenLanguageEntity(
+                                    spokenLanguageName = language.name
                                 )
                             },
-                            movieCastList = castEntity!!
+                            movieCastList = castEntity
                         )
 
                         imgSave.setOnClickListener {
@@ -334,9 +339,7 @@ class MovieDetailFragment : Fragment() {
                     hideLoading()
                 }
 
-                is Resource.Loading -> {
-                    showLoading()
-                }
+                is Resource.Loading -> { showLoading() }
             }
         }
     }

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.vuey.util.Constants
 import com.example.vuey.util.Constants.MOVIE_TABLE_NAME
 import kotlinx.parcelize.Parcelize
 
@@ -21,8 +22,30 @@ data class MovieEntity(
     @ColumnInfo("movieReleaseDate") val movieReleaseDate: String,
     @ColumnInfo("movieTitle") val movieTitle: String,
     @ColumnInfo("movieVoteAverage") val movieVoteAverage: String,
-    @ColumnInfo("movieRuntime") val movieRuntime: String,
+    @ColumnInfo("movieRuntime") val movieRuntime: Int,
     @ColumnInfo("saveTime") val saveTime: Long = System.currentTimeMillis()
-) : Parcelable
+) : Parcelable {
+
+    @Parcelize
+    @Entity(tableName = Constants.MOVIE_CAST_TABLE_NAME)
+    data class MovieCastEntity(
+        @ColumnInfo("castName") val castName: String,
+        @ColumnInfo("castProfilePath") val castProfilePath: String,
+        @ColumnInfo("castCharacter") val castCharacter: String,
+        @PrimaryKey(autoGenerate = false)
+        @ColumnInfo("id") val id : Int
+    ) : Parcelable
+
+    @Parcelize
+    data class MovieGenreEntity(
+        @ColumnInfo("genreName") val genreName: String
+    ) : Parcelable
+
+    @Parcelize
+    data class MovieSpokenLanguageEntity(
+        @ColumnInfo("spokenLanguageName") val spokenLanguageName: String
+    ) : Parcelable
+
+}
 
 

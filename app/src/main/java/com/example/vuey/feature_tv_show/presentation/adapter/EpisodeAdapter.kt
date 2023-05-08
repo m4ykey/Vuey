@@ -36,9 +36,9 @@ class EpisodeAdapter : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() 
                 txtOverview.text = episodeResult.overview
 
                 if (episodeResult.still_path != null) {
-                    imgEpisodePoster.load(Constants.TMDB_IMAGE + episodeResult.still_path) {
+                    imgEpisodePoster.load(Constants.TMDB_IMAGE_ORIGINAL + episodeResult.still_path) {
                         crossfade(true)
-                        crossfade(2000)
+                        crossfade(500)
                     }
                 } else {
                     imgEpisodePoster.setImageResource(R.drawable.ic_movie_error)

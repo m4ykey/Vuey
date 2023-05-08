@@ -8,7 +8,6 @@ import com.example.vuey.feature_album.data.database.dao.AlbumDao
 import com.example.vuey.feature_album.data.database.entity.AlbumEntity
 import com.example.vuey.feature_movie.data.database.converter.MovieConverter
 import com.example.vuey.feature_movie.data.database.dao.MovieDao
-import com.example.vuey.feature_movie.data.database.entity.MovieCastEntity
 import com.example.vuey.feature_movie.data.database.entity.MovieEntity
 import com.example.vuey.feature_tv_show.data.database.converter.TvShowConverter
 import com.example.vuey.feature_tv_show.data.database.dao.TvShowDao
@@ -19,7 +18,7 @@ import com.example.vuey.util.Constants.DATABASE_VERSION
     entities = [
         AlbumEntity::class,
         MovieEntity::class,
-        MovieCastEntity::class,
+        MovieEntity.MovieCastEntity::class,
         TvShowEntity::class,
         TvShowEntity.TvShowGenreEntity::class,
         TvShowEntity.TvShowCastEntity::class,

@@ -36,30 +36,37 @@
         android:layout_height="0dp"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:id="@+id/txtReleaseDate"
                 tools:text="2022"
                 android:textSize="12sp"
                 android:textColor="@color/movie_blue"
-                android:layout_weight="1"
                 android:fontFamily="@font/cabin"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <ImageView
                 android:layout_width="18dp"
                 app:tint="@color/movie_blue"
                 android:layout_height="18dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtVoteAverage"
                 android:src="@drawable/ic_round_star"/>
 
             <TextView
                 android:id="@+id/txtVoteAverage"
                 tools:text="8.5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:textSize="12sp"
                 android:layout_marginStart="5dp"
                 android:textColor="@color/movie_blue"
@@ -67,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:layout_width="match_parent"

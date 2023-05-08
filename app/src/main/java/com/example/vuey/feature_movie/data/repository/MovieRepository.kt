@@ -1,13 +1,12 @@
 package com.example.vuey.feature_movie.data.repository
 
 import androidx.lifecycle.LiveData
+import com.example.vuey.feature_movie.data.api.MovieApi
+import com.example.vuey.feature_movie.data.api.search.SearchMovie
 import com.example.vuey.feature_movie.data.database.dao.MovieDao
 import com.example.vuey.feature_movie.data.database.entity.MovieEntity
-import com.example.vuey.feature_movie.data.api.search.SearchMovie
-import com.example.vuey.feature_movie.data.api.MovieApi
-import com.example.vuey.feature_movie.data.database.entity.MovieCastEntity
-import com.example.vuey.feature_movie.data.response.MovieTvShowCreditsResponse
 import com.example.vuey.feature_movie.data.response.MovieDetailResponse
+import com.example.vuey.feature_movie.data.response.MovieTvShowCreditsResponse
 import com.example.vuey.util.network.Resource
 import javax.inject.Inject
 
@@ -28,17 +27,17 @@ class MovieRepository @Inject constructor(
         return movieDao.getAllMovies()
     }
 
-    suspend fun insertCast(cast : List<MovieCastEntity>) {
-        return movieDao.insertCast(cast)
-    }
-
-    fun getCast(movieId: Int) : LiveData<List<MovieCastEntity>> {
-        return movieDao.getCast(movieId)
-    }
-
-    suspend fun deleteCast(cast : List<MovieCastEntity>) {
-        return movieDao.deleteCast(cast)
-    }
+//    suspend fun insertCast(cast : List<MovieEntity.MovieCastEntity>) {
+//        return movieDao.insertCast(cast)
+//    }
+//
+//    fun getCast(movieId: Int) : LiveData<List<MovieCastEntity>> {
+//        return movieDao.getCast(movieId)
+//    }
+//
+//    suspend fun deleteCast(cast : List<MovieCastEntity>) {
+//        return movieDao.deleteCast(cast)
+//    }
 
     fun getMovieById(movieId: Int) : LiveData<MovieEntity> {
         return movieDao.getMovieById(movieId)
