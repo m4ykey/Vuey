@@ -43,29 +43,6 @@ class TvShowEpisodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.tvShowSeason(1434, 8)
-        viewModel.tvShowSeasons.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> {  }
-
-                is Resource.Success -> {
-
-                    val tvShowEpisode = response.data!!
-
-                    binding.recyclerViewEpisodes.adapter = episodeListAdapter
-                    binding.recyclerViewEpisodes.layoutManager = LinearLayoutManager(requireContext())
-
-                    tvShowEpisode.let { episodeList ->
-                        episodeListAdapter.submitEpisode(episodeList.episodes)
-                    }
-                }
-
-                is Resource.Failure -> {
-                    showSnackbar(requireView(), "${response.message}", Snackbar.LENGTH_LONG)
-                }
-            }
-        }
-
     }
 
     override fun onDestroy() {

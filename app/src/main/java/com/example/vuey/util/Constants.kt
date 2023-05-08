@@ -18,12 +18,9 @@ object Constants {
     const val DATABASE_VERSION = 21
 
     const val SPOTIFY_BASE_URL = "https://api.spotify.com/"
-    const val SPOTIFY_CLIENT_ID = "SPOTIFY_CLIENT_ID"
-    const val SPOTIFY_CLIENT_SECRET = "SPOTIFY_CLIENT_SECRET"
     const val SPOTIFY_AUTH_URL = "https://accounts.spotify.com/"
 
     const val TMDB_BASE_URL = "https://api.themoviedb.org/3/"
-    const val TMDB_API_KEY = "TMDB_API_KEY"
     const val TMDB_IMAGE = "https://image.tmdb.org/t/p/w500/"
     const val TMDB_IMAGE_ORIGINAL = "https://image.tmdb.org/t/p/original/"
 

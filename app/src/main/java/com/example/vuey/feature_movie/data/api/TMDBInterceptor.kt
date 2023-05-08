@@ -1,6 +1,6 @@
 package com.example.vuey.feature_movie.data.api
 
-import com.example.vuey.util.Constants.TMDB_API_KEY
+import com.example.vuey.BuildConfig.TMDB_API_KEY
 import okhttp3.Interceptor
 import okhttp3.Response
 

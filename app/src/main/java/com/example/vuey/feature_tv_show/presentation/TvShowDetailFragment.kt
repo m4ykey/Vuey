@@ -1,9 +1,11 @@
 package com.example.vuey.feature_tv_show.presentation
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -237,9 +239,7 @@ class TvShowDetailFragment : Fragment() {
 
         viewModel.detailTvShow.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showLoading()
-                }
+                is Resource.Loading -> { showLoading() }
 
                 is Resource.Success -> {
                     hideLoading()
@@ -312,20 +312,21 @@ class TvShowDetailFragment : Fragment() {
                             tvShowId = tvShowDetail.id
                         )
                         spinnerSeason.setSelection(0)
-                        spinnerSeason.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position : Int,
-                                p3: Long
-                            ) {
-                                val selectedSeasonId =
-                                    (spinnerSeason.adapter.getItem(position) as Season).season_number
-                                viewModel.tvShowSeason(tvShowDetail.id, selectedSeasonId)
-                            }
+                        spinnerSeason.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>?,
+                                    view: View?,
+                                    position: Int,
+                                    p3: Long
+                                ) {
+                                    val selectedSeasonId =
+                                        (spinnerSeason.adapter.getItem(position) as Season).season_number
+                                    viewModel.tvShowSeason(tvShowDetail.id, selectedSeasonId)
+                                }
 
-                            override fun onNothingSelected(p0: AdapterView<*>?) {}
-                        }
+                                override fun onNothingSelected(p0: AdapterView<*>?) {}
+                            }
 
                         val seasonEntity = tvShowDetail.seasons.map { season ->
                             TvShowEntity.TvShowSeasonEntity(
@@ -421,7 +422,7 @@ class TvShowDetailFragment : Fragment() {
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
     }
-
+    
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

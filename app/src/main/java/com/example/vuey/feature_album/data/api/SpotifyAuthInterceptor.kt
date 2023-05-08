@@ -3,9 +3,9 @@ package com.example.vuey.feature_album.data.api
 import android.content.SharedPreferences
 import android.util.Base64
 import androidx.core.content.edit
+import com.example.vuey.BuildConfig.SPOTIFY_CLIENT_ID
+import com.example.vuey.BuildConfig.SPOTIFY_CLIENT_SECRET
 import com.example.vuey.feature_album.data.api.token.AuthApi
-import com.example.vuey.util.Constants.SPOTIFY_CLIENT_ID
-import com.example.vuey.util.Constants.SPOTIFY_CLIENT_SECRET
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -44,7 +44,7 @@ class SpotifyAuthInterceptor @Inject constructor(
 
     fun getAccessToken() : String = runBlocking {
         val authHeader = "Basic " + Base64.encodeToString(
-            "${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}".toByteArray(),
+            "${SPOTIFY_CLIENT_ID}:$SPOTIFY_CLIENT_SECRET".toByteArray(),
             Base64.NO_WRAP
         )
 
