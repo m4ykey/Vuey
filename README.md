@@ -34,6 +34,7 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [ ] Dark/Light Theme
 - [ ] Settings Screen
 - [ ] Statistic Screen
+- [ ] Paging
 
 ## Tech
 - [Retrofit](https://square.github.io/retrofit/)
