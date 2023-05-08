@@ -30,7 +30,7 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 ## TODO
 - [ ] Save TV Shows seasons to database
 - [ ] Save TV Shows episodes to database
-- [ ] Improve UI
+- [ ] Improve UX/UI
 - [ ] Dark/Light Theme
 - [ ] Settings Screen
 - [ ] Statistic Screen
