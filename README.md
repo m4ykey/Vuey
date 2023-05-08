@@ -11,7 +11,6 @@ Vuey is open source Album, Movies and TV Shows Tracker.
   <img src="screenshots/album_detail.jpg" width="150" alt="Album Detail" />
   <img src="screenshots/movie_detail.jpg" width="150" alt="Movie Detail" />
   <img src="screenshots/tv_show_detail.jpg" width="150" alt="Tv Show Detail" />
-  <img src="screenshots/tv_show_detail2.jpg" width="150" alt="Tv Show Detail2" />
   <img src="screenshots/episode_list.jpg" width="150" alt="Episode List" />
 </div>
 
