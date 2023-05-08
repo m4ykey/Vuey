@@ -26,3 +26,21 @@ SPOTIFY_CLIENT_ID="YOUR_SPOTIFY_CLIENT_ID"
 SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 ```
 5. Clean and rebuild project
+
+## TODO
+- [ ] Save TV Shows seasons to database
+- [ ] Save TV Shows episodes to database
+- [ ] Improve UI
+- [ ] Dark/Light Theme
+- [ ] Settings Screen
+- [ ] Statistic Screen
+
+## Tech
+- [Retrofit](https://square.github.io/retrofit/)
+- [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+- [Dagger-Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+- [OkHttpClient](https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/)
+- [Firebase](https://firebase.google.com/)
+- [Room Database](https://developer.android.com/training/data-storage/room)
+- [Gson](https://github.com/google/gson)
+- [Coil](https://coil-kt.github.io/coil/)
