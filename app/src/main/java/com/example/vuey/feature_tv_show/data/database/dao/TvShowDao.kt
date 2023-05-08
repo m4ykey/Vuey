@@ -22,14 +22,4 @@ interface TvShowDao {
 
     @Delete
     suspend fun deleteTvShow(tvShowEntity: TvShowEntity)
-
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertAllEpisodes(tvShowEpisodeEntity: List<TvShowEpisodeEntity>)
-//
-//    @Query("SELECT * FROM tv_show_episode_table WHERE showId = :showId AND seasonNumber = :seasonNumber")
-//    fun getEpisodesById(showId: Int, seasonNumber : Int) : LiveData<List<TvShowEpisodeEntity>>
-//
-//    @Query("DELETE FROM tv_show_episode_table WHERE showId = :showId")
-//    fun deleteAllEpisodes(showId: Int) : Int
-
 }

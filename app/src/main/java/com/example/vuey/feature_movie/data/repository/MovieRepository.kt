@@ -27,18 +27,6 @@ class MovieRepository @Inject constructor(
         return movieDao.getAllMovies()
     }
 
-//    suspend fun insertCast(cast : List<MovieEntity.MovieCastEntity>) {
-//        return movieDao.insertCast(cast)
-//    }
-//
-//    fun getCast(movieId: Int) : LiveData<List<MovieCastEntity>> {
-//        return movieDao.getCast(movieId)
-//    }
-//
-//    suspend fun deleteCast(cast : List<MovieCastEntity>) {
-//        return movieDao.deleteCast(cast)
-//    }
-
     fun getMovieById(movieId: Int) : LiveData<MovieEntity> {
         return movieDao.getMovieById(movieId)
     }

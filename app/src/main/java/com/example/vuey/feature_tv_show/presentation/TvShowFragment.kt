@@ -1,11 +1,10 @@
 package com.example.vuey.feature_tv_show.presentation
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +13,6 @@ import com.example.vuey.databinding.FragmentTvShowBinding
 import com.example.vuey.feature_tv_show.presentation.adapter.TvShowAdapter
 import com.example.vuey.feature_tv_show.presentation.viewmodel.TvShowViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.api.Distribution.BucketOptions.Linear
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

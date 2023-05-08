@@ -46,22 +46,6 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-//    fun insertCast(castEntity: List<MovieCastEntity>) {
-//        viewModelScope.launch {
-//            movieRepository.insertCast(castEntity)
-//        }
-//    }
-//
-//    fun getCast(movieId : Int) : LiveData<List<MovieCastEntity>> {
-//        return movieRepository.getCast(movieId)
-//    }
-//
-//    fun deleteCast(castEntity: List<MovieCastEntity>) {
-//        viewModelScope.launch {
-//            movieRepository.deleteCast(castEntity)
-//        }
-//    }
-
     fun movieCredit(movieId: Int) {
         viewModelScope.launch {
             _movieCredits.value = Resource.Loading()
