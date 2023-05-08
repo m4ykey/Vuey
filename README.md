@@ -28,7 +28,6 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 5. Clean and rebuild project
 
 ## TODO
-- [ ] Save TV Shows seasons to database
 - [ ] Save TV Shows episodes to database
 - [ ] Improve UX/UI
 - [ ] Dark/Light Theme
