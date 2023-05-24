@@ -15,7 +15,6 @@ class AlbumRepository @Inject constructor(
     private val albumDao: AlbumDao,
     private val spotifyInterceptor: SpotifyInterceptor
 ) {
-
     suspend fun insertAlbum(albumEntity: AlbumEntity) = albumDao.insertAlbum(albumEntity)
     suspend fun deleteAlbum(albumEntity: AlbumEntity) = albumDao.deleteAlbum(albumEntity)
     fun getAllAlbums() : LiveData<List<AlbumEntity>> = albumDao.getAllAlbums()
