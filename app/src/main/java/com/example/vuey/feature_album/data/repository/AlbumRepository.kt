@@ -1,18 +1,15 @@
 package com.example.vuey.feature_album.data.repository
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import com.example.vuey.feature_album.data.database.dao.AlbumDao
 import com.example.vuey.feature_album.data.database.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
+import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.remote.model.AlbumDetailResponse
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.util.network.Resource
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.O)
 class AlbumRepository @Inject constructor(
     private val albumApi: AlbumApi,
     private val albumDao: AlbumDao,
