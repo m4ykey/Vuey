@@ -1,19 +1,22 @@
 package com.example.vuey.feature_album.data.repository
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import com.example.vuey.feature_album.data.database.dao.AlbumDao
 import com.example.vuey.feature_album.data.database.entity.AlbumEntity
-import com.example.vuey.feature_album.data.api.search.Album
-import com.example.vuey.feature_album.data.api.AlbumApi
-import com.example.vuey.feature_album.data.api.SpotifyAuthInterceptor
-import com.example.vuey.feature_album.data.response.AlbumDetailResponse
+import com.example.vuey.feature_album.data.remote.model.Album
+import com.example.vuey.feature_album.data.remote.api.AlbumApi
+import com.example.vuey.feature_album.data.remote.model.AlbumDetailResponse
+import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.util.network.Resource
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 class AlbumRepository @Inject constructor(
     private val albumApi: AlbumApi,
-    private val authInterceptor: SpotifyAuthInterceptor,
-    private val albumDao: AlbumDao
+    private val albumDao: AlbumDao,
+    private val spotifyInterceptor: SpotifyInterceptor
 ) {
 
     suspend fun insertAlbum(albumEntity: AlbumEntity) = albumDao.insertAlbum(albumEntity)
@@ -24,7 +27,7 @@ class AlbumRepository @Inject constructor(
     suspend fun getAlbum(albumId : String) : Resource<AlbumDetailResponse> {
         return try {
             val response = albumApi.getAlbum(
-                token = "Bearer ${authInterceptor.getAccessToken()}",
+                token = "Bearer ${spotifyInterceptor.getAccessToken()}",
                 albumId = albumId
             )
             if (response.isSuccessful) {
@@ -42,7 +45,7 @@ class AlbumRepository @Inject constructor(
     suspend fun searchAlbum(albumName: String): Resource<List<Album>> {
         return try {
             val response = albumApi.searchAlbum(
-                token = "Bearer ${authInterceptor.getAccessToken()}",
+                token = "Bearer ${spotifyInterceptor.getAccessToken()}",
                 query = albumName
             )
             if (response.isSuccessful) {

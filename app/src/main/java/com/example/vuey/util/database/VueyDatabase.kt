@@ -28,7 +28,7 @@ import com.example.vuey.util.Constants.DATABASE_VERSION
     exportSchema = false
 )
 @TypeConverters(AlbumConverter::class, MovieConverter::class, TvShowConverter::class)
-abstract class AppDatabase : RoomDatabase() {
+abstract class VueyDatabase : RoomDatabase() {
 
     abstract fun albumDao(): AlbumDao
     abstract fun movieDao(): MovieDao

@@ -3,7 +3,7 @@
     <string name="app_name">Vuey</string>
     <string name="album">Album</string>
     <string name="artist">Artysta</string>
-    <string name="total_tracks">Ilość utworów: </string>
+    <string name="tracks">Utworów</string>
     <string name="movie">Filmy</string>
     <string name="tv_show">Seriale</string>
     <string name="search">Szukaj</string>

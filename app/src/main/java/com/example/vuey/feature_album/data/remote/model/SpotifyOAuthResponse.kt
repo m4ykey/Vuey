@@ -1,8 +1,8 @@
-package com.example.vuey.feature_album.data.api.token
+package com.example.vuey.feature_album.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-data class AccessTokenResponse(
+data class SpotifyOAuthResponse(
     @SerializedName("access_token")
     val accessToken: String,
     @SerializedName("token_type")

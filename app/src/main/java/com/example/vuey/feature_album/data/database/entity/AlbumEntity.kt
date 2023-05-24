@@ -13,7 +13,7 @@ data class AlbumEntity(
     @ColumnInfo("trackList") val trackList: List<TrackListEntity> = emptyList(),
     @ColumnInfo("saveTime") val saveTime: Long = System.currentTimeMillis(),
     @ColumnInfo("albumType") val albumType: String,
-    @ColumnInfo("releaseDate") val release: String,
+    @ColumnInfo("releaseDate") val releaseDate: String,
     @ColumnInfo("artistList") val artistList: List<ArtistEntity> = emptyList(),
     @ColumnInfo("externalUrls") val externalUrls: ExternalUrlsEntity,
     @PrimaryKey(autoGenerate = false)
@@ -27,10 +27,8 @@ data class AlbumEntity(
     @Parcelize
     data class TrackListEntity(
         @ColumnInfo("durationMs") val durationMs: Int,
-        @ColumnInfo("trackNumber") val trackNumber: Int,
         @ColumnInfo("albumName") val albumName: String,
         @ColumnInfo("artistList") val artistList: List<ArtistEntity> = emptyList(),
-        @ColumnInfo("discNumber") val discNumber : Int
     ) : Parcelable
 
     @Parcelize

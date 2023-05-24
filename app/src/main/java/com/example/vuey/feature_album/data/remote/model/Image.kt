@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.data.api.detail
+package com.example.vuey.feature_album.data.remote.model
 
 data class Image(
     val height: Int,

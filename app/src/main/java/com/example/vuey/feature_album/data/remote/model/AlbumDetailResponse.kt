@@ -1,9 +1,9 @@
-package com.example.vuey.feature_album.data.response
+package com.example.vuey.feature_album.data.remote.model
 
-import com.example.vuey.feature_album.data.api.detail.Artist
-import com.example.vuey.feature_album.data.api.detail.ExternalUrls
-import com.example.vuey.feature_album.data.api.detail.Image
-import com.example.vuey.feature_album.data.api.detail.Tracks
+import com.example.vuey.feature_album.data.remote.model.Artist
+import com.example.vuey.feature_album.data.remote.model.ExternalUrls
+import com.example.vuey.feature_album.data.remote.model.Image
+import com.example.vuey.feature_album.data.remote.model.Tracks
 import com.google.gson.annotations.SerializedName
 
 data class AlbumDetailResponse(

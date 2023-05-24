@@ -1,19 +1,21 @@
 package com.example.vuey.feature_album.presentation.viewmodel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_album.data.database.entity.AlbumEntity
-import com.example.vuey.feature_album.data.api.search.Album
-import com.example.vuey.feature_album.data.response.AlbumDetailResponse
+import com.example.vuey.feature_album.data.remote.model.Album
+import com.example.vuey.feature_album.data.remote.model.AlbumDetailResponse
 import com.example.vuey.feature_album.data.repository.AlbumRepository
 import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
     private val albumRepository: AlbumRepository

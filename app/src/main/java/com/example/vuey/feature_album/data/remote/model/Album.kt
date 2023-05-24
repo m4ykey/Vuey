@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.data.api.search
+package com.example.vuey.feature_album.data.remote.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -6,21 +6,28 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Album(
-    val album_type: String,
-    val artists: List<Artist>,
-    val external_urls: ExternalUrls,
+    @SerializedName("album_type")
+    val albumType: String,
+    @SerializedName("artists")
+    val artistList: List<Artist>,
+    @SerializedName("external_urls")
+    val externalUrls: ExternalUrls,
     val id: String,
-    val images: List<Image>,
+    @SerializedName("images")
+    val imageList: List<Image>,
     @SerializedName("name")
     val albumName: String,
-    val total_tracks: Int
+    @SerializedName("total_tracks")
+    val totalTracks: Int
 ) : Parcelable {
 
     @Parcelize
     data class Artist(
-        val external_urls: ExternalUrls,
+        @SerializedName("external_urls")
+        val externalUrls: ExternalUrls,
         val id: String,
-        val name: String,
+        @SerializedName("name")
+        val artistName: String,
     ) : Parcelable
 
 

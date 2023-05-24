@@ -2,21 +2,19 @@ package com.example.vuey.feature_album.presentation.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vuey.feature_album.data.api.detail.AlbumItem
-import com.example.vuey.feature_album.data.api.detail.Artist
+import com.example.vuey.feature_album.data.remote.model.Artist
 import com.example.vuey.databinding.LayoutAlbumTrackListBinding
+import com.example.vuey.feature_album.data.remote.model.Tracks
 import com.example.vuey.util.utils.DiffUtils
 
 class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
 
-    private var trackResult = listOf<AlbumItem>()
-    private var lastTrackInAlbum = 0
+    private var trackResult = listOf<Tracks.AlbumItem>()
 
-    fun submitTrack(newTrack: List<AlbumItem>) {
+    fun submitTrack(newTrack: List<Tracks.AlbumItem>) {
         val oldTrack = DiffUtils(trackResult, newTrack)
         val result = DiffUtil.calculateDiff(oldTrack)
         trackResult = newTrack
@@ -27,25 +25,17 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
     class TrackViewHolder(private val binding: LayoutAlbumTrackListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(trackResult: AlbumItem, showAlbum : Boolean) {
+        fun bind(trackResult: Tracks.AlbumItem) {
             with(binding) {
 
-                txtRank.text = trackResult.track_number.toString()
-                val artists : List<Artist> = trackResult.artists
-                val artistList = artists.joinToString(separator = ", ") { it.name }
-                txtArtist.text = artistList
-                txtTrackName.text = trackResult.name
+                val artistList : List<Artist> = trackResult.artistList
+                val artists = artistList.joinToString(separator = ", ") { it.artistName }
+                txtArtist.text = artists
+                txtTrackName.text = trackResult.albumName
 
-                val seconds = trackResult.duration_ms / 1000
-                val formattedDuration = String.format("%d:%02d", seconds / 60, seconds % 60)
-                txtDuration.text = formattedDuration
-
-                if (showAlbum && trackResult.track_number == 1) {
-                    linearLayoutAlbum.visibility = View.VISIBLE
-                    txtDiscNumber.text = "Album ${trackResult.disc_number}"
-                } else {
-                    linearLayoutAlbum.visibility = View.GONE
-                }
+                val seconds = trackResult.durationMs / 1000
+                val trackDuration = String.format("%d:%02d", seconds / 60, seconds % 60)
+                txtDuration.text = trackDuration
             }
         }
     }
@@ -58,9 +48,7 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        val currentTrack = trackResult[position]
-        val showAlbumInfo = currentTrack.track_number == 1 || currentTrack.track_number <= lastTrackInAlbum
-        holder.bind(currentTrack, showAlbumInfo)
+        holder.bind(trackResult[position])
     }
 
     override fun getItemCount(): Int {

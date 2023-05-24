@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
-import com.example.vuey.feature_album.data.api.detail.AlbumItem
-import com.example.vuey.feature_album.data.api.detail.Artist
-import com.example.vuey.feature_album.data.api.detail.ExternalUrls
+import com.example.vuey.feature_album.data.remote.model.Artist
+import com.example.vuey.feature_album.data.remote.model.ExternalUrls
+import com.example.vuey.feature_album.data.remote.model.Tracks
 import com.example.vuey.feature_album.data.database.entity.AlbumEntity
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
@@ -60,14 +60,12 @@ class DetailAlbumFragment : Fragment() {
             requireActivity().findViewById(R.id.bottomMenu)
         bottomNavigationView.visibility = View.GONE
 
-        val totalTracks = getString(R.string.total_tracks)
-
         with(binding) {
             recyclerViewTracks.apply {
                 adapter = trackListAdapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
-            imgBack.setOnClickListener { findNavController().navigateUp() }
+            toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
 
             val databaseArguments = arguments.albumEntity
 
@@ -83,7 +81,7 @@ class DetailAlbumFragment : Fragment() {
 
             txtInfo.text =
                 "${databaseArguments.albumType.replaceFirstChar { it.uppercase() }} • " +
-                        "${databaseArguments.release} • " + totalTracks + " ${databaseArguments.totalTracks}"
+                        "${DateUtils.formatAirDate(databaseArguments.releaseDate)} • " + " ${databaseArguments.totalTracks} " + getString(R.string.tracks)
 
             btnAlbum.setOnClickListener {
                 val intent =
@@ -98,21 +96,19 @@ class DetailAlbumFragment : Fragment() {
                 startActivity(intent)
             }
             val trackList = databaseArguments.trackList.map { trackEntity ->
-                AlbumItem(
-                    id = arguments.album.id + trackEntity.trackNumber,
-                    name = trackEntity.albumName,
-                    artists = trackEntity.artistList.map { artistEntity ->
+                Tracks.AlbumItem(
+                    id = databaseArguments.id,
+                    albumName = trackEntity.albumName,
+                    artistList = trackEntity.artistList.map { artistEntity ->
                         Artist(
                             id = artistEntity.id,
-                            name = artistEntity.name,
-                            external_urls = artistEntity.externalUrls.toExternalUrls()
+                            artistName = artistEntity.name,
+                            externalUrls = artistEntity.externalUrls.toExternalUrls()
                         )
                     },
-                    duration_ms = trackEntity.durationMs,
-                    track_number = trackEntity.trackNumber,
-                    external_urls = arguments.albumEntity.externalUrls.toExternalUrls(),
-                    type = arguments.albumEntity.albumType,
-                    disc_number = trackEntity.discNumber
+                    durationMs = trackEntity.durationMs,
+                    externalUrls = arguments.albumEntity.externalUrls.toExternalUrls(),
+                    albumType = arguments.albumEntity.albumType
                 )
             }
             trackListAdapter.submitTrack(trackList)
@@ -126,7 +122,7 @@ class DetailAlbumFragment : Fragment() {
                 artistList = databaseArguments.artistList,
                 externalUrls = databaseArguments.externalUrls,
                 imageList = databaseArguments.imageList,
-                release = databaseArguments.release,
+                releaseDate = databaseArguments.releaseDate,
                 totalTracks = databaseArguments.totalTracks,
                 trackList = databaseArguments.trackList
             )
@@ -171,7 +167,7 @@ class DetailAlbumFragment : Fragment() {
 
                         var albumTime = 0
                         for (track in albumDetail.tracks.items) {
-                            albumTime += track.duration_ms
+                            albumTime += track.durationMs
                         }
 
                         val albumTimeHour = albumTime / (1000 * 60 * 60)
@@ -191,24 +187,24 @@ class DetailAlbumFragment : Fragment() {
                         }
                         txtAlbumName.text = albumDetail.albumName
                         val artists: List<Artist> = albumDetail.artists
-                        val artistNames = artists.joinToString(separator = ", ") { it.name }
+                        val artistNames = artists.joinToString(separator = ", ") { it.artistName }
                         txtArtist.text = artistNames
 
                         txtInfo.text =
                             "${albumDetail.album_type.replaceFirstChar { it.uppercase() }} • " +
-                                    "${DateUtils.formatAirDate(albumDetail.release_date)} • " + totalTracks + " ${albumDetail.total_tracks}"
+                                    "${DateUtils.formatAirDate(albumDetail.release_date)} • " + " ${albumDetail.total_tracks} " + getString(R.string.tracks)
 
                         btnAlbum.setOnClickListener {
                             val intent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse(arguments.album.external_urls.spotify)
+                                Uri.parse(arguments.album.externalUrls.spotify)
                             )
                             startActivity(intent)
                         }
                         btnArtist.setOnClickListener {
                             val intent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse(albumDetail.artists[0].external_urls.spotify)
+                                Uri.parse(albumDetail.artists[0].externalUrls.spotify)
                             )
                             startActivity(intent)
                         }
@@ -217,21 +213,21 @@ class DetailAlbumFragment : Fragment() {
 
                         val artistList = albumDetail.artists.map { artist ->
                             AlbumEntity.ArtistEntity(
-                                name = artist.name,
+                                name = artist.artistName,
                                 id = artist.id,
                                 externalUrls = AlbumEntity.ExternalUrlsEntity(
-                                    spotify = artist.external_urls.spotify
+                                    spotify = artist.externalUrls.spotify
                                 )
                             )
                         }
                         val albumEntity = AlbumEntity(
                             albumType = albumDetail.album_type,
-                            id = arguments.album.id,
+                            id = albumDetail.id,
                             albumName = albumDetail.albumName,
                             totalTracks = albumDetail.total_tracks,
                             artistList = artistList,
                             albumLength = formattedAlbumTime,
-                            release = DateUtils.formatAirDate(albumDetail.release_date).toString(),
+                            releaseDate = DateUtils.formatAirDate(albumDetail.release_date).toString(),
                             imageList = albumDetail.images.map { image ->
                                 AlbumEntity.ImageEntity(
                                     width = image.width,
@@ -244,11 +240,9 @@ class DetailAlbumFragment : Fragment() {
                             ),
                             trackList = albumDetail.tracks.items.map { tracks ->
                                 AlbumEntity.TrackListEntity(
-                                    durationMs = tracks.duration_ms,
-                                    trackNumber = tracks.track_number,
-                                    albumName = tracks.name,
-                                    artistList = artistList,
-                                    discNumber = tracks.disc_number
+                                    durationMs = tracks.durationMs,
+                                    albumName = tracks.albumName,
+                                    artistList = artistList
                                 )
                             }
                         )

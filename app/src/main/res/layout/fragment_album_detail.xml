@@ -7,17 +7,35 @@
     tools:background="@color/black"
     tools:context=".feature_album.presentation.DetailAlbumFragment">
 
-        <ProgressBar
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:id="@+id/progressBar"
-            android:indeterminateTint="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <ProgressBar
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:id="@+id/progressBar"
+        android:indeterminateTint="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.appbar.AppBarLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@null"
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIconTint="@color/white"
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -26,31 +44,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/appBar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:id="@+id/imgBack"
-                app:tint="@color/white"
-                android:src="@drawable/ic_arrow_back"
-                android:contentDescription="@string/back" />
-
-            <ImageView
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:layout_gravity="center"
-                tools:src="@drawable/album_error"
-                android:scaleType="centerCrop"
+            <androidx.cardview.widget.CardView
                 android:layout_marginTop="5dp"
-                android:id="@+id/imgAlbum"
-                android:contentDescription="@string/album" />
+                android:layout_gravity="center"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:src="@drawable/album_error"
+                    android:scaleType="centerCrop"
+                    android:id="@+id/imgAlbum"
+                    android:contentDescription="@string/album" />
+
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:padding="10dp"

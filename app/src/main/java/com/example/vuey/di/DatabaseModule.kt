@@ -6,7 +6,7 @@ import com.example.vuey.feature_album.data.database.dao.AlbumDao
 import com.example.vuey.feature_movie.data.database.dao.MovieDao
 import com.example.vuey.feature_tv_show.data.database.dao.TvShowDao
 import com.example.vuey.util.Constants.DATABASE_NAME
-import com.example.vuey.util.database.AppDatabase
+import com.example.vuey.util.database.VueyDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,29 +19,29 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(application: Application) : AppDatabase {
+    fun provideAppDatabase(application: Application) : VueyDatabase {
         return Room.databaseBuilder(
             application,
-            AppDatabase::class.java,
+            VueyDatabase::class.java,
             DATABASE_NAME
         ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
     @Singleton
-    fun provideAlbumDao(appDatabase: AppDatabase) : AlbumDao {
+    fun provideAlbumDao(appDatabase: VueyDatabase) : AlbumDao {
         return appDatabase.albumDao()
     }
 
     @Provides
     @Singleton
-    fun provideMovieDao(appDatabase: AppDatabase) : MovieDao {
+    fun provideMovieDao(appDatabase: VueyDatabase) : MovieDao {
         return appDatabase.movieDao()
     }
 
     @Provides
     @Singleton
-    fun provideTvShowDao(appDatabase: AppDatabase) : TvShowDao {
+    fun provideTvShowDao(appDatabase: VueyDatabase) : TvShowDao {
         return appDatabase.tvShowDao()
     }
 

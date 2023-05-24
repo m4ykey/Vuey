@@ -1,6 +1,6 @@
 package com.example.vuey.util.utils
 
-import com.example.vuey.feature_album.data.api.search.Album
+import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.database.entity.AlbumEntity
 import com.example.vuey.feature_movie.data.api.search.SearchMovie
 import com.example.vuey.feature_movie.data.database.entity.MovieEntity
@@ -36,27 +36,27 @@ fun TvShowEntity.toSearchTv(): SearchTvShow {
 
 fun AlbumEntity.toAlbum() : Album {
     return Album(
-        album_type = this.albumType,
+        albumType = this.albumType,
         albumName = this.albumName,
         id = this.id,
-        total_tracks = this.totalTracks,
-        artists = this.artistList.map { artist ->
+        totalTracks = this.totalTracks,
+        artistList = this.artistList.map { artist ->
             Album.Artist(
-                name = artist.name,
+                artistName = artist.name,
                 id = artist.id,
-                external_urls = Album.ExternalUrls(
+                externalUrls = Album.ExternalUrls(
                     spotify = this.externalUrls.spotify
                 )
             )
         },
-        images = this.imageList.map { image ->
+        imageList = this.imageList.map { image ->
             Album.Image(
                 height = image.height,
                 width = image.width,
                 url = image.url
             )
         },
-        external_urls = Album.ExternalUrls(
+        externalUrls = Album.ExternalUrls(
             spotify = this.externalUrls.spotify
         )
     )
@@ -65,13 +65,13 @@ fun AlbumEntity.toAlbum() : Album {
 fun Album.toAlbumEntity() : AlbumEntity {
     return AlbumEntity(
         albumName = this.albumName,
-        albumType = this.album_type,
+        albumType = this.albumType,
         albumLength = "",
         id = this.id,
-        release = "",
-        totalTracks = this.total_tracks,
+        releaseDate = "",
+        totalTracks = this.totalTracks,
         externalUrls = AlbumEntity.ExternalUrlsEntity(
-            spotify = this.external_urls.spotify
+            spotify = this.externalUrls.spotify
         )
     )
 }

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutAlbumBinding
-import com.example.vuey.feature_album.data.api.search.Album
+import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.database.entity.AlbumEntity
 import com.example.vuey.feature_album.presentation.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.SearchAlbumFragmentDirections
@@ -44,9 +44,9 @@ class AlbumAdapter(
 
         fun bind(albumResult : Album) {
 
-            val image = albumResult.images.find { it.width == 640 && it.height == 640 }
-            val artists : List<Album.Artist> = albumResult.artists
-            val artistNames = artists.joinToString(separator = ", ") { it.name }
+            val image = albumResult.imageList.find { it.width == 640 && it.height == 640 }
+            val artists : List<Album.Artist> = albumResult.artistList
+            val artistNames = artists.joinToString(separator = ", ") { it.artistName }
 
             with(binding) {
                 imgAlbum.load(image?.url) {
