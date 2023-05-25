@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.Artist
 import com.example.vuey.feature_album.data.remote.model.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.Tracks
-import com.example.vuey.feature_album.data.database.entity.AlbumEntity
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.Resource
@@ -27,7 +27,6 @@ import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class DetailAlbumFragment : Fragment() {
@@ -98,7 +97,7 @@ class DetailAlbumFragment : Fragment() {
             val trackList = databaseArguments.trackList.map { trackEntity ->
                 Tracks.AlbumItem(
                     id = databaseArguments.id,
-                    albumName = trackEntity.albumName,
+                    trackName = trackEntity.trackName,
                     artistList = trackEntity.artistList.map { artistEntity ->
                         Artist(
                             id = artistEntity.id,
@@ -107,8 +106,8 @@ class DetailAlbumFragment : Fragment() {
                         )
                     },
                     durationMs = trackEntity.durationMs,
-                    externalUrls = arguments.albumEntity.externalUrls.toExternalUrls(),
-                    albumType = arguments.albumEntity.albumType
+                    externalUrls = databaseArguments.externalUrls.toExternalUrls(),
+                    albumType = databaseArguments.albumType
                 )
             }
             trackListAdapter.submitTrack(trackList)
@@ -127,32 +126,32 @@ class DetailAlbumFragment : Fragment() {
                 trackList = databaseArguments.trackList
             )
 
-            viewModel.getAlbumById(arguments.albumEntity.id)
-                .observe(viewLifecycleOwner) { album ->
-                    isAlbumSaved = if (album == null) {
-                        imgSave.setImageResource(R.drawable.ic_save_outlined)
-                        false
-                    } else {
-                        imgSave.setImageResource(R.drawable.ic_save)
-                        true
-                    }
-                }
+//            viewModel.getAlbumById(arguments.albumEntity.id)
+//                .observe(viewLifecycleOwner) { album ->
+//                    isAlbumSaved = if (album == null) {
+//                        imgSave.setImageResource(R.drawable.ic_save_outlined)
+//                        false
+//                    } else {
+//                        imgSave.setImageResource(R.drawable.ic_save)
+//                        true
+//                    }
+//                }
 
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
                 if (isAlbumSaved) {
                     showSnackbar(requireView(), getString(R.string.added_to_library))
-                    viewModel.insertAlbum(albumEntity)
+                    //viewModel.insertAlbum(albumEntity)
                     imgSave.setImageResource(R.drawable.ic_save)
                 } else {
                     showSnackbar(requireView(), getString(R.string.removed_from_library))
-                    viewModel.deleteAlbum(albumEntity)
+                    //viewModel.deleteAlbum(albumEntity)
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                 }
             }
         }
 
-        viewModel.getAlbum(arguments.album.id)
+        //viewModel.getAlbum(arguments.album.id)
         viewModel.albumDetail.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
@@ -241,32 +240,32 @@ class DetailAlbumFragment : Fragment() {
                             trackList = albumDetail.tracks.items.map { tracks ->
                                 AlbumEntity.TrackListEntity(
                                     durationMs = tracks.durationMs,
-                                    albumName = tracks.albumName,
+                                    trackName = tracks.trackName,
                                     artistList = artistList
                                 )
                             }
                         )
 
-                        viewModel.getAlbumById(arguments.albumEntity.id)
-                            .observe(viewLifecycleOwner) { album ->
-                                isAlbumSaved = if (album == null) {
-                                    imgSave.setImageResource(R.drawable.ic_save_outlined)
-                                    false
-                                } else {
-                                    imgSave.setImageResource(R.drawable.ic_save)
-                                    true
-                                }
-                            }
+//                        viewModel.getAlbumById(arguments.albumEntity.id)
+//                            .observe(viewLifecycleOwner) { album ->
+//                                isAlbumSaved = if (album == null) {
+//                                    imgSave.setImageResource(R.drawable.ic_save_outlined)
+//                                    false
+//                                } else {
+//                                    imgSave.setImageResource(R.drawable.ic_save)
+//                                    true
+//                                }
+//                            }
 
                         imgSave.setOnClickListener {
                             isAlbumSaved = !isAlbumSaved
                             if (isAlbumSaved) {
                                 showSnackbar(requireView(), getString(R.string.added_to_library))
-                                viewModel.insertAlbum(albumEntity)
+                                //viewModel.insertAlbum(albumEntity)
                                 imgSave.setImageResource(R.drawable.ic_save)
                             } else {
                                 showSnackbar(requireView(), getString(R.string.removed_from_library))
-                                viewModel.deleteAlbum(albumEntity)
+                                //viewModel.deleteAlbum(albumEntity)
                                 imgSave.setImageResource(R.drawable.ic_save_outlined)
                             }
                         }

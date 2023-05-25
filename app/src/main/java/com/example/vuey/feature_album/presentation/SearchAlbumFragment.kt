@@ -1,31 +1,37 @@
 package com.example.vuey.feature_album.presentation
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
-import com.example.vuey.util.network.Resource
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchAlbumFragment : Fragment() {
 
     private var _binding: FragmentSearchAlbumBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AlbumViewModel by viewModels()
-    private lateinit var albumAdapter: AlbumAdapter
+
+    private val searchViewModel: AlbumViewModel by viewModels()
+    private val albumAdapter by lazy { AlbumAdapter(true) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,11 +41,6 @@ class SearchAlbumFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        albumAdapter = AlbumAdapter(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -47,53 +48,53 @@ class SearchAlbumFragment : Fragment() {
             requireActivity().findViewById(R.id.bottomMenu)
         bottomNavigationView.visibility = View.GONE
 
+        searchAlbum()
+        observeSearchAlbum()
+
         with(binding) {
             toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
             recyclerViewAlbum.apply {
                 adapter = albumAdapter
                 layoutManager = GridLayoutManager(requireContext(), 2)
             }
+        }
+    }
 
-            etSearch.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    val searchQuery = etSearch.text.toString()
-                    if (searchQuery.isEmpty()) {
-                        showSnackbar(requireView(), getString(R.string.empty_search_query))
-                    } else {
-                        viewModel.searchAlbum(searchQuery)
-                    }
-                    return@setOnEditorActionListener true
+    private fun searchAlbum() {
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val searchQuery = binding.etSearch.text.toString()
+                if (searchQuery.isEmpty()) {
+                    showSnackbar(requireView(), getString(R.string.empty_search_query))
+                } else {
+                    searchViewModel.searchAlbum(searchQuery)
                 }
-                return@setOnEditorActionListener false
+                return@setOnEditorActionListener true
             }
+            return@setOnEditorActionListener false
+        }
+    }
 
-            viewModel.albumSearch.observe(viewLifecycleOwner) { response ->
-                when (response) {
-                    is Resource.Success -> {
-                        hideLoading()
-                        response.data?.let { album ->
-                            albumAdapter.submitAlbum(album)
+    private fun observeSearchAlbum() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchViewModel.albumSearchUiState.collect { uiState ->
+                    when {
+                        uiState.isLoading -> {
+                            binding.progressBar.visibility = View.VISIBLE
                         }
-                    }
-                    is Resource.Failure -> {
-                        hideLoading()
-                        showSnackbar(requireView(), "${response.message}", Snackbar.LENGTH_LONG)
-                    }
-                    is Resource.Loading -> {
-                        showLoading()
+                        uiState.searchAlbumData.isNotEmpty() -> {
+                            binding.progressBar.visibility = View.GONE
+                            albumAdapter.submitAlbum(uiState.searchAlbumData)
+                        }
+                        uiState.isError?.isNotEmpty() == true -> {
+                            binding.progressBar.visibility = View.GONE
+                            showSnackbar(requireView(), uiState.isError.toString(), Snackbar.LENGTH_LONG)
+                        }
                     }
                 }
             }
         }
-
-    }
-
-    private fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun hideLoading() {
-        binding.progressBar.visibility = View.GONE
     }
 
     override fun onDestroy() {

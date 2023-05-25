@@ -1,8 +1,8 @@
-package com.example.vuey.feature_album.data.database.dao
+package com.example.vuey.feature_album.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.vuey.feature_album.data.database.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 
 @Dao
 interface AlbumDao {

@@ -1,12 +1,8 @@
 package com.example.vuey.feature_album.data.remote.model
 
-import com.example.vuey.feature_album.data.remote.model.Artist
-import com.example.vuey.feature_album.data.remote.model.ExternalUrls
-import com.example.vuey.feature_album.data.remote.model.Image
-import com.example.vuey.feature_album.data.remote.model.Tracks
 import com.google.gson.annotations.SerializedName
 
-data class AlbumDetailResponse(
+data class AlbumDetail(
     val album_type: String,
     val artists: List<Artist>,
     val external_urls: ExternalUrls,

@@ -1,8 +1,8 @@
 package com.example.vuey.feature_album.data.remote.api
 
-import com.example.vuey.feature_album.data.remote.model.AlbumDetailResponse
-import com.example.vuey.feature_album.data.remote.model.SearchAlbumResponse
-import retrofit2.Response
+import com.example.vuey.feature_album.data.remote.model.Album
+import com.example.vuey.feature_album.data.remote.model.AlbumDetail
+import com.example.vuey.feature_album.data.remote.model.SearchAlbum
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -15,12 +15,12 @@ interface AlbumApi {
         @Query("q") query : String,
         @Query("type") type : String = "album",
         @Header("Authorization") token : String
-    ) : Response<SearchAlbumResponse>
+    ) : SearchAlbum
 
     @GET("v1/albums/{id}")
     suspend fun getAlbum(
         @Path("id") albumId : String,
         @Header("Authorization") token : String
-    ) : Response<AlbumDetailResponse>
+    ) : AlbumDetail
 
 }

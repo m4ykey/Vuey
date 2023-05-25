@@ -1,6 +1,5 @@
 package com.example.vuey.feature_album.presentation.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -24,14 +23,13 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
 
     class TrackViewHolder(private val binding: LayoutAlbumTrackListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        @SuppressLint("SetTextI18n")
         fun bind(trackResult: Tracks.AlbumItem) {
             with(binding) {
 
                 val artistList : List<Artist> = trackResult.artistList
                 val artists = artistList.joinToString(separator = ", ") { it.artistName }
                 txtArtist.text = artists
-                txtTrackName.text = trackResult.albumName
+                txtTrackName.text = trackResult.trackName
 
                 val seconds = trackResult.durationMs / 1000
                 val trackDuration = String.format("%d:%02d", seconds / 60, seconds % 60)

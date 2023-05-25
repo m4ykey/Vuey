@@ -49,9 +49,9 @@ class AlbumFragment : Fragment() {
                 findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
             }
 
-            viewModel.getAllAlbums.observe(viewLifecycleOwner) { albumList ->
-                    albumAdapter.submitAlbumEntity(albumList)
-            }
+//            viewModel.getAllAlbums.observe(viewLifecycleOwner) { albumList ->
+//                    albumAdapter.submitAlbumEntity(albumList)
+//            }
 
             albumRecyclerView.apply {
                 layoutManager = GridLayoutManager(requireContext(), 2)

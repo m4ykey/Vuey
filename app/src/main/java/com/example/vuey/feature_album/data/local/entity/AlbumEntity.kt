@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.data.database.entity
+package com.example.vuey.feature_album.data.local.entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
@@ -27,7 +27,7 @@ data class AlbumEntity(
     @Parcelize
     data class TrackListEntity(
         @ColumnInfo("durationMs") val durationMs: Int,
-        @ColumnInfo("albumName") val albumName: String,
+        @ColumnInfo("albumName") val trackName: String,
         @ColumnInfo("artistList") val artistList: List<ArtistEntity> = emptyList(),
     ) : Parcelable
 

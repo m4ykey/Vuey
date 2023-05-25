@@ -9,7 +9,7 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.feature_album.data.remote.model.Album
-import com.example.vuey.feature_album.data.database.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.presentation.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.SearchAlbumFragmentDirections
 import com.example.vuey.util.utils.DiffUtils

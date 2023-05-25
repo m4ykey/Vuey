@@ -14,7 +14,7 @@ data class Tracks(
         val externalUrls: ExternalUrls,
         val id: String,
         @SerializedName("name")
-        val albumName: String,
+        val trackName: String,
         @SerializedName("type")
         val albumType: String,
     )
