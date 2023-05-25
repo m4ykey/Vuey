@@ -1,5 +1,6 @@
 package com.example.vuey.di
 
+import com.example.vuey.feature_album.use_cases.AlbumDetailUseCase
 import com.example.vuey.feature_album.use_cases.AlbumSearchUseCase
 import com.example.vuey.feature_album.use_cases.UseCases
 import dagger.Module
@@ -13,9 +14,13 @@ object UseCasesModule {
 
     @Provides
     fun provideUseCases(
-        getAlbumSearchUseCase: AlbumSearchUseCase
+        getAlbumSearchUseCase: AlbumSearchUseCase,
+        getAlbumDetailUseCase: AlbumDetailUseCase
     ) : UseCases {
-        return UseCases(getAlbumSearchUseCase)
+        return UseCases(
+            getAlbumSearchUseCase,
+            getAlbumDetailUseCase
+        )
     }
 
 }

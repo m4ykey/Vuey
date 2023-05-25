@@ -173,6 +173,7 @@
                 android:overScrollMode="never"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/layout_album_track_list"
                 android:id="@+id/recyclerViewTracks"
                 android:layout_width="match_parent"

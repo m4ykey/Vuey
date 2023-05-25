@@ -2,6 +2,7 @@ package com.example.vuey.feature_album.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vuey.feature_album.ui_state.AlbumDetailUiState
 import com.example.vuey.feature_album.ui_state.SearchAlbumUiState
 import com.example.vuey.feature_album.use_cases.UseCases
 import com.example.vuey.util.network.Resource
@@ -20,6 +21,43 @@ class AlbumViewModel @Inject constructor(
 
     private val _albumSearchUiState = MutableStateFlow(SearchAlbumUiState())
     val albumSearchUiState : StateFlow<SearchAlbumUiState> get() = _albumSearchUiState
+
+    private val _albumDetailUiState = MutableStateFlow(AlbumDetailUiState())
+    val albumDetailUiState : StateFlow<AlbumDetailUiState> get() = _albumDetailUiState
+
+    fun getAlbumDetail(albumId : String) {
+        useCases.getAlbumDetailUseCase(albumId).onEach { result ->
+            when(result) {
+                is Resource.Success -> {
+                    _albumDetailUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = false,
+                            isError = null,
+                            detailAlbumData = result.data
+                        )
+                    }
+                }
+                is Resource.Failure -> {
+                    _albumDetailUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = false,
+                            isError = result.message ?: "An unexpected error occurred.",
+                            detailAlbumData = result.data
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    _albumDetailUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = true,
+                            isError = null,
+                            detailAlbumData = result.data
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
 
     fun searchAlbum(albumName : String) {
         useCases.getAlbumSearchUseCase(albumName).onEach { result ->

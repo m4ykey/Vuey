@@ -52,7 +52,23 @@ class AlbumDaoTest {
             totalTracks = 21,
             externalUrls = AlbumEntity.ExternalUrlsEntity(
                 spotify = "random link"
-            )
+            ),
+            trackList = listOf(AlbumEntity.TrackListEntity(
+                durationMs = 3,
+                trackName = "random title"
+            )),
+            artistList = listOf(AlbumEntity.ArtistEntity(
+                id = "artistId",
+                name = "random artist",
+                externalUrls = AlbumEntity.ExternalUrlsEntity(
+                    spotify = "random artist link"
+                )
+            )),
+            imageList = listOf(AlbumEntity.ImageEntity(
+                height = 640,
+                width = 640,
+                url = "image url"
+            ))
         )
         dao.insertAlbum(albumItem)
 
@@ -72,7 +88,23 @@ class AlbumDaoTest {
             totalTracks = 21,
             externalUrls = AlbumEntity.ExternalUrlsEntity(
                 spotify = "random link"
-            )
+            ),
+            trackList = listOf(AlbumEntity.TrackListEntity(
+                durationMs = 3,
+                trackName = "random title"
+            )),
+            artistList = listOf(AlbumEntity.ArtistEntity(
+                id = "artistId",
+                name = "random artist",
+                externalUrls = AlbumEntity.ExternalUrlsEntity(
+                    spotify = "random artist link"
+                )
+            )),
+            imageList = listOf(AlbumEntity.ImageEntity(
+                height = 640,
+                width = 640,
+                url = "image url"
+            ))
         )
         dao.insertAlbum(albumItem)
         dao.deleteAlbum(albumItem)
