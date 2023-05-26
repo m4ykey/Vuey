@@ -45,7 +45,9 @@ android-material = { group = "com.google.android.material", name = "material", v
 
 android-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
 
-android-core = { group = "androidx.core", name = "core-ktx", version = "1.10.1"}
+android-core = { group = "androidx.core", name = "core-ktx", version = "1.10.1" }
+
+swipe-refresh = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version = "1.2.0-alpha01" }
 
 # Testing
 junit = { group = "junit", name = "junit", version = "4.13.2" }

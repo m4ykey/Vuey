@@ -108,4 +108,7 @@ dependencies {
     // Coil
     api libs.coil
 
+    // SwipeToRefresh
+    api libs.swipe.refresh
+
 }

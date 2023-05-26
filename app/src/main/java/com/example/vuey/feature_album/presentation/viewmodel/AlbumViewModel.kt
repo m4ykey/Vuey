@@ -32,6 +32,14 @@ class AlbumViewModel @Inject constructor(
 
     val allAlbums = repository.getAllAlbums()
 
+    fun refreshDetail(albumId: String) {
+        getAlbumDetail(albumId)
+    }
+
+    fun refreshSearch(albumName: String) {
+        searchAlbum(albumName)
+    }
+
     fun insertAlbum(albumEntity: AlbumEntity) {
         viewModelScope.launch {
             repository.insertAlbum(albumEntity)

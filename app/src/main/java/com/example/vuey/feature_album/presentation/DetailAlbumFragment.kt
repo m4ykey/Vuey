@@ -61,6 +61,7 @@ class DetailAlbumFragment : Fragment() {
 
         observeDetailAlbum()
         initRecyclerView()
+        refreshUi()
 
         binding.toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
 
@@ -169,6 +170,13 @@ class DetailAlbumFragment : Fragment() {
                 )
                 startActivity(intent)
             }
+        }
+    }
+
+    private fun refreshUi() {
+        binding.swipeRefresh.setOnRefreshListener {
+            detailViewModel.refreshDetail(arguments.album.id)
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 
