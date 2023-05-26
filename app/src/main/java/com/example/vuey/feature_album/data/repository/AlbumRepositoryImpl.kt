@@ -1,6 +1,5 @@
 package com.example.vuey.feature_album.data.repository
 
-import androidx.lifecycle.LiveData
 import com.example.vuey.feature_album.data.local.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
@@ -22,10 +21,21 @@ class AlbumRepositoryImpl @Inject constructor(
     private val spotifyInterceptor: SpotifyInterceptor
 ) : AlbumRepository {
 
-    suspend fun insertAlbum(albumEntity: AlbumEntity) = albumDao.insertAlbum(albumEntity)
-    suspend fun deleteAlbum(albumEntity: AlbumEntity) = albumDao.deleteAlbum(albumEntity)
-    fun getAllAlbums(): LiveData<List<AlbumEntity>> = albumDao.getAllAlbums()
-    fun getAlbumById(albumId: String): LiveData<AlbumEntity> = albumDao.getAlbumById(albumId)
+    override suspend fun insertAlbum(albumEntity: AlbumEntity) {
+        return albumDao.insertAlbum(albumEntity)
+    }
+
+    override suspend fun deleteAlbum(albumEntity: AlbumEntity) {
+        return albumDao.deleteAlbum(albumEntity)
+    }
+
+    override fun getAllAlbums(): Flow<List<AlbumEntity>> {
+        return albumDao.getAllAlbums()
+    }
+
+    override fun getAlbumById(albumId: String): Flow<AlbumEntity> {
+        return albumDao.getAlbumById(albumId)
+    }
 
     override fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {
         return flow {

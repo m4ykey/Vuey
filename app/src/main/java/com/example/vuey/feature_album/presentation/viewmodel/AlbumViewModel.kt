@@ -2,21 +2,26 @@ package com.example.vuey.feature_album.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.repository.AlbumRepository
 import com.example.vuey.feature_album.ui_state.AlbumDetailUiState
 import com.example.vuey.feature_album.ui_state.SearchAlbumUiState
 import com.example.vuey.feature_album.use_cases.UseCases
 import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val useCases: UseCases
+    private val useCases: UseCases,
+    private val repository: AlbumRepository
 ) : ViewModel() {
 
     private val _albumSearchUiState = MutableStateFlow(SearchAlbumUiState())
@@ -24,6 +29,24 @@ class AlbumViewModel @Inject constructor(
 
     private val _albumDetailUiState = MutableStateFlow(AlbumDetailUiState())
     val albumDetailUiState : StateFlow<AlbumDetailUiState> get() = _albumDetailUiState
+
+    val allAlbums = repository.getAllAlbums()
+
+    fun insertAlbum(albumEntity: AlbumEntity) {
+        viewModelScope.launch {
+            repository.insertAlbum(albumEntity)
+        }
+    }
+
+    fun deleteAlbum(albumEntity: AlbumEntity) {
+        viewModelScope.launch {
+            repository.deleteAlbum(albumEntity)
+        }
+    }
+
+    fun getAlbumById(albumId : String) : Flow<AlbumEntity> {
+        return repository.getAlbumById(albumId)
+    }
 
     fun getAlbumDetail(albumId : String) {
         useCases.getAlbumDetailUseCase(albumId).onEach { result ->

@@ -20,14 +20,18 @@ import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.Artist
 import com.example.vuey.feature_album.data.remote.model.ExternalUrls
+import com.example.vuey.feature_album.data.remote.model.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+@SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class DetailAlbumFragment : Fragment() {
 
@@ -52,7 +56,6 @@ class DetailAlbumFragment : Fragment() {
         detailViewModel.getAlbumDetail(arguments.album.id)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -61,13 +64,118 @@ class DetailAlbumFragment : Fragment() {
 
         binding.toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
 
+        val albumDatabase = arguments.albumEntity
+
+        detailViewModel.getAlbumById(albumDatabase.id).onEach { album ->
+            isAlbumSaved = if (album == null) {
+                binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
+                false
+            } else {
+                binding.imgSave.setImageResource(R.drawable.ic_save)
+                true
+            }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        val trackList = albumDatabase.trackList.map { trackEntity ->
+            Tracks.AlbumItem(
+                id = albumDatabase.id,
+                trackName = trackEntity.trackName,
+                artistList = trackEntity.artistList.map { artistEntity ->
+                    Artist(
+                        id = artistEntity.id,
+                        artistName = artistEntity.name,
+                        externalUrls = ExternalUrls(
+                            spotify = artistEntity.externalUrls.spotify
+                        )
+                    )
+                },
+                durationMs = trackEntity.durationMs,
+                externalUrls = ExternalUrls(
+                    spotify = albumDatabase.externalUrls.spotify
+                ),
+                albumType = albumDatabase.albumType
+            )
+        }
+        trackListAdapter.submitTrack(trackList)
+
+        val albumEntity = AlbumEntity(
+            albumLength = albumDatabase.albumLength,
+            albumName = albumDatabase.albumName,
+            albumType = albumDatabase.albumType,
+            id = albumDatabase.id,
+            releaseDate = DateUtils.formatAirDate(albumDatabase.releaseDate).toString(),
+            totalTracks = albumDatabase.totalTracks,
+            externalUrls = AlbumEntity.ExternalUrlsEntity(
+                spotify = albumDatabase.externalUrls.spotify
+            ),
+            imageList = albumDatabase.imageList.map { image ->
+                AlbumEntity.ImageEntity(
+                    height = image.height,
+                    width = image.width,
+                    url = image.url
+                )
+            },
+            artistList = albumDatabase.artistList,
+            trackList = albumDatabase.trackList.map { track ->
+                AlbumEntity.TrackListEntity(
+                    durationMs = track.durationMs,
+                    trackName = track.trackName,
+                    artistList = track.artistList
+                )
+            }
+        )
+
+        val albumCover = albumDatabase.imageList.find { it.height == 640 && it.width == 640 }
+        val artists : List<AlbumEntity.ArtistEntity> = albumDatabase.artistList
+        val artistList = artists.joinToString(separator = ", ") { it.name }
+
+        with(binding) {
+            imgSave.setOnClickListener {
+                isAlbumSaved = !isAlbumSaved
+                if (isAlbumSaved) {
+                    showSnackbar(requireView(), getString(R.string.added_to_library))
+                    imgSave.setImageResource(R.drawable.ic_save)
+                    detailViewModel.insertAlbum(albumEntity)
+                } else {
+                    showSnackbar(requireView(), getString(R.string.removed_from_library))
+                    imgSave.setImageResource(R.drawable.ic_save_outlined)
+                    detailViewModel.deleteAlbum(albumEntity)
+                }
+            }
+
+            txtAlbumName.text = albumDatabase.albumName
+            txtAlbumTime.text = albumDatabase.albumLength
+            txtArtist.text = artistList
+            txtInfo.text = "${albumDatabase.albumType.replaceFirstChar { it.uppercase() }} • " +
+                    "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(R.string.tracks)
+
+            imgAlbum.load(albumCover?.url) {
+                crossfade(true)
+                crossfade(1000)
+            }
+
+            btnAlbum.setOnClickListener {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(albumDatabase.externalUrls.spotify)
+                )
+                startActivity(intent)
+            }
+
+            btnArtist.setOnClickListener {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(albumDatabase.artistList[0].externalUrls.spotify)
+                )
+                startActivity(intent)
+            }
+        }
     }
 
     private fun initRecyclerView() {
         binding.recyclerViewTracks.adapter = trackListAdapter
     }
 
-    @SuppressLint("SetTextI18n")
     private fun observeDetailAlbum() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -97,7 +205,7 @@ class DetailAlbumFragment : Fragment() {
                             val albumTimeHour = time / (1000 * 60 * 60)
                             val albumTimeMinute = (time / (1000 * 60)) % 60
 
-                            val albumTime = if (albumTimeHour == 0) {
+                            val albumLength = if (albumTimeHour == 0) {
                                 String.format("%d min", albumTimeMinute)
                             } else {
                                 String.format("%d h %d min", albumTimeHour, albumTimeMinute)
@@ -106,7 +214,7 @@ class DetailAlbumFragment : Fragment() {
                             with(binding) {
 
                                 txtAlbumName.text = albumDetail.albumName
-                                txtAlbumTime.text = albumTime
+                                txtAlbumTime.text = albumLength
                                 txtArtist.text = artistName
                                 txtInfo.text = "${albumDetail.albumType.replaceFirstChar { it.uppercase() }} • " +
                                         "${DateUtils.formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(R.string.tracks)
@@ -133,18 +241,72 @@ class DetailAlbumFragment : Fragment() {
                                 }
 
                                 albumDetail.let { trackList -> trackListAdapter.submitTrack(trackList.tracks.items) }
+
+                                val artistEntity = albumDetail.artistList.map { artist ->
+                                    AlbumEntity.ArtistEntity(
+                                        id = artist.id,
+                                        name = artist.artistName,
+                                        externalUrls = AlbumEntity.ExternalUrlsEntity(
+                                            spotify = artist.externalUrls.spotify
+                                        )
+                                    )
+                                }
+
+                                val albumEntity = AlbumEntity(
+                                    id = albumDetail.id,
+                                    albumLength = albumLength,
+                                    albumName = albumDetail.albumName,
+                                    albumType = albumDetail.albumType,
+                                    releaseDate = DateUtils.formatAirDate(albumDetail.releaseDate).toString(),
+                                    totalTracks = albumDetail.totalTracks,
+                                    externalUrls = AlbumEntity.ExternalUrlsEntity(
+                                        spotify = albumDetail.externalUrls.spotify
+                                    ),
+                                    imageList = albumDetail.imageList.map { image ->
+                                        AlbumEntity.ImageEntity(
+                                            width = image.width,
+                                            height = image.height,
+                                            url = image.url
+                                        )
+                                    },
+                                    artistList = artistEntity,
+                                    trackList = albumDetail.tracks.items.map { tracks ->
+                                        AlbumEntity.TrackListEntity(
+                                            durationMs = tracks.durationMs,
+                                            trackName = tracks.trackName,
+                                            artistList = artistEntity
+                                        )
+                                    }
+                                )
+
+                                detailViewModel.getAlbumById(arguments.albumEntity.id).onEach { album ->
+                                    isAlbumSaved = if (album == null) {
+                                        binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
+                                        false
+                                    } else {
+                                        binding.imgSave.setImageResource(R.drawable.ic_save)
+                                        true
+                                    }
+                                }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+                                imgSave.setOnClickListener {
+                                    isAlbumSaved = !isAlbumSaved
+                                    if (isAlbumSaved) {
+                                        showSnackbar(requireView(), getString(R.string.added_to_library))
+                                        imgSave.setImageResource(R.drawable.ic_save)
+                                        detailViewModel.insertAlbum(albumEntity)
+                                    } else {
+                                        showSnackbar(requireView(), getString(R.string.removed_from_library))
+                                        imgSave.setImageResource(R.drawable.ic_save_outlined)
+                                        detailViewModel.deleteAlbum(albumEntity)
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
-    }
-
-    private fun AlbumEntity.ExternalUrlsEntity.toExternalUrls(): ExternalUrls {
-        return ExternalUrls(
-            spotify = this.spotify
-        )
     }
 
     override fun onDestroy() {
