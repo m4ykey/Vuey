@@ -219,9 +219,12 @@ class DetailAlbumFragment : Fragment() {
 
                             val albumTimeHour = time / (1000 * 60 * 60)
                             val albumTimeMinute = (time / (1000 * 60)) % 60
+                            val albumTimeSeconds = (time / 1000) % 60
 
                             val albumLength = if (albumTimeHour == 0) {
-                                String.format("%d min", albumTimeMinute)
+                                String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
+                            } else if (albumTimeMinute == 0){
+                                String.format("%d h", albumTimeHour)
                             } else {
                                 String.format("%d h %d min", albumTimeHour, albumTimeMinute)
                             }

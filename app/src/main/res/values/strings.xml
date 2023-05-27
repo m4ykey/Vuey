@@ -18,4 +18,5 @@
     <string name="added_to_library">Added to library</string>
     <string name="removed_from_library">Removed from library</string>
     <string name="episodes">Episodes</string>
+    <string name="sec">sec</string>
 </resources>

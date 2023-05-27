@@ -19,4 +19,5 @@
     <string name="added_to_library">Dodano do biblioteki</string>
     <string name="removed_from_library">Usunięto z biblioteki</string>
     <string name="episodes">Odcinków</string>
+    <string name="sec">sek.</string>
 </resources>
