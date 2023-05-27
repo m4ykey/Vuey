@@ -11,8 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
-import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
+import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -37,9 +37,7 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val bottomNavigationView: BottomNavigationView =
-            requireActivity().findViewById(R.id.bottomMenu)
-        bottomNavigationView.visibility = View.VISIBLE
+        showBottomNavigation()
 
         binding.apply {
 
@@ -57,8 +55,13 @@ class AlbumFragment : Fragment() {
                     albumAdapter.submitAlbumEntity(albums)
                 }
             }
-
         }
+    }
+
+    private fun showBottomNavigation() {
+        val bottomNavigationView: BottomNavigationView =
+            requireActivity().findViewById(R.id.bottomMenu)
+        bottomNavigationView.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

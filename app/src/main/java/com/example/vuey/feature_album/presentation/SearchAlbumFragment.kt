@@ -1,8 +1,6 @@
 package com.example.vuey.feature_album.presentation
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
-import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
+import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -44,12 +42,9 @@ class SearchAlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val bottomNavigationView: BottomNavigationView =
-            requireActivity().findViewById(R.id.bottomMenu)
-        bottomNavigationView.visibility = View.GONE
-
         searchAlbum()
         observeSearchAlbum()
+        hideBottomNavigation()
 
         with(binding) {
             toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
@@ -58,6 +53,12 @@ class SearchAlbumFragment : Fragment() {
                 layoutManager = GridLayoutManager(requireContext(), 2)
             }
         }
+    }
+
+    private fun hideBottomNavigation() {
+        val bottomNavigationView: BottomNavigationView =
+            requireActivity().findViewById(R.id.bottomMenu)
+        bottomNavigationView.visibility = View.GONE
     }
 
     private fun searchAlbum() {
