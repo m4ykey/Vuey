@@ -1,10 +1,13 @@
 package com.example.vuey.feature_album.presentation
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -45,12 +48,33 @@ class SearchAlbumFragment : Fragment() {
         searchAlbum()
         observeSearchAlbum()
         hideBottomNavigation()
+        setupToolbar()
+        initRecyclerView()
 
+    }
+
+    private fun initRecyclerView() {
+        binding.recyclerViewAlbum.apply {
+            adapter = albumAdapter
+            layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+    }
+
+    private fun setupToolbar() {
         with(binding) {
             toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
-            recyclerViewAlbum.apply {
-                adapter = albumAdapter
-                layoutManager = GridLayoutManager(requireContext(), 2)
+            toolBar.setOnMenuItemClickListener { menuItem ->
+                when(menuItem.itemId) {
+                    R.id.clearText -> {
+                        binding.etSearch.setText("")
+                        true
+                    }
+                    else -> { false }
+                }
+            }
+            val menuItem = toolBar.menu.findItem(R.id.clearText)
+            menuItem.icon.let {
+                MenuItemCompat.setIconTintList(menuItem, ColorStateList.valueOf(Color.WHITE))
             }
         }
     }
