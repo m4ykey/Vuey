@@ -1,9 +1,12 @@
 package com.example.vuey.feature_album.presentation
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,10 +23,10 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AlbumFragment : Fragment() {
 
-    private var _binding : FragmentAlbumBinding? = null
+    private var _binding: FragmentAlbumBinding? = null
     private val binding get() = _binding!!
 
-    private val albumViewModel : AlbumViewModel by viewModels()
+    private val albumViewModel: AlbumViewModel by viewModels()
     private val albumAdapter by lazy { AlbumAdapter(false) }
 
     override fun onCreateView(
@@ -38,23 +41,42 @@ class AlbumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         showBottomNavigation()
+        initRecyclerView()
+        showAllAlbums()
+        setupNavigation()
+    }
 
-        binding.apply {
-
-            fabSearch.setOnClickListener {
-                findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
-            }
-
-            albumRecyclerView.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2)
-                adapter = albumAdapter
-            }
-
-            lifecycleScope.launch {
-                albumViewModel.allAlbums.collect { albums ->
-                    albumAdapter.submitAlbumEntity(albums)
+    private fun setupNavigation() {
+        with(binding) {
+            fabSearch.setOnClickListener { findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment) }
+            toolbar.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.imgStatistics -> {
+                        findNavController().navigate(R.id.action_albumFragment_to_statisticsAlbumFragment)
+                        true
+                    }
+                    else -> { false }
                 }
             }
+            val menuItem = toolbar.menu.findItem(R.id.imgStatistics)
+            menuItem.icon.let {
+                MenuItemCompat.setIconTintList(menuItem, ColorStateList.valueOf(Color.WHITE))
+            }
+        }
+    }
+
+    private fun showAllAlbums() {
+        lifecycleScope.launch {
+            albumViewModel.allAlbums.collect { albums ->
+                albumAdapter.submitAlbumEntity(albums)
+            }
+        }
+    }
+
+    private fun initRecyclerView() {
+        binding.albumRecyclerView.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            adapter = albumAdapter
         }
     }
 

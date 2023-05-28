@@ -224,9 +224,9 @@ class DetailAlbumFragment : Fragment() {
                             val albumLength = if (albumTimeHour == 0) {
                                 String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
                             } else if (albumTimeMinute == 0){
-                                String.format("%d h", albumTimeHour)
+                                String.format("%d ${getString(R.string.hour)}", albumTimeHour)
                             } else {
-                                String.format("%d h %d min", albumTimeHour, albumTimeMinute)
+                                String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
                             }
 
                             with(binding) {

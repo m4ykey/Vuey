@@ -6,7 +6,7 @@ hilt = "2.46.1"
 coroutines = "1.7.1"
 lifecycle = "2.6.1"
 retrofit = "2.9.0"
-androidGradlePlugin = "8.0.1"
+androidGradlePlugin = "8.0.2"
 
 [libraries]
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -58,5 +58,5 @@ core-testing = { group = "androidx.arch.core", name = "core-testing", version = 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.8.0" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.8.21" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

@@ -20,4 +20,6 @@
     <string name="removed_from_library">Usunięto z biblioteki</string>
     <string name="episodes">Odcinków</string>
     <string name="sec">sek.</string>
+    <string name="library">Biblioteka</string>
+    <string name="hour">godz.</string>
 </resources>
