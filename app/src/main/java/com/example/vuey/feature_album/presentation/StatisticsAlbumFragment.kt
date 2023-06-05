@@ -18,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlin.math.max
 
@@ -50,12 +51,12 @@ class StatisticsAlbumFragment : Fragment() {
 
                     val startValue = 0
 
-                    val albumsEndValue = viewModel.getAlbumCount().first()
-                    val tracksEndValue  = viewModel.getTotalTracks().first()
+                    val albumsEndValue = viewModel.getAlbumCount().firstOrNull() ?: 0
+                    val tracksEndValue  = viewModel.getTotalTracks().firstOrNull() ?: 0
 
                     val valueAnimator = ValueAnimator.ofInt(startValue, max(albumsEndValue, tracksEndValue))
 
-                    valueAnimator.duration = 2000
+                    valueAnimator.duration = 1500
                     valueAnimator.interpolator = AccelerateDecelerateInterpolator()
 
                     valueAnimator.addUpdateListener { animator ->
