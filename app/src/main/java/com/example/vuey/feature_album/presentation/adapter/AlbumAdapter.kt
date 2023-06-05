@@ -69,12 +69,16 @@ class AlbumAdapter(
 
         fun bind(albumResultEntity : AlbumEntity) {
 
-            val images = albumResultEntity.imageList.find { it.width == 640 && it.height == 640 }
+            val images = albumResultEntity.albumCover.copy(
+                height = 640,
+                width = 640,
+                url = albumResultEntity.albumCover.url
+            )
             val artists : List<AlbumEntity.ArtistEntity> = albumResultEntity.artistList
             val artistNames = artists.joinToString(separator = ", ") { it.name }
 
             with(binding) {
-                imgAlbum.load(images?.url) {
+                imgAlbum.load(images.url) {
                     crossfade(true)
                     crossfade(500)
                     error(R.drawable.album_error)

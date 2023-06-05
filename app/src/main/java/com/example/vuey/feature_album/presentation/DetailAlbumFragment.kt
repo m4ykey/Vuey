@@ -111,13 +111,7 @@ class DetailAlbumFragment : Fragment() {
             externalUrls = AlbumEntity.ExternalUrlsEntity(
                 spotify = albumDatabase.externalUrls.spotify
             ),
-            imageList = albumDatabase.imageList.map { image ->
-                AlbumEntity.ImageEntity(
-                    height = image.height,
-                    width = image.width,
-                    url = image.url
-                )
-            },
+            albumCover = albumDatabase.albumCover,
             artistList = albumDatabase.artistList,
             trackList = albumDatabase.trackList.map { track ->
                 AlbumEntity.TrackListEntity(
@@ -128,7 +122,7 @@ class DetailAlbumFragment : Fragment() {
             }
         )
 
-        val albumCover = albumDatabase.imageList.find { it.height == 640 && it.width == 640 }
+//        val albumCover = albumDatabase.albumCover.find { it.height == 640 && it.width == 640 }
         val artists : List<AlbumEntity.ArtistEntity> = albumDatabase.artistList
         val artistList = artists.joinToString(separator = ", ") { it.name }
 
@@ -152,7 +146,7 @@ class DetailAlbumFragment : Fragment() {
             txtInfo.text = "${albumDatabase.albumType.replaceFirstChar { it.uppercase() }} • " +
                     "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(R.string.tracks)
 
-            imgAlbum.load(albumCover?.url) {
+            imgAlbum.load(albumDatabase.albumCover.url) {
                 crossfade(true)
                 crossfade(1000)
             }
@@ -280,13 +274,13 @@ class DetailAlbumFragment : Fragment() {
                                     externalUrls = AlbumEntity.ExternalUrlsEntity(
                                         spotify = albumDetail.externalUrls.spotify
                                     ),
-                                    imageList = albumDetail.imageList.map { image ->
+                                    albumCover = albumDetail.imageList.firstOrNull()?.let { image ->
                                         AlbumEntity.ImageEntity(
-                                            width = image.width,
-                                            height = image.height,
+                                            width = 640,
+                                            height = 640,
                                             url = image.url
                                         )
-                                    },
+                                    }!!,
                                     artistList = artistEntity,
                                     trackList = albumDetail.tracks.items.map { tracks ->
                                         AlbumEntity.TrackListEntity(

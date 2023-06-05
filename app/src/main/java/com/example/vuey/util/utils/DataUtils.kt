@@ -49,16 +49,14 @@ fun AlbumEntity.toAlbum() : Album {
                 )
             )
         },
-        imageList = this.imageList.map { image ->
-            Album.Image(
-                height = image.height,
-                width = image.width,
-                url = image.url
-            )
-        },
         externalUrls = Album.ExternalUrls(
             spotify = this.externalUrls.spotify
-        )
+        ),
+        imageList = listOf(Album.Image(
+            height = 640,
+            width = 640,
+            url = albumCover.url
+        ))
     )
 }
 
@@ -72,6 +70,11 @@ fun Album.toAlbumEntity() : AlbumEntity {
         totalTracks = this.totalTracks,
         externalUrls = AlbumEntity.ExternalUrlsEntity(
             spotify = this.externalUrls.spotify
+        ),
+        albumCover = AlbumEntity.ImageEntity(
+            height = 640,
+            width = 640,
+            url = ""
         )
     )
 }

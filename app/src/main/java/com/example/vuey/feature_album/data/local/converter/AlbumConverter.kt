@@ -30,13 +30,13 @@ class AlbumConverter {
     }
 
     @TypeConverter
-    fun fromImageJson(json : String) : List<AlbumEntity.ImageEntity> {
-        val type = object : TypeToken<List<AlbumEntity.ImageEntity>>() {}.type
+    fun fromImageJson(json : String) : AlbumEntity.ImageEntity {
+        val type = object : TypeToken<AlbumEntity.ImageEntity>() {}.type
         return Gson().fromJson(json, type)
     }
 
     @TypeConverter
-    fun toImageJson(images : List<AlbumEntity.ImageEntity>) : String {
+    fun toImageJson(images : AlbumEntity.ImageEntity) : String {
         return Gson().toJson(images)
     }
 

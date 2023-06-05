@@ -18,7 +18,7 @@ data class AlbumEntity(
     @ColumnInfo("externalUrls") val externalUrls: ExternalUrlsEntity,
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo("id") val id: String,
-    @ColumnInfo("imageList") val imageList: List<ImageEntity> = emptyList(),
+    @ColumnInfo("albumCover") val albumCover: ImageEntity,
     @ColumnInfo("albumName") val albumName: String,
     @ColumnInfo("totalTracks") val totalTracks: Int,
     @ColumnInfo("albumLength") val albumLength : String

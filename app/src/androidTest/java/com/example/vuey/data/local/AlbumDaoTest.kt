@@ -7,9 +7,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.vuey.feature_album.data.local.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.getOrAwaitValue
 import com.example.vuey.util.database.VueyDatabase
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -43,6 +43,21 @@ class AlbumDaoTest {
 
     @Test
     fun insertAlbum() = runTest {
+        val trackList = (1..10).map { index ->
+            AlbumEntity.TrackListEntity(
+                durationMs = index * 1000,
+                trackName = "random title $index"
+            )
+        }
+        val artistList = (1..5).map { index ->
+            AlbumEntity.ArtistEntity(
+                id = index.toString(),
+                name = "artist $index",
+                externalUrls = AlbumEntity.ExternalUrlsEntity(
+                    spotify = "random $index link"
+                )
+            )
+        }
         val albumItem = AlbumEntity(
             albumName = "MM...FOOD",
             albumType = "Album",
@@ -53,32 +68,38 @@ class AlbumDaoTest {
             externalUrls = AlbumEntity.ExternalUrlsEntity(
                 spotify = "random link"
             ),
-            trackList = listOf(AlbumEntity.TrackListEntity(
-                durationMs = 3,
-                trackName = "random title"
-            )),
-            artistList = listOf(AlbumEntity.ArtistEntity(
-                id = "artistId",
-                name = "random artist",
-                externalUrls = AlbumEntity.ExternalUrlsEntity(
-                    spotify = "random artist link"
-                )
-            )),
-            imageList = listOf(AlbumEntity.ImageEntity(
+            trackList = trackList,
+            artistList = artistList,
+            albumCover = AlbumEntity.ImageEntity(
                 height = 640,
                 width = 640,
-                url = "image url"
-            ))
+                url = "album cover link"
+            )
         )
         dao.insertAlbum(albumItem)
 
-        val allAlbums = dao.getAllAlbums().getOrAwaitValue()
+        val allAlbums = dao.getAllAlbums().first()
 
         assertThat(allAlbums).contains(albumItem)
     }
 
     @Test
     fun deleteAlbum() = runTest {
+        val trackList = (1..10).map { index ->
+            AlbumEntity.TrackListEntity(
+                durationMs = index * 1000,
+                trackName = "random title $index"
+            )
+        }
+        val artistList = (1..5).map { index ->
+            AlbumEntity.ArtistEntity(
+                id = index.toString(),
+                name = "artist $index",
+                externalUrls = AlbumEntity.ExternalUrlsEntity(
+                    spotify = "random $index link"
+                )
+            )
+        }
         val albumItem = AlbumEntity(
             albumName = "MM...FOOD",
             albumType = "Album",
@@ -89,27 +110,18 @@ class AlbumDaoTest {
             externalUrls = AlbumEntity.ExternalUrlsEntity(
                 spotify = "random link"
             ),
-            trackList = listOf(AlbumEntity.TrackListEntity(
-                durationMs = 3,
-                trackName = "random title"
-            )),
-            artistList = listOf(AlbumEntity.ArtistEntity(
-                id = "artistId",
-                name = "random artist",
-                externalUrls = AlbumEntity.ExternalUrlsEntity(
-                    spotify = "random artist link"
-                )
-            )),
-            imageList = listOf(AlbumEntity.ImageEntity(
+            trackList = trackList,
+            artistList = artistList,
+            albumCover = AlbumEntity.ImageEntity(
                 height = 640,
                 width = 640,
-                url = "image url"
-            ))
+                url = "album cover link"
+            )
         )
         dao.insertAlbum(albumItem)
         dao.deleteAlbum(albumItem)
 
-        val allAlbums = dao.getAllAlbums().getOrAwaitValue()
+        val allAlbums = dao.getAllAlbums().first()
 
         assertThat(allAlbums).doesNotContain(albumItem)
     }

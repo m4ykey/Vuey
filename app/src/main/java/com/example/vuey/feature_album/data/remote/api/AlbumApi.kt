@@ -1,6 +1,5 @@
 package com.example.vuey.feature_album.data.remote.api
 
-import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.remote.model.AlbumDetail
 import com.example.vuey.feature_album.data.remote.model.SearchAlbum
 import retrofit2.http.GET
