@@ -13,6 +13,12 @@ interface AlbumDao {
     @Query("SELECT * FROM album_table WHERE id = :albumId")
     fun getAlbumById(albumId : String) : Flow<AlbumEntity>
 
+    @Query("SELECT COUNT(*) FROM album_table")
+    fun getAlbumCount() : Flow<Int>
+
+    @Query("SELECT SUM(totalTracks) FROM album_table")
+    fun getTotalTracks() : Flow<Int>
+
     @Delete
     suspend fun deleteAlbum(albumEntity: AlbumEntity)
 

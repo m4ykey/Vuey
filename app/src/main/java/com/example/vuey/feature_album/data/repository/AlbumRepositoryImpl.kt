@@ -37,6 +37,14 @@ class AlbumRepositoryImpl @Inject constructor(
         return albumDao.getAlbumById(albumId)
     }
 
+    override fun getAlbumCount(): Flow<Int> {
+        return albumDao.getAlbumCount()
+    }
+
+    override fun getTotalTracks(): Flow<Int> {
+        return albumDao.getTotalTracks()
+    }
+
     override fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {
         return flow {
             emit(Resource.Loading())

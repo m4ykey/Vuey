@@ -25,6 +25,7 @@ data class AlbumEntity(
 ) : Parcelable {
 
     @Parcelize
+    @Entity(tableName = "track_list_entity")
     data class TrackListEntity(
         @ColumnInfo("durationMs") val durationMs: Int,
         @ColumnInfo("albumName") val trackName: String,

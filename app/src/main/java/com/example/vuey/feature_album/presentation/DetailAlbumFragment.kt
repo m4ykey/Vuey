@@ -122,7 +122,6 @@ class DetailAlbumFragment : Fragment() {
             }
         )
 
-//        val albumCover = albumDatabase.albumCover.find { it.height == 640 && it.width == 640 }
         val artists : List<AlbumEntity.ArtistEntity> = albumDatabase.artistList
         val artistList = artists.joinToString(separator = ", ") { it.name }
 

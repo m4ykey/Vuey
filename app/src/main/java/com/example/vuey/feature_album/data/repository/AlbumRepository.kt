@@ -15,5 +15,7 @@ interface AlbumRepository {
     suspend fun deleteAlbum(albumEntity: AlbumEntity)
     fun getAllAlbums() : Flow<List<AlbumEntity>>
     fun getAlbumById(albumId : String) : Flow<AlbumEntity>
+    fun getAlbumCount() : Flow<Int>
+    fun getTotalTracks() : Flow<Int>
 
 }

@@ -21,4 +21,9 @@
     <string name="sec">sec</string>
     <string name="library">Library</string>
     <string name="hour">h</string>
+    <string name="statistics">Statistics</string>
+    <string name="listened_albums">Listened albums</string>
+    <string name="listened_songs">Listened songs</string>
+    <string name="total_time">Total time</string>
+    <string name="discovered_artists">Discovered artists</string>
 </resources>

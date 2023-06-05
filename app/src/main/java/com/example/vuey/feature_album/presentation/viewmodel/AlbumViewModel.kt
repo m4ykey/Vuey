@@ -32,12 +32,17 @@ class AlbumViewModel @Inject constructor(
 
     val allAlbums = repository.getAllAlbums()
 
-    fun refreshDetail(albumId: String) {
-        getAlbumDetail(albumId)
+    fun getAlbumCount() : Flow<Int> {
+        return repository.getAlbumCount()
     }
 
-    fun refreshSearch(albumName: String) {
-        searchAlbum(albumName)
+    fun getTotalTracks() : Flow<Int> {
+        return repository.getTotalTracks()
+    }
+
+
+    fun refreshDetail(albumId: String) {
+        getAlbumDetail(albumId)
     }
 
     fun insertAlbum(albumEntity: AlbumEntity) {
