@@ -55,60 +55,60 @@ android {
 
 dependencies {
 
-    api libs.android.core
-    api libs.android.appcompat
-    api libs.android.material
-    api libs.constraintlayout
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
-    api libs.junit
-    api libs.truth
-    api libs.coroutines.test
-    api libs.core.testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'com.google.truth:truth:1.1.3'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Retrofit
-    api libs.retrofit.converter
-    api libs.retrofit
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
     // Kotlin Lifecycle
-    api libs.lifecycle.viewmodel
-    api libs.lifecycle.livedata
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
 
     // Kotlin Coroutines
-    api libs.coroutines.android
-    api libs.coroutines.core
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // Dagger - Hilt
-    kapt libs.hilt.compiler
-    api libs.hilt.android
+    kapt 'com.google.dagger:hilt-compiler:2.46.1'
+    implementation 'com.google.dagger:hilt-android:2.46.1'
 
     // Navigation
-    api libs.navigation.fragment
-    api libs.navigation.ui
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
 
     // OkHttpClient
-    api libs.okhttp
-    api libs.logging.interceptor
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11'
 
     // Firebase
-    api libs.firebase.crashlytics
-    api libs.firebase.analytics
-    api libs.firebase.pref
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation 'com.google.firebase:firebase-perf-ktx:20.3.2'
 
     // Room Database
-    api libs.room.runtime
-    kapt libs.room.compiler
-    api libs.room.ktx
+    kapt 'androidx.room:room-compiler:2.5.1'
+    implementation 'androidx.room:room-runtime:2.5.1'
+    implementation 'androidx.room:room-ktx:2.5.1'
 
     // Gson
-    api libs.gson
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     // Coil
-    api libs.coil
+    implementation 'io.coil-kt:coil:2.4.0'
 
     // SwipeToRefresh
-    api libs.swipe.refresh
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
 
 }
