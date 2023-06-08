@@ -19,6 +19,9 @@ interface AlbumDao {
     @Query("SELECT SUM(totalTracks) FROM album_table")
     fun getTotalTracks() : Flow<Int>
 
+    @Query("SELECT SUM(albumLength) FROM album_table")
+    fun getTotalLength() : Flow<Int>
+
     @Delete
     suspend fun deleteAlbum(albumEntity: AlbumEntity)
 

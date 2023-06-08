@@ -27,7 +27,7 @@ class AlbumFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val albumViewModel: AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumAdapter(false) }
+    private val albumAdapter by lazy { AlbumAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +68,7 @@ class AlbumFragment : Fragment() {
     private fun showAllAlbums() {
         lifecycleScope.launch {
             albumViewModel.allAlbums.collect { albums ->
-                albumAdapter.submitAlbumEntity(albums)
+                albumAdapter.submitAlbums(albums)
             }
         }
     }

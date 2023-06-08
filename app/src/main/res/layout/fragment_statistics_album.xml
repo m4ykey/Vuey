@@ -60,7 +60,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    tools:text="0"
                     android:textSize="80sp"
                     android:id="@+id/txtAlbumsNumber"
                     android:fontFamily="@font/cabin_semibold"
@@ -92,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="40sp"
-                    android:text="0"
+                    tools:text="0"
                     android:id="@+id/txtSongs"
                     android:fontFamily="@font/cabin_semibold"
                     android:textColor="@color/white"/>
@@ -122,8 +122,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="40sp"
-                    android:text="0"
-                    android:id="@+id/txtMinutes"
+                    tools:text="0"
+                    android:id="@+id/txtLength"
                     android:fontFamily="@font/cabin_semibold"
                     android:textColor="@color/white"/>
 
@@ -152,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="40sp"
-                    android:text="0"
+                    tools:text="0"
                     android:id="@+id/txtArtists"
                     android:fontFamily="@font/cabin_semibold"
                     android:textColor="@color/white"/>

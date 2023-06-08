@@ -45,6 +45,10 @@ class AlbumRepositoryImpl @Inject constructor(
         return albumDao.getTotalTracks()
     }
 
+    override fun getTotalLength(): Flow<Int> {
+        return albumDao.getTotalLength()
+    }
+
     override fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {
         return flow {
             emit(Resource.Loading())

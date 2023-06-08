@@ -64,7 +64,7 @@ fun Album.toAlbumEntity() : AlbumEntity {
     return AlbumEntity(
         albumName = this.albumName,
         albumType = this.albumType,
-        albumLength = "",
+        albumLength = 0,
         id = this.id,
         releaseDate = "",
         totalTracks = this.totalTracks,

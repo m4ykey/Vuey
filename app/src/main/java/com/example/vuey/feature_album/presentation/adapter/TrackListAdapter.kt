@@ -11,13 +11,12 @@ import com.example.vuey.util.utils.DiffUtils
 
 class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>() {
 
-    private var trackResult = listOf<Tracks.AlbumItem>()
+    private var tracks = listOf<Tracks.AlbumItem>()
 
-    fun submitTrack(newTrack: List<Tracks.AlbumItem>) {
-        val oldTrack = DiffUtils(trackResult, newTrack)
-        val result = DiffUtil.calculateDiff(oldTrack)
-        trackResult = newTrack
-        result.dispatchUpdatesTo(this)
+    fun submitTrack(newData: List<Tracks.AlbumItem>) {
+        val oldData = tracks.toList()
+        tracks = newData
+        DiffUtil.calculateDiff(DiffUtils(oldData, newData)).dispatchUpdatesTo(this)
         notifyDataSetChanged()
     }
 
@@ -46,10 +45,10 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListAdapter.TrackViewHolder>(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackResult[position])
+        holder.bind(tracks[position])
     }
 
     override fun getItemCount(): Int {
-        return trackResult.size
+        return tracks.size
     }
 }

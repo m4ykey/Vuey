@@ -32,7 +32,7 @@ class SearchAlbumFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val searchViewModel: AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumAdapter(true) }
+    private val albumAdapter by lazy { AlbumAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -110,7 +110,7 @@ class SearchAlbumFragment : Fragment() {
                         }
                         uiState.searchAlbumData.isNotEmpty() -> {
                             binding.progressBar.visibility = View.GONE
-                            albumAdapter.submitAlbum(uiState.searchAlbumData)
+                            albumAdapter.submitAlbums(uiState.searchAlbumData)
                         }
                         uiState.isError?.isNotEmpty() == true -> {
                             binding.progressBar.visibility = View.GONE

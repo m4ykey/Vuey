@@ -16,81 +16,54 @@ import com.example.vuey.util.utils.DiffUtils
 import com.example.vuey.util.utils.toAlbum
 import com.example.vuey.util.utils.toAlbumEntity
 
-class AlbumAdapter(
-    private val isFromApi : Boolean
-) : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
+class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
 
-    private var albumResult = listOf<Album>()
-    private var albumResultEntity = listOf<AlbumEntity>()
+    private var albums = emptyList<Any>()
 
-    fun submitAlbum(newAlbum: List<Album>) {
-        val oldAlbum = DiffUtils(albumResult, newAlbum)
-        val result = DiffUtil.calculateDiff(oldAlbum)
-        albumResult = newAlbum
-        result.dispatchUpdatesTo(this)
-        notifyDataSetChanged()
-    }
-
-    fun submitAlbumEntity(newAlbum: List<AlbumEntity>) {
-        val oldAlbum = DiffUtils(albumResultEntity, newAlbum)
-        val result = DiffUtil.calculateDiff(oldAlbum)
-        albumResultEntity = newAlbum
-        result.dispatchUpdatesTo(this)
+    fun submitAlbums(newData : List<Any>) {
+        val oldData = albums.toList()
+        albums = newData
+        DiffUtil.calculateDiff(DiffUtils(oldData, newData)).dispatchUpdatesTo(this)
         notifyDataSetChanged()
     }
 
     inner class AlbumViewHolder(private val binding: LayoutAlbumBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(albumResult : Album) {
-
-            val image = albumResult.imageList.find { it.width == 640 && it.height == 640 }
-            val artists : List<Album.Artist> = albumResult.artistList
-            val artistNames = artists.joinToString(separator = ", ") { it.artistName }
-
+        fun bind(album : Any) {
             with(binding) {
-                imgAlbum.load(image?.url) {
-                    crossfade(true)
-                    crossfade(500)
-                    error(R.drawable.album_error)
-                }
-                txtAlbum.text = albumResult.albumName
-                txtArtist.text = artistNames
-
-                layoutAlbum.setOnClickListener {
-                    val action = SearchAlbumFragmentDirections.actionSearchAlbumFragmentToAlbumDetailFragment(
-                        album = albumResult,
-                        albumEntity = albumResult.toAlbumEntity()
-                    )
-                    it.findNavController().navigate(action)
-                }
-            }
-        }
-
-        fun bind(albumResultEntity : AlbumEntity) {
-
-            val images = albumResultEntity.albumCover.copy(
-                height = 640,
-                width = 640,
-                url = albumResultEntity.albumCover.url
-            )
-            val artists : List<AlbumEntity.ArtistEntity> = albumResultEntity.artistList
-            val artistNames = artists.joinToString(separator = ", ") { it.name }
-
-            with(binding) {
-                imgAlbum.load(images.url) {
-                    crossfade(true)
-                    crossfade(500)
-                    error(R.drawable.album_error)
-                }
-                txtAlbum.text = albumResultEntity.albumName
-                txtArtist.text = artistNames
-                layoutAlbum.setOnClickListener {
-                    val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(
-                        album = albumResultEntity.toAlbum(),
-                        albumEntity = albumResultEntity
-                    )
-                    it.findNavController().navigate(action)
+                when(album) {
+                    is Album -> {
+                        val image = album.imageList.find { it.height == 640 && it.width == 640 }
+                        txtAlbum.text = album.albumName
+                        txtArtist.text = album.artistList.joinToString(separator = ", ") { it.artistName }
+                        imgAlbum.load(image?.url) { error(R.drawable.album_error) }
+                        layoutAlbum.setOnClickListener {
+                            val action = SearchAlbumFragmentDirections.actionSearchAlbumFragmentToAlbumDetailFragment(
+                                album = album,
+                                albumEntity = album.toAlbumEntity()
+                            )
+                            it.findNavController().navigate(action)
+                        }
+                    }
+                    is AlbumEntity -> {
+                        val image = album.albumCover.copy(
+                            height = 640,
+                            width = 640,
+                            url = album.albumCover.url
+                        )
+                        imgAlbum.load(image.url) { error(R.drawable.album_error) }
+                        txtAlbum.text = album.albumName
+                        txtArtist.text = album.artistList.joinToString(separator = ", ") { it.name }
+                        layoutAlbum.setOnClickListener {
+                            val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(
+                                album = album.toAlbum(),
+                                albumEntity = album
+                            )
+                            it.findNavController().navigate(action)
+                        }
+                    }
+                    else -> return
                 }
             }
         }
@@ -106,18 +79,10 @@ class AlbumAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (isFromApi) {
-            albumResult.size
-        } else {
-            albumResultEntity.size
-        }
+        return albums.size
     }
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
-        if (isFromApi) {
-            holder.bind(albumResult[position])
-        } else {
-            holder.bind(albumResultEntity[position])
-        }
+        holder.bind(albums[position])
     }
 }

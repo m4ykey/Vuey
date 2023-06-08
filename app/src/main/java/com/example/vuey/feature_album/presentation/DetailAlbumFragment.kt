@@ -61,10 +61,10 @@ class DetailAlbumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeDetailAlbum()
-        initRecyclerView()
         refreshUi()
         hideBottomNavigation()
 
+        binding.recyclerViewTracks.adapter = trackListAdapter
         binding.toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
 
         val albumDatabase = arguments.albumEntity
@@ -139,8 +139,20 @@ class DetailAlbumFragment : Fragment() {
                 }
             }
 
+            val albumTime = albumDatabase.albumLength
+            val albumTimeHour = albumTime / (1000 * 60 * 60)
+            val albumTimeMinute = (albumTime / (1000 * 60)) % 60
+            val albumTimeSeconds = (albumTime / 1000) % 60
+
+            txtAlbumTime.text = if (albumTimeHour == 0) {
+                String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
+            } else if (albumTimeMinute == 0){
+                String.format("%d ${getString(R.string.hour)}", albumTimeHour)
+            } else {
+                String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
+            }
+
             txtAlbumName.text = albumDatabase.albumName
-            txtAlbumTime.text = albumDatabase.albumLength
             txtArtist.text = artistList
             txtInfo.text = "${albumDatabase.albumType.replaceFirstChar { it.uppercase() }} • " +
                     "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(R.string.tracks)
@@ -180,10 +192,6 @@ class DetailAlbumFragment : Fragment() {
         }
     }
 
-    private fun initRecyclerView() {
-        binding.recyclerViewTracks.adapter = trackListAdapter
-    }
-
     private fun observeDetailAlbum() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -210,6 +218,7 @@ class DetailAlbumFragment : Fragment() {
                                 time += track.durationMs
                             }
 
+                            val albumTime = time
                             val albumTimeHour = time / (1000 * 60 * 60)
                             val albumTimeMinute = (time / (1000 * 60)) % 60
                             val albumTimeSeconds = (time / 1000) % 60
@@ -265,7 +274,7 @@ class DetailAlbumFragment : Fragment() {
 
                                 val albumEntity = AlbumEntity(
                                     id = albumDetail.id,
-                                    albumLength = albumLength,
+                                    albumLength = albumTime,
                                     albumName = albumDetail.albumName,
                                     albumType = albumDetail.albumType,
                                     releaseDate = DateUtils.formatAirDate(albumDetail.releaseDate).toString(),

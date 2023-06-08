@@ -40,6 +40,9 @@ class AlbumViewModel @Inject constructor(
         return repository.getTotalTracks()
     }
 
+    fun getTotalLength() : Flow<Int> {
+        return repository.getTotalLength()
+    }
 
     fun refreshDetail(albumId: String) {
         getAlbumDetail(albumId)

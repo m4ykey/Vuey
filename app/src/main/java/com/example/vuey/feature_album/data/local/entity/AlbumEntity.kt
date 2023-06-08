@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.vuey.util.Constants.ALBUM_TABLE_NAME
+import com.example.vuey.util.Constants.ARTIST_TABLE_NAME
+import com.example.vuey.util.Constants.TRACK_TABLE_NAME
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -21,11 +23,11 @@ data class AlbumEntity(
     @ColumnInfo("albumCover") val albumCover: ImageEntity,
     @ColumnInfo("albumName") val albumName: String,
     @ColumnInfo("totalTracks") val totalTracks: Int,
-    @ColumnInfo("albumLength") val albumLength : String
+    @ColumnInfo("albumLength") val albumLength: Int
 ) : Parcelable {
 
     @Parcelize
-    @Entity(tableName = "track_list_entity")
+    @Entity(tableName = TRACK_TABLE_NAME)
     data class TrackListEntity(
         @ColumnInfo("durationMs") val durationMs: Int,
         @ColumnInfo("albumName") val trackName: String,
@@ -33,8 +35,10 @@ data class AlbumEntity(
     ) : Parcelable
 
     @Parcelize
+    @Entity(tableName = ARTIST_TABLE_NAME)
     data class ArtistEntity(
         @ColumnInfo("externalUrls")  val externalUrls: ExternalUrlsEntity,
+        @PrimaryKey(autoGenerate = false)
         @ColumnInfo("id") val id: String,
         @ColumnInfo("name") val name: String
     ) : Parcelable
