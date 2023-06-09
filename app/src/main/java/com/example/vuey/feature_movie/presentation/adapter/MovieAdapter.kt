@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutMovieBinding
-import com.example.vuey.feature_movie.data.remote.model.SearchMovie
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.remote.model.SearchMovie
 import com.example.vuey.feature_movie.presentation.MovieFragmentDirections
 import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections
 import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
@@ -20,100 +20,82 @@ import com.example.vuey.util.utils.formatVoteAverage
 import com.example.vuey.util.utils.toMovieEntity
 import com.example.vuey.util.utils.toSearchMovie
 
-class MovieAdapter(
-    private val isFromApi: Boolean
-) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    private var movieResult = listOf<SearchMovie>()
-    private var movieEntityResult = listOf<MovieEntity>()
+    private var movies = emptyList<Any>()
 
-    fun submitMovie(newMovie: List<SearchMovie>) {
-        val oldMovie = DiffUtils(movieResult, newMovie)
-        val result = DiffUtil.calculateDiff(oldMovie)
-        movieResult = newMovie
-        result.dispatchUpdatesTo(this)
+    fun submitMovies(newData: List<Any>) {
+        val oldData = movies.toList()
+        movies = newData
+        DiffUtil.calculateDiff(DiffUtils(oldData, newData)).dispatchUpdatesTo(this)
         notifyDataSetChanged()
     }
 
-    fun submitMovieEntity(newMovie: List<MovieEntity>) {
-        val oldMovie = DiffUtils(movieEntityResult, newMovie)
-        val result = DiffUtil.calculateDiff(oldMovie)
-        movieEntityResult = newMovie
-        result.dispatchUpdatesTo(this)
-        notifyDataSetChanged()
-    }
-
-    class MovieViewHolder(private val binding: LayoutMovieBinding) :
+    inner class MovieViewHolder(private val binding: LayoutMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movieEntityResult: MovieEntity) {
-
+        fun bind(movie: Any) {
             with(binding) {
+                when(movie) {
+                    is SearchMovie -> {
+                        txtMovieTitle.text = movie.title
+                        txtDescription.text = movie.overview
+                        txtVoteAverage.text = movie.vote_average.formatVoteAverage()
 
-                txtMovieTitle.text = movieEntityResult.movieTitle
-                txtDescription.text = movieEntityResult.movieOverview
-                txtReleaseDate.text = movieEntityResult.movieReleaseDate
-                txtVoteAverage.text = movieEntityResult.movieVoteAverage
-
-                if (movieEntityResult.moviePosterPath != null) {
-                    imgMovie.load(TMDB_IMAGE_ORIGINAL + movieEntityResult.moviePosterPath) {
-                        crossfade(true)
-                        crossfade(500)
+                        if (movie.poster_path != null) {
+                            imgMovie.load(TMDB_IMAGE_ORIGINAL + movie.poster_path) {
+                                crossfade(true)
+                                crossfade(1000)
+                            }
+                        } else {
+                            imgMovie.setImageResource(R.drawable.ic_movie_error) // to change
+                        }
+                        if (movie.release_date != null && !movie.release_date.isNullOrEmpty()) {
+                            txtReleaseDate.text = DateUtils.formatAirDate(movie.release_date)
+                        } else {
+                            txtReleaseDate.visibility = View.GONE
+                        }
+                        layoutMovie.setOnClickListener {
+                            val action = SearchMovieFragmentDirections.actionSearchMovieFragmentToMovieDetailFragment(
+                                movieEntity = movie.toMovieEntity(),
+                                searchMovie = movie
+                            )
+                            it.findNavController().navigate(action)
+                        }
                     }
-                } else {
-                    imgMovie.setImageResource(R.drawable.ic_movie_error)
-                }
+                    is MovieEntity -> {
+                        txtMovieTitle.text = movie.movieTitle
+                        txtDescription.text = movie.movieOverview
+                        txtReleaseDate.text = movie.movieReleaseDate
+                        txtVoteAverage.text = movie.movieVoteAverage
 
-                if (movieEntityResult.movieReleaseDate.isNullOrEmpty().not() && movieEntityResult.movieReleaseDate != null) {
-                    txtReleaseDate.text = DateUtils.formatAirDate(movieEntityResult.movieReleaseDate)
-                } else {
-                    txtReleaseDate.visibility = View.GONE
-                }
-
-                layoutMovie.setOnClickListener {
-                    val action =
-                        MovieFragmentDirections.actionMovieFragmentToMovieDetailFragment(
-                            searchMovie = movieEntityResult.toSearchMovie(),
-                            movieEntity = movieEntityResult
-                        )
-                    it.findNavController().navigate(action)
-                }
-            }
-        }
-
-        fun bind(movieResult: SearchMovie) {
-            with(binding) {
-
-                if (movieResult.release_date != null && !movieResult.release_date.isNullOrEmpty()) {
-                    txtReleaseDate.text = DateUtils.formatAirDate(movieResult.release_date)
-                } else {
-                    txtReleaseDate.visibility = View.GONE
-                }
-
-                txtMovieTitle.text = movieResult.title
-                txtDescription.text = movieResult.overview
-                txtVoteAverage.text = movieResult.vote_average.formatVoteAverage()
-
-                if (movieResult.poster_path != null) {
-                    imgMovie.load(TMDB_IMAGE_ORIGINAL + movieResult.poster_path) {
-                        crossfade(true)
-                        crossfade(500)
+                        if (movie.moviePosterPath != null) {
+                            imgMovie.load(TMDB_IMAGE_ORIGINAL + movie.moviePosterPath) {
+                                crossfade(true)
+                                crossfade(1000)
+                            }
+                        } else {
+                            imgMovie.setImageResource(R.drawable.ic_movie_error) // to change
+                        }
+                        if (!movie.movieReleaseDate.isNullOrEmpty() && movie.movieReleaseDate != null) {
+                            txtReleaseDate.text = DateUtils.formatAirDate(movie.movieReleaseDate)
+                        } else {
+                            txtReleaseDate.visibility = View.GONE
+                        }
+                        layoutMovie.setOnClickListener {
+                            val action = MovieFragmentDirections.actionMovieFragmentToMovieDetailFragment(
+                               movieEntity = movie,
+                               searchMovie = movie.toSearchMovie()
+                            )
+                            it.findNavController().navigate(action)
+                        }
                     }
-                } else {
-                    imgMovie.setImageResource(R.drawable.ic_movie_error)
-                }
-
-                layoutMovie.setOnClickListener {
-                    val action =
-                        SearchMovieFragmentDirections.actionSearchMovieFragmentToMovieDetailFragment(
-                            searchMovie = movieResult,
-                            movieEntity = movieResult.toMovieEntity()
-                        )
-                    it.findNavController().navigate(action)
+                    else -> {}
                 }
             }
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding = LayoutMovieBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -124,18 +106,10 @@ class MovieAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        if (isFromApi) {
-            holder.bind(movieResult[position])
-        } else {
-            holder.bind(movieEntityResult[position])
-        }
+        holder.bind(movies[position])
     }
 
     override fun getItemCount(): Int {
-        return if (isFromApi) {
-            movieResult.size
-        } else {
-            movieEntityResult.size
-        }
+        return movies.size
     }
 }

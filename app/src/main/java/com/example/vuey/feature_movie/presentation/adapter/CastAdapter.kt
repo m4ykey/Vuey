@@ -13,13 +13,12 @@ import com.example.vuey.util.utils.DiffUtils
 
 class CastAdapter : RecyclerView.Adapter<CastAdapter.CreditViewHolder>() {
 
-    private var castResult = listOf<Cast>()
+    private var casts = listOf<Cast>()
 
-    fun submitCast(newCast : List<Cast>) {
-        val oldCast = DiffUtils(newCast, castResult)
-        val result = DiffUtil.calculateDiff(oldCast)
-        castResult = newCast
-        result.dispatchUpdatesTo(this)
+    fun submitCast(newData : List<Cast>) {
+        val oldData = casts.toList()
+        casts = newData
+        DiffUtil.calculateDiff(DiffUtils(oldData, newData)).dispatchUpdatesTo(this)
         notifyDataSetChanged()
     }
 
@@ -32,11 +31,11 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CreditViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CreditViewHolder, position: Int) {
-        holder.bind(castResult[position])
+        holder.bind(casts[position])
     }
 
     override fun getItemCount(): Int {
-        return castResult.size
+        return casts.size
     }
 
     class CreditViewHolder(private val binding : LayoutCastBinding) : RecyclerView.ViewHolder(binding.root) {

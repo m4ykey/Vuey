@@ -21,7 +21,7 @@ class MovieFragment : Fragment() {
     private var _binding : FragmentMovieBinding? = null
     private val binding get() = _binding!!
     private val viewModel : MovieViewModel by viewModels()
-    private lateinit var movieAdapter: MovieAdapter
+    private val movieAdapter by lazy { MovieAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,11 +29,6 @@ class MovieFragment : Fragment() {
     ): View {
         _binding = FragmentMovieBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        movieAdapter = MovieAdapter(isFromApi = false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,10 +45,6 @@ class MovieFragment : Fragment() {
             }
 
             fabSearch.setOnClickListener { findNavController().navigate(R.id.action_movieFragment_to_searchMovieFragment) }
-        }
-
-        viewModel.getAllMovies.observe(viewLifecycleOwner) { movieList ->
-            movieAdapter.submitMovieEntity(movieList)
         }
     }
 
