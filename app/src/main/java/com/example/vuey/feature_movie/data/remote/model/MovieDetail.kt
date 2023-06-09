@@ -1,9 +1,6 @@
-package com.example.vuey.feature_movie.data.response
+package com.example.vuey.feature_movie.data.remote.model
 
-import com.example.vuey.feature_movie.data.api.detail.Genre
-import com.example.vuey.feature_movie.data.api.detail.SpokenLanguage
-
-data class MovieDetailResponse(
+data class MovieDetail(
     val backdrop_path: String?,
     val genres: List<Genre>,
     val id: Int,

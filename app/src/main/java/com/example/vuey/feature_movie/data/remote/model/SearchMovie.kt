@@ -1,4 +1,4 @@
-package com.example.vuey.feature_movie.data.api.search
+package com.example.vuey.feature_movie.data.remote.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

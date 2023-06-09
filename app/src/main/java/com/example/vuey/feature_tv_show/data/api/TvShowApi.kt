@@ -1,6 +1,6 @@
 package com.example.vuey.feature_tv_show.data.api
 
-import com.example.vuey.feature_movie.data.response.MovieTvShowCreditsResponse
+import com.example.vuey.feature_movie.data.remote.model.Credits
 import com.example.vuey.feature_tv_show.data.response.TvShowDetailResponse
 import com.example.vuey.feature_tv_show.data.response.TvShowSearchResponse
 import com.example.vuey.feature_tv_show.data.response.TvShowSeasonResponse
@@ -27,7 +27,7 @@ interface TvShowApi {
     @GET("tv/{tv_id}/credits")
     suspend fun tvShowCredits(
         @Path("tv_id") id : Int
-    ) : Response<MovieTvShowCreditsResponse>
+    ) : Response<Credits>
 
     @GET("tv/{tv_id}/season/{season_number}")
     suspend fun tvShowSeasons(

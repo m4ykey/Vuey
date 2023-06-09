@@ -1,4 +1,4 @@
-package com.example.vuey.feature_movie.data.api.detail
+package com.example.vuey.feature_movie.data.remote.model
 
 data class Cast(
     val character: String,

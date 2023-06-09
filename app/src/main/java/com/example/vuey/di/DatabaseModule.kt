@@ -3,7 +3,7 @@ package com.example.vuey.di
 import android.app.Application
 import androidx.room.Room
 import com.example.vuey.feature_album.data.local.dao.AlbumDao
-import com.example.vuey.feature_movie.data.database.dao.MovieDao
+import com.example.vuey.feature_movie.data.local.dao.MovieDao
 import com.example.vuey.feature_tv_show.data.database.dao.TvShowDao
 import com.example.vuey.util.Constants.DATABASE_NAME
 import com.example.vuey.util.database.VueyDatabase

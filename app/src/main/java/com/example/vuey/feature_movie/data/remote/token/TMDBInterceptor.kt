@@ -1,4 +1,4 @@
-package com.example.vuey.feature_movie.data.api
+package com.example.vuey.feature_movie.data.remote.token
 
 import com.example.vuey.BuildConfig.TMDB_API_KEY
 import okhttp3.Interceptor

@@ -2,8 +2,8 @@ package com.example.vuey.util.utils
 
 import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_movie.data.api.search.SearchMovie
-import com.example.vuey.feature_movie.data.database.entity.MovieEntity
+import com.example.vuey.feature_movie.data.remote.model.SearchMovie
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_tv_show.data.api.search.SearchTvShow
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity
 

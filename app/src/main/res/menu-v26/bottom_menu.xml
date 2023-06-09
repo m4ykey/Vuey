@@ -3,11 +3,11 @@
     <item android:id="@+id/albumFragment"
         android:title="@string/album"
         android:icon="@drawable/select_album"/>
-    <item android:id="@+id/movieFragment"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <item
+        android:id="@+id/movieFragment"
         android:title="@string/movie"
-        android:icon="@drawable/select_movie"/>
+        android:icon="@drawable/select_movie" />
     <item android:id="@+id/tvShowFragment"
-        android:title="@string/tv_show"
-        android:icon="@drawable/ic_tv"/>
+        android:icon="@drawable/ic_tv"
+        android:title="@string/tv_show" />
 </menu>

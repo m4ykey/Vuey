@@ -1,7 +1,7 @@
 package com.example.vuey.feature_tv_show.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.vuey.feature_movie.data.response.MovieTvShowCreditsResponse
+import com.example.vuey.feature_movie.data.remote.model.Credits
 import com.example.vuey.feature_tv_show.data.api.TvShowApi
 import com.example.vuey.feature_tv_show.data.api.search.SearchTvShow
 import com.example.vuey.feature_tv_show.data.database.dao.TvShowDao
@@ -64,7 +64,7 @@ class TvShowRepository @Inject constructor(
         }
     }
 
-    suspend fun tvShowCredits(tvShowId : Int) : Resource<MovieTvShowCreditsResponse> {
+    suspend fun tvShowCredits(tvShowId : Int) : Resource<Credits> {
         return try {
             val response = tvShowApi.tvShowCredits(tvShowId)
             if (response.isSuccessful) {

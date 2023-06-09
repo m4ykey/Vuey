@@ -3,8 +3,8 @@ package com.example.vuey.di
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
-import com.example.vuey.feature_movie.data.api.MovieApi
-import com.example.vuey.feature_movie.data.api.TMDBInterceptor
+import com.example.vuey.feature_movie.data.remote.api.MovieApi
+import com.example.vuey.feature_movie.data.remote.token.TMDBInterceptor
 import com.example.vuey.feature_tv_show.data.api.TvShowApi
 import com.example.vuey.util.Constants
 import com.google.gson.GsonBuilder

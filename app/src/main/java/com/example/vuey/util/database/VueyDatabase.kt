@@ -6,9 +6,9 @@ import androidx.room.TypeConverters
 import com.example.vuey.feature_album.data.local.converter.AlbumConverter
 import com.example.vuey.feature_album.data.local.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_movie.data.database.converter.MovieConverter
-import com.example.vuey.feature_movie.data.database.dao.MovieDao
-import com.example.vuey.feature_movie.data.database.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.converter.MovieConverter
+import com.example.vuey.feature_movie.data.local.dao.MovieDao
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_tv_show.data.database.converter.TvShowConverter
 import com.example.vuey.feature_tv_show.data.database.dao.TvShowDao
 import com.example.vuey.feature_tv_show.data.database.entity.TvShowEntity

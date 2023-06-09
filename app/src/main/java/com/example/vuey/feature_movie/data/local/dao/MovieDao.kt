@@ -1,8 +1,8 @@
-package com.example.vuey.feature_movie.data.database.dao
+package com.example.vuey.feature_movie.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.vuey.feature_movie.data.database.entity.MovieEntity
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 
 @Dao
 interface MovieDao {

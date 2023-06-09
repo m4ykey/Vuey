@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutCastBinding
-import com.example.vuey.feature_movie.data.api.detail.Cast
+import com.example.vuey.feature_movie.data.remote.model.Cast
 import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.utils.DiffUtils
 
