@@ -108,9 +108,7 @@ class DetailAlbumFragment : Fragment() {
             id = albumDatabase.id,
             releaseDate = DateUtils.formatAirDate(albumDatabase.releaseDate).toString(),
             totalTracks = albumDatabase.totalTracks,
-            externalUrls = AlbumEntity.ExternalUrlsEntity(
-                spotify = albumDatabase.externalUrls.spotify
-            ),
+            externalUrls = AlbumEntity.ExternalUrlsEntity(spotify = albumDatabase.externalUrls.spotify),
             albumCover = albumDatabase.albumCover,
             artistList = albumDatabase.artistList,
             trackList = albumDatabase.trackList.map { track ->
@@ -121,9 +119,6 @@ class DetailAlbumFragment : Fragment() {
                 )
             }
         )
-
-        val artists : List<AlbumEntity.ArtistEntity> = albumDatabase.artistList
-        val artistList = artists.joinToString(separator = ", ") { it.name }
 
         with(binding) {
             imgSave.setOnClickListener {
@@ -146,16 +141,18 @@ class DetailAlbumFragment : Fragment() {
 
             txtAlbumTime.text = if (albumTimeHour == 0) {
                 String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
-            } else if (albumTimeMinute == 0){
+            } else if (albumTimeMinute == 0) {
                 String.format("%d ${getString(R.string.hour)}", albumTimeHour)
             } else {
                 String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
             }
 
             txtAlbumName.text = albumDatabase.albumName
-            txtArtist.text = artistList
+            txtArtist.text = albumDatabase.artistList.joinToString(separator = ", ") { it.name }
             txtInfo.text = "${albumDatabase.albumType.replaceFirstChar { it.uppercase() }} • " +
-                    "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(R.string.tracks)
+                    "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(
+                R.string.tracks
+            )
 
             imgAlbum.load(albumDatabase.albumCover.url) {
                 crossfade(true)
@@ -163,25 +160,22 @@ class DetailAlbumFragment : Fragment() {
             }
 
             btnAlbum.setOnClickListener {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(albumDatabase.externalUrls.spotify)
+                startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse(albumDatabase.externalUrls.spotify))
                 )
-                startActivity(intent)
             }
 
             btnArtist.setOnClickListener {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(albumDatabase.artistList[0].externalUrls.spotify)
+                startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse(albumDatabase.artistList[0].externalUrls.spotify))
                 )
-                startActivity(intent)
             }
         }
     }
 
     private fun hideBottomNavigation() {
-        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomMenu)
+        val bottomNavigationView =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomMenu)
         bottomNavigationView.visibility = View.GONE
     }
 
@@ -197,21 +191,23 @@ class DetailAlbumFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 detailViewModel.albumDetailUiState.collect { uiState ->
                     when {
-                        uiState.isLoading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
+                        uiState.isLoading -> { binding.progressBar.visibility = View.VISIBLE }
+
                         uiState.isError?.isNotEmpty() == true -> {
                             binding.progressBar.visibility = View.GONE
-                            showSnackbar(requireView(), uiState.isError.toString(), Snackbar.LENGTH_LONG)
+                            showSnackbar(
+                                requireView(),
+                                uiState.isError.toString(),
+                                Snackbar.LENGTH_LONG
+                            )
                         }
+
                         uiState.detailAlbumData != null -> {
                             binding.progressBar.visibility = View.GONE
 
                             val albumDetail = uiState.detailAlbumData
 
                             val albumCover = albumDetail.imageList.find { it.height == 640 && it.width == 640 }
-                            val artists : List<Artist> = albumDetail.artistList
-                            val artistName = artists.joinToString(separator = ", ") { it.artistName }
 
                             var time = 0
                             for (track in albumDetail.tracks.items) {
@@ -225,7 +221,7 @@ class DetailAlbumFragment : Fragment() {
 
                             val albumLength = if (albumTimeHour == 0) {
                                 String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
-                            } else if (albumTimeMinute == 0){
+                            } else if (albumTimeMinute == 0) {
                                 String.format("%d ${getString(R.string.hour)}", albumTimeHour)
                             } else {
                                 String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
@@ -235,9 +231,12 @@ class DetailAlbumFragment : Fragment() {
 
                                 txtAlbumName.text = albumDetail.albumName
                                 txtAlbumTime.text = albumLength
-                                txtArtist.text = artistName
-                                txtInfo.text = "${albumDetail.albumType.replaceFirstChar { it.uppercase() }} • " +
-                                        "${DateUtils.formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(R.string.tracks)
+                                txtArtist.text = albumDetail.artistList.joinToString(separator = ", ") { it.artistName }
+                                txtInfo.text =
+                                    "${albumDetail.albumType.replaceFirstChar { it.uppercase() }} • " +
+                                            "${DateUtils.formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(
+                                        R.string.tracks
+                                    )
 
                                 imgAlbum.load(albumCover?.url) {
                                     crossfade(true)
@@ -246,18 +245,10 @@ class DetailAlbumFragment : Fragment() {
                                 }
 
                                 btnAlbum.setOnClickListener {
-                                    val intent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse(albumDetail.externalUrls.spotify)
-                                    )
-                                    startActivity(intent)
+                                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(albumDetail.externalUrls.spotify)))
                                 }
                                 btnArtist.setOnClickListener {
-                                    val intent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse(albumDetail.artistList[0].externalUrls.spotify)
-                                    )
-                                    startActivity(intent)
+                                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(albumDetail.artistList[0].externalUrls.spotify)))
                                 }
 
                                 albumDetail.let { trackList -> trackListAdapter.submitTrack(trackList.tracks.items) }
@@ -299,24 +290,31 @@ class DetailAlbumFragment : Fragment() {
                                     }
                                 )
 
-                                detailViewModel.getAlbumById(arguments.albumEntity.id).onEach { album ->
-                                    isAlbumSaved = if (album == null) {
-                                        binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
-                                        false
-                                    } else {
-                                        binding.imgSave.setImageResource(R.drawable.ic_save)
-                                        true
-                                    }
-                                }.launchIn(viewLifecycleOwner.lifecycleScope)
+                                detailViewModel.getAlbumById(arguments.albumEntity.id)
+                                    .onEach { album ->
+                                        isAlbumSaved = if (album == null) {
+                                            binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
+                                            false
+                                        } else {
+                                            binding.imgSave.setImageResource(R.drawable.ic_save)
+                                            true
+                                        }
+                                    }.launchIn(viewLifecycleOwner.lifecycleScope)
 
                                 imgSave.setOnClickListener {
                                     isAlbumSaved = !isAlbumSaved
                                     if (isAlbumSaved) {
-                                        showSnackbar(requireView(), getString(R.string.added_to_library))
+                                        showSnackbar(
+                                            requireView(),
+                                            getString(R.string.added_to_library)
+                                        )
                                         imgSave.setImageResource(R.drawable.ic_save)
                                         detailViewModel.insertAlbum(albumEntity)
                                     } else {
-                                        showSnackbar(requireView(), getString(R.string.removed_from_library))
+                                        showSnackbar(
+                                            requireView(),
+                                            getString(R.string.removed_from_library)
+                                        )
                                         imgSave.setImageResource(R.drawable.ic_save_outlined)
                                         detailViewModel.deleteAlbum(albumEntity)
                                     }

@@ -16,7 +16,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            app:menu="@menu/stats_menu"
+            app:menu="@menu/album_top_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

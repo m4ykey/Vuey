@@ -18,5 +18,6 @@ interface AlbumRepository {
     fun getAlbumCount() : Flow<Int>
     fun getTotalTracks() : Flow<Int>
     fun getTotalLength() : Flow<Int>
+    fun searchAlbumInDatabase(searchQuery : String) : Flow<List<AlbumEntity>>
 
 }

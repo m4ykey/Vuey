@@ -17,6 +17,8 @@ import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -44,6 +46,12 @@ class AlbumFragment : Fragment() {
         initRecyclerView()
         showAllAlbums()
         setupNavigation()
+
+        lifecycleScope.launch {
+            albumViewModel.searchAlbumInDatabase.collect { albums ->
+                albumAdapter.submitAlbums(albums)
+            }
+        }
     }
 
     private fun setupNavigation() {
@@ -55,12 +63,34 @@ class AlbumFragment : Fragment() {
                         findNavController().navigate(R.id.action_albumFragment_to_statisticsAlbumFragment)
                         true
                     }
+                    R.id.imgSearch -> {
+
+                        val dialogLayout = LayoutInflater.from(requireContext()).inflate(R.layout.layout_material_text_field, null)
+
+                        val editTextAlbumSearch : TextInputEditText = dialogLayout.findViewById(R.id.etSearch)
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Search Album")
+                            .setView(dialogLayout)
+                            .setNegativeButton(R.string.close) { _, _ ->}
+                            .setPositiveButton(getString(R.string.search)) { _, _ ->
+                                val searchQuery = editTextAlbumSearch.text.toString()
+                                albumViewModel.searchAlbumsInDatabase(searchQuery)
+                            }
+                            .create()
+                            .show()
+                        true
+                    }
                     else -> { false }
                 }
             }
-            val menuItem = toolbar.menu.findItem(R.id.imgStatistics)
-            menuItem.icon.let {
-                MenuItemCompat.setIconTintList(menuItem, ColorStateList.valueOf(Color.WHITE))
+            val statisticItem = toolbar.menu.findItem(R.id.imgStatistics)
+            val searchItem = toolbar.menu.findItem(R.id.imgSearch)
+            searchItem.icon.let {
+                MenuItemCompat.setIconTintList(searchItem, ColorStateList.valueOf(Color.WHITE))
+            }
+            statisticItem.icon.let {
+                MenuItemCompat.setIconTintList(statisticItem, ColorStateList.valueOf(Color.WHITE))
             }
         }
     }

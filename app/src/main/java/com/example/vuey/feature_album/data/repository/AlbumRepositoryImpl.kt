@@ -49,6 +49,10 @@ class AlbumRepositoryImpl @Inject constructor(
         return albumDao.getTotalLength()
     }
 
+    override fun searchAlbumInDatabase(searchQuery: String): Flow<List<AlbumEntity>> {
+        return albumDao.searchAlbumInDatabase(searchQuery)
+    }
+
     override fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {
         return flow {
             emit(Resource.Loading())
