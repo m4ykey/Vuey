@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.repository.AlbumRepository
-import com.example.vuey.feature_album.ui_state.AlbumDetailUiState
+import com.example.vuey.feature_album.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.ui_state.SearchAlbumUiState
-import com.example.vuey.feature_album.use_cases.UseCases
+import com.example.vuey.feature_album.use_cases.AlbumUseCases
 import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -20,15 +20,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val useCases: UseCases,
+    private val useCases: AlbumUseCases,
     private val repository: AlbumRepository
 ) : ViewModel() {
 
     private val _albumSearchUiState = MutableStateFlow(SearchAlbumUiState())
     val albumSearchUiState : StateFlow<SearchAlbumUiState> get() = _albumSearchUiState
 
-    private val _albumDetailUiState = MutableStateFlow(AlbumDetailUiState())
-    val albumDetailUiState : StateFlow<AlbumDetailUiState> get() = _albumDetailUiState
+    private val _albumDetailUiState = MutableStateFlow(DetailAlbumUiState())
+    val albumDetailUiState : StateFlow<DetailAlbumUiState> get() = _albumDetailUiState
+
+    private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
+    val searchAlbumInDatabase : StateFlow<List<AlbumEntity>> = _searchAlbumInDatabase
+
+    fun searchAlbumsInDatabase(searchQuery : String) {
+        viewModelScope.launch {
+            repository.searchAlbumInDatabase(searchQuery).collect { albums ->
+                _searchAlbumInDatabase.emit(albums)
+            }
+        }
+    }
 
     val allAlbums = repository.getAllAlbums()
 

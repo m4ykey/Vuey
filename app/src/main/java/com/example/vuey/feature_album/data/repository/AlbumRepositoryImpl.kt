@@ -49,6 +49,10 @@ class AlbumRepositoryImpl @Inject constructor(
         return albumDao.getTotalLength()
     }
 
+    override fun searchAlbumInDatabase(searchQuery: String): Flow<List<AlbumEntity>> {
+        return albumDao.searchAlbumInDatabase(searchQuery)
+    }
+
     override fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {
         return flow {
             emit(Resource.Loading())
@@ -78,29 +82,31 @@ class AlbumRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAlbum(albumId: String): Flow<Resource<AlbumDetail>> = flow {
-        emit(Resource.Loading())
+    override fun getAlbum(albumId: String): Flow<Resource<AlbumDetail>> {
+        return flow {
+            emit(Resource.Loading())
 
-        try {
-            val albumResponse = albumApi.getAlbum(
-                token = "Bearer ${spotifyInterceptor.getAccessToken()}",
-                albumId = albumId
-            )
-            emit(Resource.Success(albumResponse))
-        } catch (e: HttpException) {
-            emit(
-                Resource.Failure(
-                    message = e.localizedMessage ?: "An unexpected error occurred",
-                    data = null
+            try {
+                val albumResponse = albumApi.getAlbum(
+                    token = "Bearer ${spotifyInterceptor.getAccessToken()}",
+                    albumId = albumId
                 )
-            )
-        } catch (e: IOException) {
-            emit(
-                Resource.Failure(
-                    message = e.localizedMessage ?: "No internet connection",
-                    data = null
+                emit(Resource.Success(albumResponse))
+            } catch (e: HttpException) {
+                emit(
+                    Resource.Failure(
+                        message = e.localizedMessage ?: "An unexpected error occurred",
+                        data = null
+                    )
                 )
-            )
+            } catch (e: IOException) {
+                emit(
+                    Resource.Failure(
+                        message = e.localizedMessage ?: "No internet connection",
+                        data = null
+                    )
+                )
+            }
         }
     }
 }

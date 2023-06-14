@@ -27,4 +27,5 @@
     <string name="listened_songs">Przesłuchane piosenki</string>
     <string name="total_time">Łączny czas</string>
     <string name="discovered_artists">Odkryci artyści</string>
+    <string name="close">Zamknij</string>
 </resources>
