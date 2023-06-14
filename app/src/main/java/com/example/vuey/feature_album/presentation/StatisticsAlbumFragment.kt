@@ -49,15 +49,15 @@ class StatisticsAlbumFragment : Fragment() {
                     val albumTimeMinute = (totalLength / (1000 * 60)) % 60
                     val albumTimeSeconds = (totalLength / 1000) % 60
 
-                    txtSongs.text = totalTracks.toString()
-                    txtAlbumsNumber.text = albumsCount.toString()
-                    txtLength.text = if (albumTimeHour == 0) {
-                        String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
-                    } else if (albumTimeMinute == 0){
-                        String.format("%d ${getString(R.string.hour)}", albumTimeHour)
-                    } else {
-                        String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
-                    }
+//                    txtSongs.text = totalTracks.toString()
+//                    txtAlbumsNumber.text = albumsCount.toString()
+//                    txtLength.text = if (albumTimeHour == 0) {
+//                        String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
+//                    } else if (albumTimeMinute == 0){
+//                        String.format("%d ${getString(R.string.hour)}", albumTimeHour)
+//                    } else {
+//                        String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
+//                    }
                 }
             }
         }
