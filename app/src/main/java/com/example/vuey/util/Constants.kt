@@ -8,16 +8,7 @@ object Constants {
     const val TRACK_TABLE_NAME = "track_table"
     const val ARTIST_TABLE_NAME = "artist_table"
 
-    const val MOVIE_TABLE_NAME = "movie_table"
-    const val MOVIE_CAST_TABLE_NAME = "movie_cast_table"
-
-    const val TV_SHOW_TABLE = "tv_show_table"
-    const val TV_SHOW_CAST_TABLE = "tv_show_cast_table"
-    const val TV_SHOW_GENRE_TABLE = "tv_show_genre_table"
-    const val TV_SHOW_SEASON_TABLE = "tv_show_season_table"
-    const val TV_SHOW_EPISODE_TABLE = "tv_show_episode_table"
-
-    const val DATABASE_VERSION = 5
+    const val DATABASE_VERSION = 1
 
     const val SPOTIFY_BASE_URL = "https://api.spotify.com/"
     const val SPOTIFY_AUTH_URL = "https://accounts.spotify.com/"

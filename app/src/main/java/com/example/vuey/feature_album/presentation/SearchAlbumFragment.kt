@@ -14,13 +14,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.utils.showSnackbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -47,7 +46,6 @@ class SearchAlbumFragment : Fragment() {
 
         searchAlbum()
         observeSearchAlbum()
-        hideBottomNavigation()
         setupToolbar()
         initRecyclerView()
 
@@ -56,7 +54,7 @@ class SearchAlbumFragment : Fragment() {
     private fun initRecyclerView() {
         binding.recyclerViewAlbum.apply {
             adapter = albumAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
@@ -77,12 +75,6 @@ class SearchAlbumFragment : Fragment() {
                 MenuItemCompat.setIconTintList(menuItem, ColorStateList.valueOf(Color.WHITE))
             }
         }
-    }
-
-    private fun hideBottomNavigation() {
-        val bottomNavigationView: BottomNavigationView =
-            requireActivity().findViewById(R.id.bottomMenu)
-        bottomNavigationView.visibility = View.GONE
     }
 
     private fun searchAlbum() {

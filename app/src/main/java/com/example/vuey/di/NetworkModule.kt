@@ -3,9 +3,6 @@ package com.example.vuey.di
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
-import com.example.vuey.feature_movie.data.api.MovieApi
-import com.example.vuey.feature_movie.data.api.TMDBInterceptor
-import com.example.vuey.feature_tv_show.data.api.TvShowApi
 import com.example.vuey.util.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -33,11 +30,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        tmdbInterceptor: TMDBInterceptor,
         spotifyInterceptor: SpotifyInterceptor
     ) : OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(tmdbInterceptor)
             .addInterceptor(spotifyInterceptor)
             .build()
     }
@@ -66,38 +61,6 @@ object NetworkModule {
             .addConverterFactory(gsonConverterFactory)
             .build()
             .create(AlbumApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideTmdbInterceptor(): TMDBInterceptor = TMDBInterceptor()
-
-    @Provides
-    @Singleton
-    fun provideMovieRetrofit(
-        gsonConverterFactory: GsonConverterFactory,
-        okHttpClient: OkHttpClient
-    ): MovieApi {
-        return Retrofit.Builder()
-            .baseUrl(Constants.TMDB_BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(gsonConverterFactory)
-            .build()
-            .create(MovieApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideTvShowRetrofit(
-        gsonConverterFactory: GsonConverterFactory,
-        okHttpClient: OkHttpClient
-    ): TvShowApi {
-        return Retrofit.Builder()
-            .baseUrl(Constants.TMDB_BASE_URL)
-            .addConverterFactory(gsonConverterFactory)
-            .client(okHttpClient)
-            .build()
-            .create(TvShowApi::class.java)
     }
 
 }

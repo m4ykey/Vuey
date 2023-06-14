@@ -11,12 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,7 +39,6 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showBottomNavigation()
         initRecyclerView()
         showAllAlbums()
         setupNavigation()
@@ -48,19 +46,26 @@ class AlbumFragment : Fragment() {
 
     private fun setupNavigation() {
         with(binding) {
-            fabSearch.setOnClickListener { findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment) }
+            cardViewProfile.setOnClickListener { findNavController().navigate(R.id.action_albumFragment_to_statisticsAlbumFragment) }
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.imgStatistics -> {
-                        findNavController().navigate(R.id.action_albumFragment_to_statisticsAlbumFragment)
+                    R.id.imgSearch -> {
+                        true
+                    }
+                    R.id.imgAdd -> {
+                        findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
                         true
                     }
                     else -> { false }
                 }
             }
-            val menuItem = toolbar.menu.findItem(R.id.imgStatistics)
-            menuItem.icon.let {
-                MenuItemCompat.setIconTintList(menuItem, ColorStateList.valueOf(Color.WHITE))
+            val addItem = toolbar.menu.findItem(R.id.imgAdd)
+            val searchItem = toolbar.menu.findItem(R.id.imgSearch)
+            searchItem.icon.let {
+                MenuItemCompat.setIconTintList(searchItem, ColorStateList.valueOf(Color.WHITE))
+            }
+            addItem.icon.let {
+                MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
             }
         }
     }
@@ -75,15 +80,9 @@ class AlbumFragment : Fragment() {
 
     private fun initRecyclerView() {
         binding.albumRecyclerView.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = albumAdapter
         }
-    }
-
-    private fun showBottomNavigation() {
-        val bottomNavigationView: BottomNavigationView =
-            requireActivity().findViewById(R.id.bottomMenu)
-        bottomNavigationView.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

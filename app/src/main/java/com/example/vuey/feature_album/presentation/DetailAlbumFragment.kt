@@ -25,7 +25,6 @@ import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.showSnackbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -62,7 +61,6 @@ class DetailAlbumFragment : Fragment() {
 
         observeDetailAlbum()
         refreshUi()
-        hideBottomNavigation()
 
         binding.recyclerViewTracks.adapter = trackListAdapter
         binding.toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
@@ -178,11 +176,6 @@ class DetailAlbumFragment : Fragment() {
                 startActivity(intent)
             }
         }
-    }
-
-    private fun hideBottomNavigation() {
-        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomMenu)
-        bottomNavigationView.visibility = View.GONE
     }
 
     private fun refreshUi() {
