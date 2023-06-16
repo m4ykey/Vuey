@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.use_cases
+package com.example.vuey.feature_album.presentation.viewmodel.use_cases
 
 import com.example.vuey.feature_album.data.remote.model.AlbumDetail
 import com.example.vuey.feature_album.data.repository.AlbumRepository

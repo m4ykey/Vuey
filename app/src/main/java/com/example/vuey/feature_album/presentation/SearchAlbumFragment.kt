@@ -47,15 +47,11 @@ class SearchAlbumFragment : Fragment() {
         searchAlbum()
         observeSearchAlbum()
         setupToolbar()
-        initRecyclerView()
-
-    }
-
-    private fun initRecyclerView() {
         binding.recyclerViewAlbum.apply {
             adapter = albumAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+
     }
 
     private fun setupToolbar() {
@@ -64,7 +60,7 @@ class SearchAlbumFragment : Fragment() {
             toolBar.setOnMenuItemClickListener { menuItem ->
                 when(menuItem.itemId) {
                     R.id.clearText -> {
-                        binding.etSearch.setText("")
+                        etSearch.setText("")
                         true
                     }
                     else -> { false }

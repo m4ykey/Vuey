@@ -3,6 +3,8 @@ package com.example.vuey.di
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
+import com.example.vuey.feature_movie.data.remote.api.MovieApi
+import com.example.vuey.feature_movie.data.remote.token.TmdbToken
 import com.example.vuey.util.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -12,11 +14,16 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideTmdbToken() : TmdbToken = TmdbToken()
 
     @Provides
     @Singleton
@@ -30,10 +37,14 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        spotifyInterceptor: SpotifyInterceptor
+        spotifyInterceptor: SpotifyInterceptor,
+        tmdbToken: TmdbToken
     ) : OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(tmdbToken)
             .addInterceptor(spotifyInterceptor)
+            .readTimeout(2, TimeUnit.MINUTES)
+            .connectTimeout(2, TimeUnit.MINUTES)
             .build()
     }
 
@@ -61,6 +72,20 @@ object NetworkModule {
             .addConverterFactory(gsonConverterFactory)
             .build()
             .create(AlbumApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMovieRetrofit(
+        httpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ) : MovieApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.TMDB_BASE_URL)
+            .client(httpClient)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+            .create(MovieApi::class.java)
     }
 
 }

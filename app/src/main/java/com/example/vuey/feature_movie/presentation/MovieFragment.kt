@@ -1,72 +1,54 @@
-package com.example.vuey.feature_album.presentation
+package com.example.vuey.feature_movie.presentation
 
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuItemCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vuey.R
-import com.example.vuey.databinding.FragmentAlbumBinding
-import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
-import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
+import com.example.vuey.databinding.FragmentMovieBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumFragment : Fragment() {
+class MovieFragment : Fragment() {
 
-    private var _binding: FragmentAlbumBinding? = null
+    private var _binding : FragmentMovieBinding? = null
     private val binding get() = _binding!!
-
-    private val albumViewModel: AlbumViewModel by viewModels()
-    private val albumAdapter by lazy { AlbumAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAlbumBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.albumRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = albumAdapter
-        }
-        lifecycleScope.launch {
-            albumViewModel.allAlbums.collect { albums ->
-                albumAdapter.submitAlbums(albums)
-            }
-        }
         setupNavigation()
     }
 
     private fun setupNavigation() {
         with(binding) {
             toolbar.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
+                when(menuItem.itemId) {
                     R.id.imgSearch -> {
                         true
                     }
                     R.id.imgAdd -> {
-                        findNavController().navigate(R.id.action_albumFragment_to_searchAlbumFragment)
+                        findNavController().navigate(R.id.action_movieFragment_to_searchMovieFragment)
                         true
                     }
                     else -> { false }
                 }
             }
-            val addItem = toolbar.menu.findItem(R.id.imgAdd)
             val searchItem = toolbar.menu.findItem(R.id.imgSearch)
+            val addItem = toolbar.menu.findItem(R.id.imgAdd)
             searchItem.icon.let {
                 MenuItemCompat.setIconTintList(searchItem, ColorStateList.valueOf(Color.WHITE))
             }
@@ -80,5 +62,4 @@ class AlbumFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
 }

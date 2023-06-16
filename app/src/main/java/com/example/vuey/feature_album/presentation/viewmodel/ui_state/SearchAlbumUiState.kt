@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.ui_state
+package com.example.vuey.feature_album.presentation.viewmodel.ui_state
 
 import com.example.vuey.feature_album.data.remote.model.Album
 

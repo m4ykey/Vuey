@@ -41,4 +41,18 @@
             android:id="@+id/action_searchAlbumFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/movieFragment"
+        android:name="com.example.vuey.feature_movie.presentation.MovieFragment"
+        android:label="fragment_movie"
+        tools:layout="@layout/fragment_movie" >
+        <action
+            android:id="@+id/action_movieFragment_to_searchMovieFragment"
+            app:destination="@id/searchMovieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchMovieFragment"
+        android:name="com.example.vuey.feature_movie.presentation.SearchMovieFragment"
+        android:label="fragment_search_movie"
+        tools:layout="@layout/fragment_search_movie" />
 </navigation>

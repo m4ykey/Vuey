@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.repository.AlbumRepository
-import com.example.vuey.feature_album.ui_state.DetailAlbumUiState
-import com.example.vuey.feature_album.ui_state.SearchAlbumUiState
-import com.example.vuey.feature_album.use_cases.AlbumUseCases
+import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
+import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
+import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
 import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -30,30 +30,30 @@ class AlbumViewModel @Inject constructor(
     private val _albumDetailUiState = MutableStateFlow(DetailAlbumUiState())
     val albumDetailUiState : StateFlow<DetailAlbumUiState> get() = _albumDetailUiState
 
-    private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
-    val searchAlbumInDatabase : StateFlow<List<AlbumEntity>> = _searchAlbumInDatabase
-
-    fun searchAlbumsInDatabase(searchQuery : String) {
-        viewModelScope.launch {
-            repository.searchAlbumInDatabase(searchQuery).collect { albums ->
-                _searchAlbumInDatabase.emit(albums)
-            }
-        }
-    }
+//    private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
+//    val searchAlbumInDatabase : StateFlow<List<AlbumEntity>> = _searchAlbumInDatabase
+//
+//    fun searchAlbumsInDatabase(searchQuery : String) {
+//        viewModelScope.launch {
+//            repository.searchAlbumInDatabase(searchQuery).collect { albums ->
+//                _searchAlbumInDatabase.emit(albums)
+//            }
+//        }
+//    }
 
     val allAlbums = repository.getAllAlbums()
 
-    fun getAlbumCount() : Flow<Int> {
-        return repository.getAlbumCount()
-    }
-
-    fun getTotalTracks() : Flow<Int> {
-        return repository.getTotalTracks()
-    }
-
-    fun getTotalLength() : Flow<Int> {
-        return repository.getTotalLength()
-    }
+//    fun getAlbumCount() : Flow<Int> {
+//        return repository.getAlbumCount()
+//    }
+//
+//    fun getTotalTracks() : Flow<Int> {
+//        return repository.getTotalTracks()
+//    }
+//
+//    fun getTotalLength() : Flow<Int> {
+//        return repository.getTotalLength()
+//    }
 
     fun refreshDetail(albumId: String) {
         getAlbumDetail(albumId)

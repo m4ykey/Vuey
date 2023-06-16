@@ -4,8 +4,8 @@
     <string name="album">Album</string>
     <string name="artist">Artysta</string>
     <string name="tracks">Utworów</string>
-    <string name="movie">Filmy</string>
-    <string name="tv_show">Seriale</string>
+    <string name="movie">Film</string>
+    <string name="tv_show">Serial</string>
     <string name="search">Szukaj</string>
     <string name="empty_search_query">Wprowadź co najmniej 1 znak</string>
     <string name="back">Wróć</string>
