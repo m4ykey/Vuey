@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutAlbumBinding
-import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.presentation.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.SearchAlbumFragmentDirections
 import com.example.vuey.util.utils.DiffUtils
+import com.example.vuey.util.utils.PreDrawListener
 import com.example.vuey.util.utils.toAlbum
 import com.example.vuey.util.utils.toAlbumEntity
 
@@ -35,9 +36,12 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                 when(album) {
                     is Album -> {
                         val image = album.imageList.find { it.height == 640 && it.width == 640 }
+                        val preDraw = PreDrawListener(imgAlbum, layoutAlbum)
+                        imgAlbum.viewTreeObserver.addOnPreDrawListener(preDraw)
                         txtAlbum.text = album.albumName
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.artistName }
                         imgAlbum.load(image?.url) { error(R.drawable.album_error) }
+
                         layoutAlbum.setOnClickListener {
                             val action = SearchAlbumFragmentDirections.actionSearchAlbumFragmentToAlbumDetailFragment(
                                 album = album,
@@ -53,6 +57,8 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                             url = album.albumCover.url
                         )
                         imgAlbum.load(image.url) { error(R.drawable.album_error) }
+                        val preDraw = PreDrawListener(imgAlbum, layoutAlbum)
+                        imgAlbum.viewTreeObserver.addOnPreDrawListener(preDraw)
                         txtAlbum.text = album.albumName
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.name }
                         layoutAlbum.setOnClickListener {

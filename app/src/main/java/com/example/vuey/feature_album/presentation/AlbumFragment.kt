@@ -46,7 +46,6 @@ class AlbumFragment : Fragment() {
 
     private fun setupNavigation() {
         with(binding) {
-            cardViewProfile.setOnClickListener { findNavController().navigate(R.id.action_albumFragment_to_statisticsAlbumFragment) }
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.imgSearch -> {

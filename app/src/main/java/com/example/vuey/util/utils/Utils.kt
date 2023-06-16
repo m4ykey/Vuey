@@ -1,6 +1,13 @@
 package com.example.vuey.util.utils
 
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.view.View
+import android.view.ViewTreeObserver
+import android.widget.ImageView
+import androidx.palette.graphics.Palette
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -29,4 +36,24 @@ object DateUtils {
 
 fun showSnackbar(view: View, message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     Snackbar.make(view, message, duration).show()
+}
+
+class PreDrawListener(private val imgAlbum : ImageView, private val layoutAlbum : MaterialCardView)
+    : ViewTreeObserver.OnPreDrawListener {
+    override fun onPreDraw(): Boolean {
+        imgAlbum.viewTreeObserver.removeOnPreDrawListener(this)
+
+        if (imgAlbum.isShown) {
+            val drawable = imgAlbum.drawable
+            if (drawable is BitmapDrawable) {
+                val originalBitmap = drawable.bitmap
+                val bitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true)
+                Palette.from(bitmap).generate { palette ->
+                    val dominantColor = palette?.dominantSwatch?.rgb ?: Color.GRAY
+                    layoutAlbum.strokeColor = dominantColor
+                }
+            }
+        }
+        return true
+    }
 }

@@ -16,9 +16,6 @@
         <action
             android:id="@+id/action_albumFragment_to_searchAlbumFragment"
             app:destination="@id/searchAlbumFragment" />
-        <action
-            android:id="@+id/action_albumFragment_to_statisticsAlbumFragment"
-            app:destination="@id/statisticsAlbumFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumDetailFragment"
@@ -44,9 +41,4 @@
             android:id="@+id/action_searchAlbumFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/statisticsAlbumFragment"
-        android:name="com.example.vuey.feature_album.presentation.StatisticsAlbumFragment"
-        android:label="fragment_statistics_album"
-        tools:layout="@layout/fragment_statistics_album" />
 </navigation>
