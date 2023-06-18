@@ -3,6 +3,7 @@ package com.example.vuey.di
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumDetailUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumSearchUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
+import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieDetailUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieSearchUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieUseCases
 import dagger.Module
@@ -27,10 +28,12 @@ object UseCasesModule {
 
     @Provides
     fun provideMovieUseCases(
-        getMovieSearchUseCase: MovieSearchUseCase
+        getMovieSearchUseCase: MovieSearchUseCase,
+        getMovieDetailUseCase: MovieDetailUseCase
     ) : MovieUseCases {
         return MovieUseCases(
-            getMovieSearchUseCase
+            getMovieSearchUseCase,
+            getMovieDetailUseCase
         )
     }
 }

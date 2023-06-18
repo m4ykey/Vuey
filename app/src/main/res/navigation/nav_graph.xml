@@ -49,10 +49,26 @@
         <action
             android:id="@+id/action_movieFragment_to_searchMovieFragment"
             app:destination="@id/searchMovieFragment" />
+        <action
+            android:id="@+id/action_movieFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchMovieFragment"
         android:name="com.example.vuey.feature_movie.presentation.SearchMovieFragment"
         android:label="fragment_search_movie"
-        tools:layout="@layout/fragment_search_movie" />
+        tools:layout="@layout/fragment_search_movie" >
+        <action
+            android:id="@+id/action_searchMovieFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailMovieFragment"
+        android:name="com.example.vuey.feature_movie.presentation.DetailMovieFragment"
+        android:label="fragment_detail_movie"
+        tools:layout="@layout/fragment_detail_movie" >
+        <argument
+            android:name="movie"
+            app:argType="com.example.vuey.feature_movie.data.remote.model.MovieList" />
+    </fragment>
 </navigation>

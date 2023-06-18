@@ -1,13 +1,20 @@
 package com.example.vuey.feature_movie.presentation.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.vuey.databinding.LayoutMovieBinding
 import com.example.vuey.feature_movie.data.remote.model.MovieList
+import com.example.vuey.feature_movie.presentation.SearchMovieFragmentDirections
+import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
+import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.DiffUtils
 import com.example.vuey.util.utils.PreDrawListener
+import com.example.vuey.util.utils.formatVoteAverage
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -29,7 +36,24 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                         imgMovie.viewTreeObserver.addOnPreDrawListener(preDraw)
                         txtMovieTitle.text = movie.title
                         txtMovieOverview.text = movie.overview
+                        imgMovie.load(TMDB_IMAGE_ORIGINAL + movie.poster_path) {
+                            crossfade(true)
+                            crossfade(1000)
+                        }
+                        txtAverageVote.text = movie.vote_average.formatVoteAverage()
+                        if (movie.release_date.isEmpty()) {
+                            txtReleaseDate.visibility = View.GONE
+                        } else {
+                            txtReleaseDate.text = DateUtils.formatAirDate(movie.release_date)
+                        }
+                        layoutMovie.setOnClickListener {
+                            val action = SearchMovieFragmentDirections.actionSearchMovieFragmentToDetailMovieFragment(
+                                movie = movie
+                            )
+                            it.findNavController().navigate(action)
+                        }
                     }
+                    else -> {}
                 }
             }
         }

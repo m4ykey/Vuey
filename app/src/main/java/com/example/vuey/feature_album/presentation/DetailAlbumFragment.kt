@@ -203,8 +203,7 @@ class DetailAlbumFragment : Fragment() {
                             val albumDetail = uiState.detailAlbumData
 
                             val albumCover = albumDetail.imageList.find { it.height == 640 && it.width == 640 }
-                            val artists : List<Artist> = albumDetail.artistList
-                            val artistName = artists.joinToString(separator = ", ") { it.artistName }
+                            val artistName = albumDetail.artistList.joinToString(separator = ", ") { it.artistName }
 
                             var time = 0
                             for (track in albumDetail.tracks.items) {
