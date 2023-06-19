@@ -2,6 +2,7 @@ package com.example.vuey.feature_movie.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieUseCases
@@ -24,6 +25,43 @@ class MovieViewModel @Inject constructor(
 
     private val _movieDetailUiState = MutableStateFlow(DetailMovieUiState())
     val movieDetailUiState : StateFlow<DetailMovieUiState> get() = _movieDetailUiState
+
+    private val _movieCastUiState = MutableStateFlow(CastMovieUiState())
+    val movieCastUiState : StateFlow<CastMovieUiState> get() = _movieCastUiState
+
+    fun getMovieCast(movieId: Int) {
+        useCase.getMovieCastUseCase(movieId).onEach { result ->
+            when (result) {
+                is Resource.Failure -> {
+                    _movieCastUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = false,
+                            isError = result.message ?: "An unexpected error occurred",
+                            castMovieData = result.data ?: emptyList()
+                        )
+                    }
+                }
+                is Resource.Success -> {
+                    _movieCastUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = false,
+                            isError = null,
+                            castMovieData = result.data ?: emptyList()
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    _movieCastUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = true,
+                            isError = null,
+                            castMovieData = result.data ?: emptyList()
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
 
     fun getMovieDetail(movieId : Int) {
         useCase.getMovieDetailUseCase(movieId).onEach { result ->

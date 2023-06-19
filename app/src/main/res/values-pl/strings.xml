@@ -9,7 +9,7 @@
     <string name="search">Szukaj</string>
     <string name="empty_search_query">Wprowadź co najmniej 1 znak</string>
     <string name="back">Wróć</string>
-    <string name="top_cast">Obsada</string>
+    <string name="cast">Obsada</string>
     <string name="spoken_languages">Obsługiwane języki</string>
     <string name="cast_is_empty">Obsada jest pusta</string>
     <string name="languages_empty">Lista języków jest pusta</string>

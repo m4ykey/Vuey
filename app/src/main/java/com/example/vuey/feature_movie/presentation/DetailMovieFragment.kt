@@ -10,10 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentDetailMovieBinding
+import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
+import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.formatVoteAverage
 import com.example.vuey.util.utils.showSnackbar
@@ -32,6 +37,8 @@ class DetailMovieFragment : Fragment() {
 
     private val viewModel: MovieViewModel by viewModels()
 
+    private val castAdapter by lazy { CastAdapter() }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,13 +50,52 @@ class DetailMovieFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getMovieDetail(args.movie.id)
+        viewModel.getMovieCast(args.movie.id)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         observeMovieDetail()
+        observeMovieCast()
 
+        with(binding) {
+            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+            recyclerViewTopCast.apply {
+                adapter = castAdapter
+                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            }
+        }
+
+    }
+
+    private fun observeMovieCast() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.movieCastUiState.collect { uiState ->
+                    when {
+                        uiState.isLoading -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.progressBarCast.visibility = View.VISIBLE
+                        }
+                        uiState.isError?.isNotEmpty() == true -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.progressBarCast.visibility = View.GONE
+                            showSnackbar(
+                                requireView(),
+                                uiState.isError.toString(),
+                                Snackbar.LENGTH_LONG
+                            )
+                        }
+                        uiState.castMovieData.isNotEmpty() -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.progressBarCast.visibility = View.GONE
+                            castAdapter.submitCast(uiState.castMovieData)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun observeMovieDetail() {
@@ -102,6 +148,13 @@ class DetailMovieFragment : Fragment() {
                                         txtOverview.visibility = View.VISIBLE
                                         txtOverviewFull.visibility = View.GONE
                                     }
+                                }
+                                val imagePath = movieDetail.backdropPath.ifEmpty {
+                                    movieDetail.posterPath
+                                }
+                                imgBackdrop.load(TMDB_IMAGE_ORIGINAL + imagePath) {
+                                    crossfade(true)
+                                    crossfade(1000)
                                 }
 
                                 txtMovieTitle.text = movieDetail.title

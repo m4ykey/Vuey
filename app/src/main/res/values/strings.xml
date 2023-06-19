@@ -8,7 +8,7 @@
     <string name="search">Search</string>
     <string name="empty_search_query">Enter at least 1 character</string>
     <string name="back">Back</string>
-    <string name="top_cast">Top Cast</string>
+    <string name="cast">Cast</string>
     <string name="spoken_languages">Spoken Languages</string>
     <string name="cast_is_empty">Cast list is empty</string>
     <string name="languages_empty">Spoken language list is empty</string>
@@ -27,6 +27,4 @@
     <string name="total_time">Total time</string>
     <string name="discovered_artists">Discovered artists</string>
     <string name="close">Close</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

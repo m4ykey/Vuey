@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -103,7 +102,6 @@ class SearchMovieFragment : Fragment() {
                             showSnackbar(requireView(), uiState.isError.toString(), Snackbar.LENGTH_LONG)
                         }
                         uiState.searchMovieData.isNotEmpty() -> {
-                            Log.i("SearchMovie", "observeSearchMovie: ${uiState.searchMovieData}")
                             binding.progressBar.visibility = View.GONE
                             movieAdapter.submitMovie(uiState.searchMovieData)
                         }
