@@ -3,7 +3,6 @@ package com.example.vuey.feature_movie.presentation
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -69,26 +68,11 @@ class SearchMovieFragment : Fragment() {
             }
 
             etSearch.addTextChangedListener( object : TextWatcher {
-
-                private val DELAY : Long = 500
-                private var searchHandler = Handler()
-
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
-                    searchHandler.removeCallbacksAndMessages(null)
-
-                    val searchMovie = etSearch.text.toString()
-
-                    if (searchMovie.isNotEmpty()) {
-                        progressBar.visibility = View.VISIBLE
-                        searchHandler.postDelayed({
-                            viewModel.searchMovie(searchMovie)
-                            progressBar.visibility = View.GONE
-                        }, DELAY)
-                    } else {
-                        progressBar.visibility = View.GONE
-                    }
+                    val etSearch = etSearch.text.toString()
+                    viewModel.searchMovie(etSearch)
                 }
             })
 
