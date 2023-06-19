@@ -8,17 +8,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuItemCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieBinding
+import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
+import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MovieFragment : Fragment() {
 
     private var _binding : FragmentMovieBinding? = null
     private val binding get() = _binding!!
+
+    private val movieAdapter by lazy { MovieAdapter() }
+
+    private val movieViewModel : MovieViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +43,17 @@ class MovieFragment : Fragment() {
 
         setupNavigation()
         showBottomNavigation()
+        with(binding) {
+            movieRecyclerView.apply {
+                adapter = movieAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+            }
+        }
+        lifecycleScope.launch {
+            movieViewModel.allMovies.collect { movies ->
+                movieAdapter.submitMovie(movies)
+            }
+        }
     }
 
     private fun setupNavigation() {

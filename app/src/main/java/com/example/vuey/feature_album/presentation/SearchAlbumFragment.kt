@@ -3,6 +3,9 @@ package com.example.vuey.feature_album.presentation
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,17 +79,32 @@ class SearchAlbumFragment : Fragment() {
     }
 
     private fun searchAlbum() {
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val searchQuery = binding.etSearch.text.toString()
-                if (searchQuery.isEmpty()) {
-                    showSnackbar(requireView(), getString(R.string.empty_search_query))
-                } else {
-                    searchViewModel.searchAlbum(searchQuery)
+        with(binding) {
+            etSearch.addTextChangedListener(object : TextWatcher {
+
+                private val DELAY : Long = 500
+                private var searchHandler = Handler()
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                override fun afterTextChanged(s: Editable?) {
+                    searchHandler.removeCallbacksAndMessages(null)
+
+                    val searchAlbum = etSearch.text.toString()
+
+                    if (searchAlbum.isNotEmpty()) {
+                        progressBar.visibility = View.VISIBLE
+                        searchHandler.postDelayed({
+                            searchViewModel.searchAlbum(searchAlbum)
+                            progressBar.visibility = View.GONE
+                        }, DELAY)
+                    } else {
+                        progressBar.visibility = View.GONE
+                    }
                 }
-                return@setOnEditorActionListener true
-            }
-            return@setOnEditorActionListener false
+            })
         }
     }
 
@@ -114,7 +132,7 @@ class SearchAlbumFragment : Fragment() {
 
     private fun hideBottomNavigation() {
         val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.VISIBLE
+        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

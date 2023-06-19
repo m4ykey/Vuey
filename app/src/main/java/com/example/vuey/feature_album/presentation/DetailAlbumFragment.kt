@@ -325,7 +325,7 @@ class DetailAlbumFragment : Fragment() {
 
     private fun hideBottomNavigation() {
         val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.VISIBLE
+        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

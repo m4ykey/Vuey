@@ -2,6 +2,34 @@ package com.example.vuey.util.utils
 
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.Album
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.remote.model.MovieList
+
+fun MovieEntity.toMovie() : MovieList {
+    return MovieList(
+        id = movieId,
+        overview = movieOverview,
+        poster_path = moviePosterPath,
+        release_date = movieReleaseDate,
+        title = movieTitle,
+        vote_average = movieVoteAverage
+    )
+}
+
+fun MovieList.toMovieEntity() : MovieEntity {
+    return MovieEntity(
+        movieBackdropPath = "",
+        movieGenreList = emptyList(),
+        movieId = this.id,
+        movieOverview = this.overview,
+        moviePosterPath = this.poster_path,
+        movieReleaseDate = this.release_date,
+        movieRuntime = 0,
+        movieSpokenLanguage = emptyList(),
+        movieTitle = this.title,
+        movieVoteAverage = this.vote_average
+    )
+}
 
 fun AlbumEntity.toAlbum() : Album {
     return Album(

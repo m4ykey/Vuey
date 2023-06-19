@@ -62,7 +62,7 @@ class AlbumDaoTest {
             albumName = "MM...FOOD",
             albumType = "Album",
             id = "albumId",
-            albumLength = "23",
+            albumLength = 23,
             releaseDate = "12 April 1999",
             totalTracks = 21,
             externalUrls = AlbumEntity.ExternalUrlsEntity(
@@ -104,7 +104,7 @@ class AlbumDaoTest {
             albumName = "MM...FOOD",
             albumType = "Album",
             id = "albumId",
-            albumLength = "23",
+            albumLength = 23,
             releaseDate = "12 April 1999",
             totalTracks = 21,
             externalUrls = AlbumEntity.ExternalUrlsEntity(
