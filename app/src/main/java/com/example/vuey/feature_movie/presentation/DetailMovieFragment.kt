@@ -63,6 +63,7 @@ class DetailMovieFragment : Fragment() {
         observeMovieDetail()
         observeMovieCast()
         hideBottomNavigation()
+        refreshDetail()
 
         with(binding) {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
@@ -72,6 +73,15 @@ class DetailMovieFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun refreshDetail() {
+        binding.swipeRefresh.apply {
+            setOnRefreshListener {
+                viewModel.refreshDetail(args.movie.id)
+                isRefreshing = false
+            }
+        }
     }
 
     private fun observeMovieCast() {

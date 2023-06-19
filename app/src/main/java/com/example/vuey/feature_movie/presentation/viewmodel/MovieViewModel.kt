@@ -35,6 +35,10 @@ class MovieViewModel @Inject constructor(
 
     val allMovies = repository.getAllMovies()
 
+    fun refreshDetail(movieId : Int) {
+        getMovieDetail(movieId)
+    }
+
     fun insertMovie(movieEntity: MovieEntity) {
         viewModelScope.launch {
             repository.insertMovie(movieEntity)
