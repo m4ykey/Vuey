@@ -16,12 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentDetailMovieBinding
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.formatVoteAverage
 import com.example.vuey.util.utils.showSnackbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,6 +40,8 @@ class DetailMovieFragment : Fragment() {
     private val viewModel: MovieViewModel by viewModels()
 
     private val castAdapter by lazy { CastAdapter() }
+
+    private var isMovieSaved = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +62,7 @@ class DetailMovieFragment : Fragment() {
 
         observeMovieDetail()
         observeMovieCast()
+        hideBottomNavigation()
 
         with(binding) {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
@@ -165,12 +170,51 @@ class DetailMovieFragment : Fragment() {
                                 txtSpokenLanguages.text =
                                     movieDetail.spokenLanguages.joinToString(separator = ", ") { it.name }
                                 txtVoteAverage.text = movieDetail.voteAverage.formatVoteAverage()
+
+                                val movieEntity = MovieEntity(
+                                    movieBackdropPath = movieDetail.backdropPath,
+                                    movieId = movieDetail.id,
+                                    movieOverview = movieDetail.overview,
+                                    moviePosterPath = movieDetail.posterPath,
+                                    movieReleaseDate = movieDetail.releaseDate,
+                                    movieRuntime = movieDetail.runtime,
+                                    movieTitle = movieDetail.title,
+                                    movieVoteAverage = movieDetail.voteAverage,
+                                    movieGenreList = movieDetail.genreList.map { genre ->
+                                        MovieEntity.GenreEntity(
+                                            genreName = genre.name
+                                        )
+                                    },
+                                    movieSpokenLanguage = movieDetail.spokenLanguages.map { language ->
+                                        MovieEntity.SpokenLanguageEntity(
+                                            spokenLanguageName = language.name
+                                        )
+                                    }
+                                )
+
+                                imgSave.setOnClickListener {
+                                    isMovieSaved = !isMovieSaved
+                                    if (isMovieSaved) {
+                                        showSnackbar(requireView(), getString(R.string.added_to_library))
+                                        imgSave.setImageResource(R.drawable.ic_save)
+                                        viewModel.insertMovie(movieEntity)
+                                    } else {
+                                        showSnackbar(requireView(), getString(R.string.removed_from_library))
+                                        imgSave.setImageResource(R.drawable.ic_save_outlined)
+                                        viewModel.deleteMovie(movieEntity)
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun hideBottomNavigation() {
+        val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

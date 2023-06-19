@@ -1,5 +1,7 @@
 package com.example.vuey.feature_movie.data.repository
 
+import com.example.vuey.feature_movie.data.local.dao.MovieDao
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
 import com.example.vuey.feature_movie.data.remote.model.CastDetail
 import com.example.vuey.feature_movie.data.remote.model.MovieDetail
@@ -12,8 +14,23 @@ import java.io.IOException
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
-    private val movieApi: MovieApi
+    private val movieApi: MovieApi,
+    private val movieDao: MovieDao
 ) : MovieRepository {
+
+    override suspend fun insertMovie(movieEntity: MovieEntity) {
+        return movieDao.insertMovie(movieEntity)
+    }
+
+    override suspend fun deleteMovie(movieEntity: MovieEntity) {
+        return movieDao.deleteMovie(movieEntity)
+    }
+
+    override fun getAllMovies(): Flow<List<MovieEntity>> {
+        return movieDao.getAllMovies()
+    }
+
+
     override fun searchMovie(query: String): Flow<Resource<List<MovieList>>> {
         return flow {
 

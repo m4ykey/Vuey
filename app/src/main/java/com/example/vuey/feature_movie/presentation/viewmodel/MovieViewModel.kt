@@ -2,6 +2,8 @@ package com.example.vuey.feature_movie.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vuey.feature_movie.data.local.entity.MovieEntity
+import com.example.vuey.feature_movie.data.repository.MovieRepository
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.DetailMovieUiState
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovieUiState
@@ -13,11 +15,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-    private val useCase : MovieUseCases
+    private val useCase : MovieUseCases,
+    private val repository: MovieRepository
 ) : ViewModel() {
 
     private val _movieSearchUiState = MutableStateFlow(SearchMovieUiState())
@@ -28,6 +32,20 @@ class MovieViewModel @Inject constructor(
 
     private val _movieCastUiState = MutableStateFlow(CastMovieUiState())
     val movieCastUiState : StateFlow<CastMovieUiState> get() = _movieCastUiState
+
+    val allMovies = repository.getAllMovies()
+
+    fun insertMovie(movieEntity: MovieEntity) {
+        viewModelScope.launch {
+            repository.insertMovie(movieEntity)
+        }
+    }
+
+    fun deleteMovie(movieEntity: MovieEntity) {
+        viewModelScope.launch {
+            repository.deleteMovie(movieEntity)
+        }
+    }
 
     fun getMovieCast(movieId: Int) {
         useCase.getMovieCastUseCase(movieId).onEach { result ->

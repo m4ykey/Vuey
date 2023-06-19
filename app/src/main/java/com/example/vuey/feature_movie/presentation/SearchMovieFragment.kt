@@ -84,11 +84,6 @@ class SearchMovieFragment : Fragment() {
 
     }
 
-    private fun hideBottomNavigation() {
-        val bottomNavigation : BottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
-        bottomNavigation.visibility = View.GONE
-    }
-
     private fun observeSearchMovie() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -109,6 +104,11 @@ class SearchMovieFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun hideBottomNavigation() {
+        val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigation.visibility = View.GONE
     }
 
     override fun onDestroy() {

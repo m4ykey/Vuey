@@ -11,6 +11,7 @@ import androidx.core.view.MenuItemCompat
 import androidx.navigation.fragment.findNavController
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +32,7 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupNavigation()
+        showBottomNavigation()
     }
 
     private fun setupNavigation() {
@@ -56,6 +58,11 @@ class MovieFragment : Fragment() {
                 MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
             }
         }
+    }
+
+    private fun showBottomNavigation() {
+        val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigation.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {
