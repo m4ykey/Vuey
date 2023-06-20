@@ -1,5 +1,6 @@
 package com.example.vuey.feature_movie.data.repository
 
+import com.example.vuey.feature_movie.data.local.entity.CastEntity
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.CastDetail
 import com.example.vuey.feature_movie.data.remote.model.MovieDetail
@@ -16,5 +17,10 @@ interface MovieRepository {
     suspend fun insertMovie(movieEntity: MovieEntity)
     suspend fun deleteMovie(movieEntity: MovieEntity)
     fun getAllMovies() : Flow<List<MovieEntity>>
+    fun getMovieById(movieId : Int) : Flow<MovieEntity>
+
+    fun getCastById(movieId: Int) : Flow<List<CastEntity>>
+    suspend fun insertCast(castEntity: CastEntity)
+    suspend fun deleteCast(castEntity: CastEntity)
 
 }

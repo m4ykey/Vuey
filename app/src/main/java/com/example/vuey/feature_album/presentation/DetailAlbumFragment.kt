@@ -64,9 +64,6 @@ class DetailAlbumFragment : Fragment() {
         refreshUi()
         hideBottomNavigation()
 
-        binding.recyclerViewTracks.adapter = trackListAdapter
-        binding.toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
-
         val albumDatabase = arguments.albumEntity
 
         detailViewModel.getAlbumById(albumDatabase.id).onEach { album ->
@@ -122,10 +119,11 @@ class DetailAlbumFragment : Fragment() {
             }
         )
 
-        val artists : List<AlbumEntity.ArtistEntity> = albumDatabase.artistList
-        val artistList = artists.joinToString(separator = ", ") { it.name }
-
         with(binding) {
+
+            recyclerViewTracks.adapter = trackListAdapter
+            toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
+
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
                 if (isAlbumSaved) {
@@ -153,7 +151,7 @@ class DetailAlbumFragment : Fragment() {
             }
 
             txtAlbumName.text = albumDatabase.albumName
-            txtArtist.text = artistList
+            txtArtist.text = albumDatabase.artistList.joinToString(separator = ", ") { it.name }
             txtInfo.text = "${albumDatabase.albumType.replaceFirstChar { it.uppercase() }} • " +
                     "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(R.string.tracks)
 
@@ -292,16 +290,6 @@ class DetailAlbumFragment : Fragment() {
                                         )
                                     }
                                 )
-
-                                detailViewModel.getAlbumById(arguments.albumEntity.id).onEach { album ->
-                                    isAlbumSaved = if (album == null) {
-                                        binding.imgSave.setImageResource(R.drawable.ic_save_outlined)
-                                        false
-                                    } else {
-                                        binding.imgSave.setImageResource(R.drawable.ic_save)
-                                        true
-                                    }
-                                }.launchIn(viewLifecycleOwner.lifecycleScope)
 
                                 imgSave.setOnClickListener {
                                     isAlbumSaved = !isAlbumSaved

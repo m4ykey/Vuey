@@ -2,6 +2,7 @@ package com.example.vuey.feature_movie.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vuey.feature_movie.data.local.entity.CastEntity
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.repository.MovieRepository
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
@@ -10,6 +11,7 @@ import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.SearchMovi
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieUseCases
 import com.example.vuey.util.network.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -35,13 +37,33 @@ class MovieViewModel @Inject constructor(
 
     val allMovies = repository.getAllMovies()
 
+    fun getCastById(movieId: Int) : Flow<List<CastEntity>> {
+        return repository.getCastById(movieId)
+    }
+
+    fun getMovieById(movieId: Int) : Flow<MovieEntity> {
+        return repository.getMovieById(movieId)
+    }
+
     fun refreshDetail(movieId : Int) {
         getMovieDetail(movieId)
+    }
+
+    fun insertCast(castEntity: CastEntity) {
+        viewModelScope.launch {
+            repository.insertCast(castEntity)
+        }
     }
 
     fun insertMovie(movieEntity: MovieEntity) {
         viewModelScope.launch {
             repository.insertMovie(movieEntity)
+        }
+    }
+
+    fun deleteCast(castEntity: CastEntity) {
+        viewModelScope.launch {
+            repository.deleteCast(castEntity)
         }
     }
 
