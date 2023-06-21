@@ -28,12 +28,9 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 5. Clean and rebuild project
 
 ## TODO
-- [ ] Save TV Shows episodes to database
+- [ ] Notifications
 - [ ] Improve UX/UI
-- [ ] Dark/Light Theme
-- [ ] Settings Screen
 - [ ] Statistic Screen
-- [ ] Paging
 
 ## Tech
 - [Retrofit](https://square.github.io/retrofit/)
@@ -44,3 +41,5 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [Room Database](https://developer.android.com/training/data-storage/room)
 - [Gson](https://github.com/google/gson)
 - [Coil](https://coil-kt.github.io/coil/)
+- [SwipeRefreshLayout](https://developer.android.com/develop/ui/views/touch-and-input/swipe/add-swipe-interface)
+- [Palette](https://developer.android.com/develop/ui/views/graphics/palette-colors)
