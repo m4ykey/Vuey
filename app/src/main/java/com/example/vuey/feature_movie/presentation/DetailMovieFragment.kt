@@ -1,6 +1,8 @@
 package com.example.vuey.feature_movie.presentation
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentDetailMovieBinding
-import com.example.vuey.feature_movie.data.local.entity.CastEntity
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.presentation.adapter.CastAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
+import com.example.vuey.util.network.NetworkStateMonitor
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.formatVoteAverage
 import com.example.vuey.util.utils.showSnackbar
@@ -46,6 +48,11 @@ class DetailMovieFragment : Fragment() {
 
     private var isMovieSaved = false
 
+    private lateinit var connectivityManager : ConnectivityManager
+    private val networkStateMonitor : NetworkStateMonitor by lazy {
+        NetworkStateMonitor(connectivityManager)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,8 +63,10 @@ class DetailMovieFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         viewModel.getMovieDetail(args.movie.id)
         viewModel.getMovieCast(args.movie.id)
+        networkStateMonitor.startMonitoring()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +76,21 @@ class DetailMovieFragment : Fragment() {
         observeMovieCast()
         hideBottomNavigation()
         refreshDetail()
+
+        lifecycleScope.launch {
+            networkStateMonitor.isInternetAvailable.collect { isAvailable ->
+                if (isAvailable) {
+                    binding.recyclerViewTopCast.visibility = View.VISIBLE
+                    binding.txtEmptyCast.visibility = View.GONE
+                } else {
+                    binding.recyclerViewTopCast.visibility = View.GONE
+                    binding.txtEmptyCast.apply {
+                        visibility = View.VISIBLE
+                        getString(R.string.cast_is_empty)
+                    }
+                }
+            }
+        }
 
         val movieDatabase = args.movieEntity
 
@@ -97,9 +121,6 @@ class DetailMovieFragment : Fragment() {
         val genreList = movieDatabase.movieGenreList.joinToString(separator = ", ") { it.genreName }
         val spokenLanguage =
             movieDatabase.movieSpokenLanguage.joinToString(separator = ", ") { it.spokenLanguageName }
-        val imagePath = movieDatabase.movieBackdropPath.ifEmpty {
-            movieDatabase.moviePosterPath
-        }
 
         viewModel.getMovieById(args.movieEntity.movieId).onEach { movie ->
             isMovieSaved = if (movie == null) {
@@ -134,6 +155,11 @@ class DetailMovieFragment : Fragment() {
                 txtSpokenLanguages.text = getString(R.string.languages_empty)
             }
 
+            imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDatabase.movieBackdropPath) {
+                crossfade(true)
+                crossfade(500)
+            }
+
             imgSave.setOnClickListener {
                 isMovieSaved = !isMovieSaved
                 if (isMovieSaved) {
@@ -154,10 +180,6 @@ class DetailMovieFragment : Fragment() {
             txtInfo.text = "$movieRuntime • $genreList • ${
                 DateUtils.formatAirDate(movieDatabase.movieReleaseDate)
             }"
-            imgBackdrop.load(TMDB_IMAGE_ORIGINAL + imagePath) {
-                crossfade(true)
-                crossfade(1000)
-            }
             txtSpokenLanguages.text = spokenLanguage
         }
 
@@ -211,15 +233,13 @@ class DetailMovieFragment : Fragment() {
 
                             with(binding) {
 
+                                imgBackdrop.load(TMDB_IMAGE_ORIGINAL + movieDetail.backdropPath) {
+                                    crossfade(true)
+                                    crossfade(500)
+                                }
+
                                 if (movieDetail.spokenLanguages.isEmpty()) {
                                     txtSpokenLanguages.text = getString(R.string.languages_empty)
-                                }
-                                val imagePath = movieDetail.backdropPath.ifEmpty {
-                                    movieDetail.posterPath
-                                }
-                                imgBackdrop.load(TMDB_IMAGE_ORIGINAL + imagePath) {
-                                    crossfade(true)
-                                    crossfade(1000)
                                 }
 
                                 txtMovieTitle.text = movieDetail.title
@@ -303,24 +323,6 @@ class DetailMovieFragment : Fragment() {
                             binding.progressBar.visibility = View.GONE
                             binding.progressBarCast.visibility = View.GONE
                             castAdapter.submitCast(uiState.castMovieData)
-
-                            val castData = uiState.castMovieData
-                            val castEntity = CastEntity(
-                                movieId = args.movie.id,
-                                castList = castData.map { cast ->
-                                    CastEntity.CastListEntity(
-                                        castId = cast.castId,
-                                        castName = cast.name,
-                                        castProfilePath = cast.profilePath
-                                    )
-                                }
-                            )
-
-                            if (isMovieSaved) {
-                                viewModel.insertCast(castEntity)
-                            } else {
-                                viewModel.deleteCast(castEntity)
-                            }
                         }
                     }
                 }
@@ -337,5 +339,6 @@ class DetailMovieFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        networkStateMonitor.stopMonitoring()
     }
 }

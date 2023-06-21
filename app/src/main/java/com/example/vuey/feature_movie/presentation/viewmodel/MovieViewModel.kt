@@ -2,7 +2,6 @@ package com.example.vuey.feature_movie.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.vuey.feature_movie.data.local.entity.CastEntity
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.repository.MovieRepository
 import com.example.vuey.feature_movie.presentation.viewmodel.ui_state.CastMovieUiState
@@ -37,10 +36,6 @@ class MovieViewModel @Inject constructor(
 
     val allMovies = repository.getAllMovies()
 
-    fun getCastById(movieId: Int) : Flow<List<CastEntity>> {
-        return repository.getCastById(movieId)
-    }
-
     fun getMovieById(movieId: Int) : Flow<MovieEntity> {
         return repository.getMovieById(movieId)
     }
@@ -49,21 +44,9 @@ class MovieViewModel @Inject constructor(
         getMovieDetail(movieId)
     }
 
-    fun insertCast(castEntity: CastEntity) {
-        viewModelScope.launch {
-            repository.insertCast(castEntity)
-        }
-    }
-
     fun insertMovie(movieEntity: MovieEntity) {
         viewModelScope.launch {
             repository.insertMovie(movieEntity)
-        }
-    }
-
-    fun deleteCast(castEntity: CastEntity) {
-        viewModelScope.launch {
-            repository.deleteCast(castEntity)
         }
     }
 

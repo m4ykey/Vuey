@@ -1,7 +1,6 @@
 package com.example.vuey.feature_movie.data.local.converter
 
 import androidx.room.TypeConverter
-import com.example.vuey.feature_movie.data.local.entity.CastEntity
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -28,16 +27,5 @@ class MovieConverter {
     @TypeConverter
     fun toSpokenLanguagesJson(spokenLanguages : List<MovieEntity.SpokenLanguageEntity>) : String {
         return Gson().toJson(spokenLanguages)
-    }
-
-    @TypeConverter
-    fun fromCastJson(json : String) : List<CastEntity.CastListEntity> {
-        val type = object : TypeToken<List<CastEntity.CastListEntity>>() {}.type
-        return Gson().fromJson(json, type)
-    }
-
-    @TypeConverter
-    fun toCastJson(cast : List<CastEntity.CastListEntity>) : String {
-        return Gson().toJson(cast)
     }
 }

@@ -103,4 +103,5 @@ class MovieDaoTest {
 
         assertThat(allMovies).contains(movieEntity)
     }
+
 }

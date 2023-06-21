@@ -1,10 +1,9 @@
 package com.example.vuey.feature_movie.data.repository
 
 import com.example.vuey.feature_movie.data.local.dao.MovieDao
-import com.example.vuey.feature_movie.data.local.entity.CastEntity
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
-import com.example.vuey.feature_movie.data.remote.model.CastDetail
+import com.example.vuey.feature_movie.data.remote.model.MovieCast
 import com.example.vuey.feature_movie.data.remote.model.MovieDetail
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 import com.example.vuey.util.network.Resource
@@ -34,19 +33,6 @@ class MovieRepositoryImpl @Inject constructor(
     override fun getMovieById(movieId: Int): Flow<MovieEntity> {
         return movieDao.getMovieById(movieId)
     }
-
-    override fun getCastById(movieId: Int): Flow<List<CastEntity>> {
-        return movieDao.getCastById(movieId)
-    }
-
-    override suspend fun insertCast(castEntity: CastEntity) {
-        return movieDao.insertCast(castEntity)
-    }
-
-    override suspend fun deleteCast(castEntity: CastEntity) {
-        return movieDao.deleteCast(castEntity)
-    }
-
 
     override fun searchMovie(query: String): Flow<Resource<List<MovieList>>> {
         return flow {
@@ -93,7 +79,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMovieCast(movieId: Int): Flow<Resource<List<CastDetail>>> {
+    override fun getMovieCast(movieId: Int): Flow<Resource<List<MovieCast.CastDetail>>> {
         return flow {
             emit(Resource.Loading())
 
