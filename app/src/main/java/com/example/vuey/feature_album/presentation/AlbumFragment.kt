@@ -1,11 +1,16 @@
 package com.example.vuey.feature_album.presentation
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +21,7 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
+import com.example.vuey.util.notification.Notification
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -51,6 +57,30 @@ class AlbumFragment : Fragment() {
         }
         setupNavigation()
         showBottomNavigation()
+        showNotifications()
+    }
+
+    private fun showNotifications() {
+
+        Notification(requireContext()).createNotificationChannel()
+
+        val notification = NotificationCompat.Builder(requireContext(), "channelId")
+            .setContentTitle("Czego dzisiaj słuchałeś?")
+            .setContentText("Zapisz swoje postępy w albumach")
+            .setSmallIcon(R.drawable.logo)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .build()
+
+        val notificationManager = NotificationManagerCompat.from(requireContext())
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        notificationManager.notify(1, notification)
     }
 
     private fun showBottomNavigation() {
