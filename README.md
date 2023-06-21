@@ -10,8 +10,6 @@ Vuey is open source Album, Movies and TV Shows Tracker.
 <div>
   <img src="screenshots/album_detail.jpg" width="150" alt="Album Detail" />
   <img src="screenshots/movie_detail.jpg" width="150" alt="Movie Detail" />
-  <img src="screenshots/tv_show_detail.jpg" width="150" alt="Tv Show Detail" />
-  <img src="screenshots/episode_list.jpg" width="150" alt="Episode List" />
 </div>
 
 ## Project Setup
@@ -28,12 +26,9 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 5. Clean and rebuild project
 
 ## TODO
-- [ ] Save TV Shows episodes to database
+- [ ] Notifications
 - [ ] Improve UX/UI
-- [ ] Dark/Light Theme
-- [ ] Settings Screen
 - [ ] Statistic Screen
-- [ ] Paging
 
 ## Tech
 - [Retrofit](https://square.github.io/retrofit/)
@@ -44,3 +39,5 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [Room Database](https://developer.android.com/training/data-storage/room)
 - [Gson](https://github.com/google/gson)
 - [Coil](https://coil-kt.github.io/coil/)
+- [SwipeRefreshLayout](https://developer.android.com/develop/ui/views/touch-and-input/swipe/add-swipe-interface)
+- [Palette](https://developer.android.com/develop/ui/views/graphics/palette-colors)
