@@ -30,6 +30,17 @@ class AlbumViewModel @Inject constructor(
     private val _albumDetailUiState = MutableStateFlow(DetailAlbumUiState())
     val albumDetailUiState : StateFlow<DetailAlbumUiState> get() = _albumDetailUiState
 
+    private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
+    val searchAlbumInDatabase : StateFlow<List<AlbumEntity>> get() = _searchAlbumInDatabase
+
+    fun searchAlbumDatabase(albumName : String) {
+        viewModelScope.launch {
+            repository.searchAlbumInDatabase(albumName).collect { albumList ->
+                _searchAlbumInDatabase.emit(albumList)
+            }
+        }
+    }
+
     val allAlbums = repository.getAllAlbums()
 
     fun refreshDetail(albumId: String) {

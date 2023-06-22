@@ -27,4 +27,5 @@
     <string name="total_time">Total time</string>
     <string name="discovered_artists">Discovered artists</string>
     <string name="close">Close</string>
+    <string name="search_album">Search for an album</string>
 </resources>
