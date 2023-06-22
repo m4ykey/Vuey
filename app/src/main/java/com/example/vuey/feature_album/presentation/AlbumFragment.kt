@@ -113,6 +113,11 @@ class AlbumFragment : Fragment() {
                         true
                     }
 
+                    R.id.imgStatistics -> {
+                        findNavController().navigate(R.id.action_albumFragment_to_albumStatisticsFragment)
+                        true
+                    }
+
                     else -> {
                         false
                     }
@@ -120,6 +125,10 @@ class AlbumFragment : Fragment() {
             }
             val addItem = toolbar.menu.findItem(R.id.imgAdd)
             val searchItem = toolbar.menu.findItem(R.id.imgSearch)
+            val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
+            statisticsItem.icon.let {
+                MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
+            }
             searchItem.icon.let {
                 MenuItemCompat.setIconTintList(searchItem, ColorStateList.valueOf(Color.WHITE))
             }

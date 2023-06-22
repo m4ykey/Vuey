@@ -3,6 +3,7 @@ package com.example.vuey.feature_album.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumStatisticsEntity
 import com.example.vuey.feature_album.data.repository.AlbumRepository
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
@@ -33,11 +34,39 @@ class AlbumViewModel @Inject constructor(
     private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
     val searchAlbumInDatabase : StateFlow<List<AlbumEntity>> get() = _searchAlbumInDatabase
 
+    fun getTotalTracks() : Flow<Int> {
+        return repository.getTotalTracks()
+    }
+
+    fun getTotalLength() : Flow<Int> {
+        return repository.getTotalLength()
+    }
+
+    fun getAlbumCount() : Flow<Int> {
+        return repository.getAlbumCount()
+    }
+
+    fun getTotalArtist() : Flow<Int> {
+        return repository.getTotalArtist()
+    }
+
     fun searchAlbumDatabase(albumName : String) {
         viewModelScope.launch {
             repository.searchAlbumInDatabase(albumName).collect { albumList ->
                 _searchAlbumInDatabase.emit(albumList)
             }
+        }
+    }
+
+    fun insertAlbumStatistics(albumStatisticsEntity: AlbumStatisticsEntity) {
+        viewModelScope.launch {
+            repository.insertAlbumStatistics(albumStatisticsEntity)
+        }
+    }
+
+    fun deleteAlbumStatistics(albumStatisticsEntity: AlbumStatisticsEntity) {
+        viewModelScope.launch {
+            repository.deleteAlbumStatistics(albumStatisticsEntity)
         }
     }
 

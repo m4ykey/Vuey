@@ -9,6 +9,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.vuey.R
+import com.example.vuey.util.Constants.CHANNEL_ID
 import java.util.Calendar
 
 class NotificationWorker(
@@ -17,12 +18,10 @@ class NotificationWorker(
 ) : Worker(context, workerParams) {
     override fun doWork(): Result {
 
-        val CHANNEL_ID = "channelId"
-
         Notification(applicationContext).createNotificationChannel()
 
         val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        if (currentHour < 15 || currentHour >= 16) {
+        if (currentHour < 10 || currentHour >= 18) {
             return Result.success()
         }
 

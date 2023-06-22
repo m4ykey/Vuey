@@ -18,6 +18,7 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumStatisticsEntity
 import com.example.vuey.feature_album.data.remote.model.Artist
 import com.example.vuey.feature_album.data.remote.model.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.Tracks
@@ -119,6 +120,17 @@ class DetailAlbumFragment : Fragment() {
             }
         )
 
+        val albumStatisticsEntity = AlbumStatisticsEntity(
+            id = albumDatabase.id,
+            totalTracks = albumDatabase.totalTracks,
+            albumLength = albumDatabase.albumLength,
+            artistList = albumDatabase.artistList.map { artist ->
+                AlbumStatisticsEntity.ArtistStatisticsEntity(
+                    artistName = artist.name
+                )
+            }
+        )
+
         with(binding) {
 
             recyclerViewTracks.adapter = trackListAdapter
@@ -130,10 +142,12 @@ class DetailAlbumFragment : Fragment() {
                     showSnackbar(requireView(), getString(R.string.added_to_library))
                     imgSave.setImageResource(R.drawable.ic_save)
                     detailViewModel.insertAlbum(albumEntity)
+                    detailViewModel.insertAlbumStatistics(albumStatisticsEntity)
                 } else {
                     showSnackbar(requireView(), getString(R.string.removed_from_library))
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                     detailViewModel.deleteAlbum(albumEntity)
+                    detailViewModel.deleteAlbumStatistics(albumStatisticsEntity)
                 }
             }
 
@@ -291,16 +305,29 @@ class DetailAlbumFragment : Fragment() {
                                     }
                                 )
 
+                                val albumStatisticsEntity = AlbumStatisticsEntity(
+                                    id = albumDetail.id,
+                                    totalTracks = albumDetail.totalTracks,
+                                    albumLength = albumTime,
+                                    artistList = albumDetail.artistList.map { artist ->
+                                        AlbumStatisticsEntity.ArtistStatisticsEntity(
+                                            artistName = artist.artistName
+                                        )
+                                    }
+                                )
+
                                 imgSave.setOnClickListener {
                                     isAlbumSaved = !isAlbumSaved
                                     if (isAlbumSaved) {
                                         showSnackbar(requireView(), getString(R.string.added_to_library))
                                         imgSave.setImageResource(R.drawable.ic_save)
                                         detailViewModel.insertAlbum(albumEntity)
+                                        detailViewModel.insertAlbumStatistics(albumStatisticsEntity)
                                     } else {
                                         showSnackbar(requireView(), getString(R.string.removed_from_library))
                                         imgSave.setImageResource(R.drawable.ic_save_outlined)
                                         detailViewModel.deleteAlbum(albumEntity)
+                                        detailViewModel.deleteAlbumStatistics(albumStatisticsEntity)
                                     }
                                 }
                             }

@@ -1,6 +1,7 @@
 package com.example.vuey.feature_album.data.repository
 
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
+import com.example.vuey.feature_album.data.local.entity.AlbumStatisticsEntity
 import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.remote.model.AlbumDetail
 import com.example.vuey.util.network.Resource
@@ -18,6 +19,10 @@ interface AlbumRepository {
     fun getAlbumCount() : Flow<Int>
     fun getTotalTracks() : Flow<Int>
     fun getTotalLength() : Flow<Int>
+    fun getTotalArtist() : Flow<Int>
     fun searchAlbumInDatabase(searchQuery : String) : Flow<List<AlbumEntity>>
+
+    suspend fun insertAlbumStatistics(albumStatisticsEntity: AlbumStatisticsEntity)
+    suspend fun deleteAlbumStatistics(albumStatisticsEntity: AlbumStatisticsEntity)
 
 }

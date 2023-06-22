@@ -4,12 +4,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import com.example.vuey.util.Constants.CHANNEL_ID
+import com.example.vuey.util.Constants.CHANNEL_NAME
 
 class Notification(
     private val context: Context
 ) {
-    private val CHANNEL_ID = "channelId"
-    private val CHANNEL_NAME = "channelName"
 
     fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
