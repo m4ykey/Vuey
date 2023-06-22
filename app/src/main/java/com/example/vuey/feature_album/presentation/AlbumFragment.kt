@@ -12,15 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
-import com.example.vuey.util.notification.NotificationWorker
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -64,22 +59,6 @@ class AlbumFragment : Fragment() {
         }
         setupNavigation()
         showBottomNavigation()
-        showNotifications()
-    }
-
-    private fun showNotifications() {
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresDeviceIdle(true)
-            .build()
-
-        val notificationRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(requireContext()).enqueue(notificationRequest)
-
     }
 
     private fun showBottomNavigation() {

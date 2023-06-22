@@ -1,18 +1,13 @@
 package com.example.vuey.feature_movie.presentation
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.MenuItemCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -21,7 +16,6 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
-import com.example.vuey.util.notification.Notification
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -49,7 +43,6 @@ class MovieFragment : Fragment() {
 
         setupNavigation()
         showBottomNavigation()
-        showNotifications()
         with(binding) {
             movieRecyclerView.apply {
                 adapter = movieAdapter
@@ -61,29 +54,6 @@ class MovieFragment : Fragment() {
                 movieAdapter.submitMovie(movies)
             }
         }
-    }
-
-    private fun showNotifications() {
-
-        Notification(requireContext()).createNotificationChannel()
-
-        val notification = NotificationCompat.Builder(requireContext(), "channelId")
-            .setContentTitle("Czy obejrzałeś dzisiaj jakiś film?")
-            .setContentText("Zapisz go w swojej kolekcji")
-            .setSmallIcon(R.drawable.logo)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
-
-        val notificationManager = NotificationManagerCompat.from(requireContext())
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        notificationManager.notify(1, notification)
     }
 
     private fun setupNavigation() {
