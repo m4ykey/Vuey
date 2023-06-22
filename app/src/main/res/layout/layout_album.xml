@@ -29,7 +29,8 @@
                 android:layout_height="80dp"
                 tools:background="@color/white"
                 android:scaleType="centerCrop"
-                android:id="@+id/imgAlbum"/>
+                android:id="@+id/imgAlbum"
+                android:contentDescription="@string/album_image" />
 
         </androidx.cardview.widget.CardView>
 

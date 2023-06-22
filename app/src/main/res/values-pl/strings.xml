@@ -29,4 +29,10 @@
     <string name="discovered_artists">Odkryci artyści</string>
     <string name="close">Zamknij</string>
     <string name="search_album">Wyszukaj album</string>
+    <string name="add">Dodaj</string>
+    <string name="save_icon">Ikona zapisu</string>
+    <string name="album_image">Zdjęcie albumu</string>
+    <string name="movie_backdrop">Tło filmu</string>
+    <string name="cast_image">Zdjęcie obsady</string>
+    <string name="movie_poster">Plakat filmu</string>
 </resources>

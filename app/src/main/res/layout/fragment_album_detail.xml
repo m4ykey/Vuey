@@ -58,7 +58,7 @@
                         tools:src="@drawable/album_error"
                         android:scaleType="centerCrop"
                         android:id="@+id/imgAlbum"
-                        android:contentDescription="@string/album" />
+                        android:contentDescription="@string/album_image" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -95,7 +95,8 @@
                     app:tint="@color/white"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="5dp"
-                    android:id="@+id/imgSave"/>
+                    android:id="@+id/imgSave"
+                    android:contentDescription="@string/save_icon" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

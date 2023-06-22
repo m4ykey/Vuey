@@ -27,7 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:id="@+id/imgMovie"/>
+                android:id="@+id/imgMovie"
+                android:contentDescription="@string/movie_poster" />
 
         </androidx.cardview.widget.CardView>
 
@@ -61,7 +62,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     app:tint="@color/tv_show_red"
-                    android:src="@drawable/ic_round_star"/>
+                    android:src="@drawable/ic_round_star"
+                    android:importantForAccessibility="no" />
 
                 <TextView
                     android:textSize="13sp"

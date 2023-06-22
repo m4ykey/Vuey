@@ -8,12 +8,12 @@
         android:icon="@drawable/ic_search"/>
 
     <item android:id="@+id/imgAdd"
-        android:title="Add"
+        android:title="@string/add"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_playlist_add"/>
 
     <item android:id="@+id/imgStatistics"
-        android:title="Analytics"
+        android:title="@string/statistics"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_analytics"/>
 

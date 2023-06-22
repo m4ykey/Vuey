@@ -24,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:src="@drawable/movie_test" />
+            tools:src="@drawable/movie_test"
+            android:contentDescription="@string/cast_image" />
 
         <TextView
             android:id="@+id/txtActorName"

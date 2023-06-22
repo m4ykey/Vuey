@@ -35,7 +35,8 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:textColor="@color/white"
-                android:textColorHint="@color/text_grey" />
+                android:textColorHint="@color/text_grey"
+                android:importantForAutofill="no" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
