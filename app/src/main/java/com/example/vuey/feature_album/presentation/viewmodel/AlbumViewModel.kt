@@ -46,10 +46,6 @@ class AlbumViewModel @Inject constructor(
         return repository.getAlbumCount()
     }
 
-    fun getTotalArtist() : Flow<Int> {
-        return repository.getTotalArtist()
-    }
-
     fun searchAlbumDatabase(albumName : String) {
         viewModelScope.launch {
             repository.searchAlbumInDatabase(albumName).collect { albumList ->

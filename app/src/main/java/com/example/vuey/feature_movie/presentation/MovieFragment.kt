@@ -67,11 +67,16 @@ class MovieFragment : Fragment() {
                         findNavController().navigate(R.id.action_movieFragment_to_searchMovieFragment)
                         true
                     }
+                    R.id.imgStatistics -> { true }
                     else -> { false }
                 }
             }
             val searchItem = toolbar.menu.findItem(R.id.imgSearch)
             val addItem = toolbar.menu.findItem(R.id.imgAdd)
+            val statisticsItem = toolbar.menu.findItem(R.id.imgStatistics)
+            statisticsItem.icon.let {
+                MenuItemCompat.setIconTintList(statisticsItem, ColorStateList.valueOf(Color.WHITE))
+            }
             searchItem.icon.let {
                 MenuItemCompat.setIconTintList(searchItem, ColorStateList.valueOf(Color.WHITE))
             }

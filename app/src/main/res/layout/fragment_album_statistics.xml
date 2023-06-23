@@ -126,34 +126,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        app:layout_constraintTop_toBottomOf="@id/linearLayout3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        android:id="@+id/linearLayout4"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40sp"
-            tools:text="0"
-            android:id="@+id/txtArtists"
-            android:fontFamily="@font/cabin_semibold"
-            android:textColor="@color/white"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="17sp"
-            android:fontFamily="@font/cabin"
-            android:text="@string/discovered_artists"
-            android:textColor="@color/white"/>
-
-    </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,7 +48,6 @@ class AlbumStatisticsFragment : Fragment() {
                     val albumCount = viewModel.getAlbumCount().firstOrNull() ?: 0
                     val totalTracks = viewModel.getTotalTracks().firstOrNull() ?: 0
                     val totalLength = viewModel.getTotalLength().firstOrNull() ?: 0
-                    val totalArtist = viewModel.getTotalArtist().firstOrNull() ?: 0
 
                     val albumTimeHour = totalLength / (1000 * 60 * 60)
                     val albumTimeMinute = (totalLength / (1000 * 60)) % 60
@@ -64,7 +63,6 @@ class AlbumStatisticsFragment : Fragment() {
 
                     txtAlbumsNumber.text = albumCount.toString()
                     txtSongs.text = totalTracks.toString()
-                    txtArtists.text = totalArtist.toString()
 
                 }
             }

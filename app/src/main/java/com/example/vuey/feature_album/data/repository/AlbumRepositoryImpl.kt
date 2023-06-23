@@ -54,10 +54,6 @@ class AlbumRepositoryImpl @Inject constructor(
         return albumDao.getTotalTracks()
     }
 
-    override fun getTotalArtist(): Flow<Int> {
-        return albumDao.getTotalArtist()
-    }
-
     override fun getTotalLength(): Flow<Int> {
         return albumDao.getTotalLength()
     }
