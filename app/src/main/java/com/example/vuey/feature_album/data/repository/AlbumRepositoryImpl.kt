@@ -2,7 +2,6 @@ package com.example.vuey.feature_album.data.repository
 
 import com.example.vuey.feature_album.data.local.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.local.entity.AlbumStatisticsEntity
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.remote.model.AlbumDetail
@@ -36,14 +35,6 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override fun getAlbumById(albumId: String): Flow<AlbumEntity> {
         return albumDao.getAlbumById(albumId)
-    }
-
-    override suspend fun insertAlbumStatistics(albumStatisticsEntity: AlbumStatisticsEntity) {
-        return albumDao.insertAlbumStatistics(albumStatisticsEntity)
-    }
-
-    override suspend fun deleteAlbumStatistics(albumStatisticsEntity: AlbumStatisticsEntity) {
-        return albumDao.deleteAlbumStatistics(albumStatisticsEntity)
     }
 
     override fun getAlbumCount(): Flow<Int> {

@@ -2,22 +2,10 @@ package com.example.vuey.feature_album.data.local.converter
 
 import androidx.room.TypeConverter
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.local.entity.AlbumStatisticsEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class AlbumConverter {
-
-    @TypeConverter
-    fun fromArtistStatisticsJson(json : String) : List<AlbumStatisticsEntity.ArtistStatisticsEntity> {
-        val type = object : TypeToken<List<AlbumStatisticsEntity.ArtistStatisticsEntity>>() {}.type
-        return Gson().fromJson(json, type)
-    }
-
-    @TypeConverter
-    fun toArtistStatisticsJson(artists : List<AlbumStatisticsEntity.ArtistStatisticsEntity>) : String {
-        return Gson().toJson(artists)
-    }
 
     @TypeConverter
     fun fromArtistJson(json : String) : List<AlbumEntity.ArtistEntity> {
