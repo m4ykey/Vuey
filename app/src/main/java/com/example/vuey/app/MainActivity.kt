@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -15,6 +16,7 @@ import com.example.vuey.databinding.ActivityMainBinding
 import com.example.vuey.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
+@RequiresApi(Build.VERSION_CODES.N_MR1)
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
-    ) { isGranted : Boolean ->
+    ) { isGranted: Boolean ->
         if (isGranted) {
 
         } else {
@@ -32,8 +34,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun askNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
-                    PackageManager.PERMISSION_GRANTED
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) ==
+                PackageManager.PERMISSION_GRANTED
             ) {
 
             } else {
@@ -47,7 +52,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigation.setupWithNavController(navController)
 
@@ -57,7 +63,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val fcmChannel = NotificationChannel(Constants.CHANNEL_ID, "FCM_Channel", NotificationManager.IMPORTANCE_HIGH)
+            val fcmChannel = NotificationChannel(
+                Constants.CHANNEL_ID,
+                "FCM_Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
 
             val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 

@@ -5,7 +5,6 @@
     <string name="artist">Artysta</string>
     <string name="tracks">Utworów</string>
     <string name="movie">Film</string>
-    <string name="tv_show">Serial</string>
     <string name="search">Szukaj</string>
     <string name="empty_search_query">Wprowadź co najmniej 1 znak</string>
     <string name="back">Wróć</string>
@@ -13,12 +12,8 @@
     <string name="spoken_languages">Obsługiwane języki</string>
     <string name="cast_is_empty">Obsada jest pusta</string>
     <string name="languages_empty">Lista języków jest pusta</string>
-    <string name="seasons">Sezony</string>
-    <string name="season">Sezon</string>
-    <string name="episode">Odcinek</string>
     <string name="added_to_library">Dodano do biblioteki</string>
     <string name="removed_from_library">Usunięto z biblioteki</string>
-    <string name="episodes">Odcinków</string>
     <string name="sec">sek.</string>
     <string name="library">Biblioteka</string>
     <string name="hour">godz.</string>

@@ -5,6 +5,7 @@ import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
 import com.example.vuey.feature_album.data.remote.model.Album
 import com.example.vuey.feature_album.data.remote.model.AlbumDetail
+import com.example.vuey.feature_album.data.remote.model.ArtistDetail
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.util.network.Resource
 import kotlinx.coroutines.flow.Flow
@@ -51,6 +52,34 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override fun searchAlbumInDatabase(searchQuery: String): Flow<List<AlbumEntity>> {
         return albumDao.searchAlbumInDatabase(searchQuery)
+    }
+
+    override fun getArtist(artistId: String): Flow<Resource<ArtistDetail>> {
+        return flow {
+            emit(Resource.Loading())
+
+            try {
+                val albumResponse = albumApi.getArtist(
+                    artistId = artistId,
+                    token = "Bearer ${spotifyInterceptor.getAccessToken()}"
+                )
+                emit(Resource.Success(albumResponse))
+            } catch (e : HttpException) {
+                emit(
+                    Resource.Failure(
+                        message = e.localizedMessage ?: "An unexpected error occurred",
+                        data = null
+                    )
+                )
+            } catch (e : IOException) {
+                emit(
+                    Resource.Failure(
+                        message = e.localizedMessage ?: "No internet connection",
+                        data = null
+                    )
+                )
+            }
+        }
     }
 
     override fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {

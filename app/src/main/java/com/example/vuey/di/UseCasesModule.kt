@@ -1,5 +1,6 @@
 package com.example.vuey.di
 
+import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumArtistUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumDetailUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumSearchUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
@@ -19,11 +20,13 @@ object UseCasesModule {
     @Provides
     fun provideAlbumUseCases(
         getAlbumSearchUseCase: AlbumSearchUseCase,
-        getAlbumDetailUseCase: AlbumDetailUseCase
+        getAlbumDetailUseCase: AlbumDetailUseCase,
+        getAlbumArtistUseCase: AlbumArtistUseCase
     ) : AlbumUseCases {
         return AlbumUseCases(
             getAlbumSearchUseCase,
-            getAlbumDetailUseCase
+            getAlbumDetailUseCase,
+            getAlbumArtistUseCase
         )
     }
 

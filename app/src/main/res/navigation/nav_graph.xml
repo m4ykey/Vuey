@@ -31,6 +31,9 @@
         <argument
             android:name="albumEntity"
             app:argType="com.example.vuey.feature_album.data.local.entity.AlbumEntity" />
+        <action
+            android:id="@+id/action_albumDetailFragment_to_artistAlbumFragment"
+            app:destination="@id/artistAlbumFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"
@@ -82,4 +85,13 @@
         android:name="com.example.vuey.feature_album.presentation.AlbumStatisticsFragment"
         android:label="fragment_album_statistics"
         tools:layout="@layout/fragment_album_statistics" />
+    <fragment
+        android:id="@+id/artistAlbumFragment"
+        android:name="com.example.vuey.feature_album.presentation.ArtistAlbumFragment"
+        android:label="fragment_artist_album"
+        tools:layout="@layout/fragment_artist_album" >
+        <argument
+            android:name="artistId"
+            app:argType="string" />
+    </fragment>
 </navigation>

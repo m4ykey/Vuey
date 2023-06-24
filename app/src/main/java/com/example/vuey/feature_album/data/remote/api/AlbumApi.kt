@@ -1,6 +1,7 @@
 package com.example.vuey.feature_album.data.remote.api
 
 import com.example.vuey.feature_album.data.remote.model.AlbumDetail
+import com.example.vuey.feature_album.data.remote.model.ArtistDetail
 import com.example.vuey.feature_album.data.remote.model.SearchAlbum
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -21,5 +22,11 @@ interface AlbumApi {
         @Path("id") albumId : String,
         @Header("Authorization") token : String
     ) : AlbumDetail
+
+    @GET("v1/artists{id}")
+    suspend fun getArtist(
+        @Path("id") artistId : String,
+        @Header("Authorization") token : String
+    ) : ArtistDetail
 
 }

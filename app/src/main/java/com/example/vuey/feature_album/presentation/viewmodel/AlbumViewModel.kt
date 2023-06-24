@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.repository.AlbumRepository
+import com.example.vuey.feature_album.presentation.viewmodel.ui_state.ArtistAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
@@ -32,6 +33,9 @@ class AlbumViewModel @Inject constructor(
 
     private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
     val searchAlbumInDatabase : StateFlow<List<AlbumEntity>> get() = _searchAlbumInDatabase
+
+    private val _albumArtistUiState = MutableStateFlow(ArtistAlbumUiState())
+    val albumArtistUiState : StateFlow<ArtistAlbumUiState> get() = _albumArtistUiState
 
     fun getTotalTracks() : Flow<Int> {
         return repository.getTotalTracks()
@@ -73,6 +77,40 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumById(albumId : String) : Flow<AlbumEntity> {
         return repository.getAlbumById(albumId)
+    }
+
+    fun getArtistDetail(artistId : String) {
+        useCases.getAlbumArtistUseCase(artistId).onEach { result ->
+            when (result) {
+                is Resource.Failure -> {
+                    _albumArtistUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = false,
+                            isError = result.message ?: "An unexpected error occurred",
+                            artistAlbumData = result.data
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    _albumArtistUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = true,
+                            isError = null,
+                            artistAlbumData = result.data
+                        )
+                    }
+                }
+                is Resource.Success -> {
+                    _albumArtistUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = false,
+                            isError = null,
+                            artistAlbumData = result.data
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun getAlbumDetail(albumId : String) {

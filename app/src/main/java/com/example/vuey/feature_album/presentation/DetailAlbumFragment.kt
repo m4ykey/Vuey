@@ -227,7 +227,18 @@ class DetailAlbumFragment : Fragment() {
 
                                 txtAlbumName.text = albumDetail.albumName
                                 txtAlbumTime.text = albumLength
-                                txtArtist.text = artistName
+                                txtArtist.apply {
+                                    text = artistName
+                                    albumDetail.artistList.forEach { artist ->
+                                        val artistId = artist.id
+                                        setOnClickListener {
+                                            val action = DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistAlbumFragment(
+                                                artistId
+                                            )
+                                            findNavController().navigate(action)
+                                        }
+                                    }
+                                }
                                 txtInfo.text = "${albumDetail.albumType.replaceFirstChar { it.uppercase() }} • " +
                                         "${DateUtils.formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(R.string.tracks)
 
