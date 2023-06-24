@@ -30,6 +30,7 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 - [X] Improve UX/UI
 - [X] Statistic Screen
 - [ ] Artist Fragment UI
+- [ ] Actor Fragment 
 
 ## Tech
 - [Retrofit](https://square.github.io/retrofit/)
