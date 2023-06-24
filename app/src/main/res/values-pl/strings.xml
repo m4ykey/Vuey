@@ -30,4 +30,5 @@
     <string name="movie_backdrop">Tło filmu</string>
     <string name="cast_image">Zdjęcie obsady</string>
     <string name="movie_poster">Plakat filmu</string>
+    <string name="artist_no_internet_connection">Potrzebujesz internetu, aby otrzymać dane o artystach</string>
 </resources>

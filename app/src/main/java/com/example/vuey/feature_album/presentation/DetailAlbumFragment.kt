@@ -1,7 +1,9 @@
 package com.example.vuey.feature_album.presentation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +25,7 @@ import com.example.vuey.feature_album.data.remote.model.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
+import com.example.vuey.util.network.NetworkStateMonitor
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,6 +47,11 @@ class DetailAlbumFragment : Fragment() {
     private val trackListAdapter by lazy { TrackListAdapter() }
     private var isAlbumSaved = false
 
+    private lateinit var connectivityManager: ConnectivityManager
+    private val networkStateMonitor : NetworkStateMonitor by lazy {
+        NetworkStateMonitor(connectivityManager)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,6 +63,8 @@ class DetailAlbumFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         detailViewModel.getAlbumDetail(arguments.album.id)
+        connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        networkStateMonitor.startMonitoring()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -227,15 +237,25 @@ class DetailAlbumFragment : Fragment() {
 
                                 txtAlbumName.text = albumDetail.albumName
                                 txtAlbumTime.text = albumLength
-                                txtArtist.apply {
-                                    text = artistName
-                                    albumDetail.artistList.forEach { artist ->
-                                        val artistId = artist.id
-                                        setOnClickListener {
-                                            val action = DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistAlbumFragment(
-                                                artistId
-                                            )
-                                            findNavController().navigate(action)
+                                lifecycleScope.launch {
+                                    networkStateMonitor.isInternetAvailable.collect { isAvailable ->
+                                        if (isAvailable) {
+                                            txtArtist.apply {
+                                                text = artistName
+                                                albumDetail.artistList.forEach { artist ->
+                                                    val artistId = artist.id
+                                                    setOnClickListener {
+                                                        val action = DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistAlbumFragment(
+                                                            artistId
+                                                        )
+                                                        findNavController().navigate(action)
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            txtArtist.setOnClickListener {
+                                                showSnackbar(requireView(), getString(R.string.artist_no_internet_connection))
+                                            }
                                         }
                                     }
                                 }
@@ -330,6 +350,7 @@ class DetailAlbumFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        networkStateMonitor.stopMonitoring()
     }
 
 }
