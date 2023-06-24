@@ -26,9 +26,10 @@ SPOTIFY_CLIENT_SECRET="YOUR_SPOTIFY_CLIENT_SECRET"
 5. Clean and rebuild project
 
 ## TODO
-- [ ] Notifications
-- [ ] Improve UX/UI
-- [ ] Statistic Screen
+- [X] Notifications
+- [X] Improve UX/UI
+- [X] Statistic Screen
+- [ ] Artist Fragment UI
 
 ## Tech
 - [Retrofit](https://square.github.io/retrofit/)
