@@ -23,7 +23,7 @@ interface AlbumApi {
         @Header("Authorization") token : String
     ) : AlbumDetail
 
-    @GET("v1/artists{id}")
+    @GET("v1/artists/{id}")
     suspend fun getArtist(
         @Path("id") artistId : String,
         @Header("Authorization") token : String
