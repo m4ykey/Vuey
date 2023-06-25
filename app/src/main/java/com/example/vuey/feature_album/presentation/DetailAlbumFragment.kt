@@ -48,7 +48,7 @@ class DetailAlbumFragment : Fragment() {
     private var isAlbumSaved = false
 
     private lateinit var connectivityManager: ConnectivityManager
-    private val networkStateMonitor : NetworkStateMonitor by lazy {
+    private val networkStateMonitor: NetworkStateMonitor by lazy {
         NetworkStateMonitor(connectivityManager)
     }
 
@@ -63,7 +63,8 @@ class DetailAlbumFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         detailViewModel.getAlbumDetail(arguments.album.id)
-        connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         networkStateMonitor.startMonitoring()
     }
 
@@ -153,17 +154,27 @@ class DetailAlbumFragment : Fragment() {
             val albumTimeSeconds = (albumTime / 1000) % 60
 
             txtAlbumTime.text = if (albumTimeHour == 0) {
-                String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
-            } else if (albumTimeMinute == 0){
+                String.format(
+                    "%d min %d ${getString(R.string.sec)}",
+                    albumTimeMinute,
+                    albumTimeSeconds
+                )
+            } else if (albumTimeMinute == 0) {
                 String.format("%d ${getString(R.string.hour)}", albumTimeHour)
             } else {
-                String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
+                String.format(
+                    "%d ${getString(R.string.hour)} %d min",
+                    albumTimeHour,
+                    albumTimeMinute
+                )
             }
 
             txtAlbumName.text = albumDatabase.albumName
             txtArtist.text = albumDatabase.artistList.joinToString(separator = ", ") { it.name }
             txtInfo.text = "${albumDatabase.albumType.replaceFirstChar { it.uppercase() }} • " +
-                    "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(R.string.tracks)
+                    "${DateUtils.formatAirDate(albumDatabase.releaseDate)} • ${albumDatabase.totalTracks} " + getString(
+                R.string.tracks
+            )
 
             imgAlbum.load(albumDatabase.albumCover.url) {
                 crossfade(true)
@@ -171,19 +182,21 @@ class DetailAlbumFragment : Fragment() {
             }
 
             btnAlbum.setOnClickListener {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(albumDatabase.externalUrls.spotify)
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(albumDatabase.externalUrls.spotify)
+                    )
                 )
-                startActivity(intent)
             }
 
             btnArtist.setOnClickListener {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(albumDatabase.artistList[0].externalUrls.spotify)
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(albumDatabase.artistList[0].externalUrls.spotify)
+                    )
                 )
-                startActivity(intent)
             }
         }
     }
@@ -203,17 +216,25 @@ class DetailAlbumFragment : Fragment() {
                         uiState.isLoading -> {
                             binding.progressBar.visibility = View.VISIBLE
                         }
+
                         uiState.isError?.isNotEmpty() == true -> {
                             binding.progressBar.visibility = View.GONE
-                            showSnackbar(requireView(), uiState.isError.toString(), Snackbar.LENGTH_LONG)
+                            showSnackbar(
+                                requireView(),
+                                uiState.isError.toString(),
+                                Snackbar.LENGTH_LONG
+                            )
                         }
+
                         uiState.detailAlbumData != null -> {
                             binding.progressBar.visibility = View.GONE
 
                             val albumDetail = uiState.detailAlbumData
 
-                            val albumCover = albumDetail.imageList.find { it.height == 640 && it.width == 640 }
-                            val artistName = albumDetail.artistList.joinToString(separator = ", ") { it.artistName }
+                            val albumCover =
+                                albumDetail.imageList.find { it.height == 640 && it.width == 640 }
+                            val artistName =
+                                albumDetail.artistList.joinToString(separator = ", ") { it.artistName }
 
                             var time = 0
                             for (track in albumDetail.tracks.items) {
@@ -226,11 +247,19 @@ class DetailAlbumFragment : Fragment() {
                             val albumTimeSeconds = (time / 1000) % 60
 
                             val albumLength = if (albumTimeHour == 0) {
-                                String.format("%d min %d ${getString(R.string.sec)}", albumTimeMinute, albumTimeSeconds)
-                            } else if (albumTimeMinute == 0){
+                                String.format(
+                                    "%d min %d ${getString(R.string.sec)}",
+                                    albumTimeMinute,
+                                    albumTimeSeconds
+                                )
+                            } else if (albumTimeMinute == 0) {
                                 String.format("%d ${getString(R.string.hour)}", albumTimeHour)
                             } else {
-                                String.format("%d ${getString(R.string.hour)} %d min", albumTimeHour, albumTimeMinute)
+                                String.format(
+                                    "%d ${getString(R.string.hour)} %d min",
+                                    albumTimeHour,
+                                    albumTimeMinute
+                                )
                             }
 
                             with(binding) {
@@ -242,25 +271,31 @@ class DetailAlbumFragment : Fragment() {
                                         if (isAvailable) {
                                             txtArtist.apply {
                                                 text = artistName
-                                                albumDetail.artistList.forEach { artist ->
-                                                    val artistId = artist.id
-                                                    setOnClickListener {
-                                                        val action = DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistAlbumFragment(
-                                                            artistId
+                                                val artistId = albumDetail.artistList[0].id
+                                                setOnClickListener {
+                                                    val action =
+                                                        DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistAlbumFragment(
+                                                            artistId = artistId
                                                         )
-                                                        findNavController().navigate(action)
-                                                    }
+                                                    findNavController().navigate(action)
                                                 }
                                             }
                                         } else {
                                             txtArtist.setOnClickListener {
-                                                showSnackbar(requireView(), getString(R.string.artist_no_internet_connection))
+                                                showSnackbar(
+                                                    requireView(),
+                                                    getString(R.string.artist_no_internet_connection)
+                                                )
                                             }
                                         }
                                     }
                                 }
-                                txtInfo.text = "${albumDetail.albumType.replaceFirstChar { it.uppercase() }} • " +
-                                        "${DateUtils.formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(R.string.tracks)
+
+                                txtInfo.text =
+                                    "${albumDetail.albumType.replaceFirstChar { it.uppercase() }} • " +
+                                            "${DateUtils.formatAirDate(albumDetail.releaseDate)} • ${albumDetail.totalTracks} " + getString(
+                                        R.string.tracks
+                                    )
 
                                 imgAlbum.load(albumCover?.url) {
                                     crossfade(true)
@@ -269,21 +304,27 @@ class DetailAlbumFragment : Fragment() {
                                 }
 
                                 btnAlbum.setOnClickListener {
-                                    val intent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse(albumDetail.externalUrls.spotify)
+                                    startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse(albumDetail.externalUrls.spotify)
+                                        )
                                     )
-                                    startActivity(intent)
                                 }
                                 btnArtist.setOnClickListener {
-                                    val intent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse(albumDetail.artistList[0].externalUrls.spotify)
+                                    startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse(albumDetail.artistList[0].externalUrls.spotify)
+                                        )
                                     )
-                                    startActivity(intent)
                                 }
 
-                                albumDetail.let { trackList -> trackListAdapter.submitTrack(trackList.tracks.items) }
+                                albumDetail.let { trackList ->
+                                    trackListAdapter.submitTrack(
+                                        trackList.tracks.items
+                                    )
+                                }
 
                                 val artistEntity = albumDetail.artistList.map { artist ->
                                     AlbumEntity.ArtistEntity(
@@ -300,7 +341,8 @@ class DetailAlbumFragment : Fragment() {
                                     albumLength = albumTime,
                                     albumName = albumDetail.albumName,
                                     albumType = albumDetail.albumType,
-                                    releaseDate = DateUtils.formatAirDate(albumDetail.releaseDate).toString(),
+                                    releaseDate = DateUtils.formatAirDate(albumDetail.releaseDate)
+                                        .toString(),
                                     totalTracks = albumDetail.totalTracks,
                                     externalUrls = AlbumEntity.ExternalUrlsEntity(
                                         spotify = albumDetail.externalUrls.spotify
@@ -325,11 +367,17 @@ class DetailAlbumFragment : Fragment() {
                                 imgSave.setOnClickListener {
                                     isAlbumSaved = !isAlbumSaved
                                     if (isAlbumSaved) {
-                                        showSnackbar(requireView(), getString(R.string.added_to_library))
+                                        showSnackbar(
+                                            requireView(),
+                                            getString(R.string.added_to_library)
+                                        )
                                         imgSave.setImageResource(R.drawable.ic_save)
                                         detailViewModel.insertAlbum(albumEntity)
                                     } else {
-                                        showSnackbar(requireView(), getString(R.string.removed_from_library))
+                                        showSnackbar(
+                                            requireView(),
+                                            getString(R.string.removed_from_library)
+                                        )
                                         imgSave.setImageResource(R.drawable.ic_save_outlined)
                                         detailViewModel.deleteAlbum(albumEntity)
                                     }
@@ -343,7 +391,8 @@ class DetailAlbumFragment : Fragment() {
     }
 
     private fun hideBottomNavigation() {
-        val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        val bottomNavigation =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.visibility = View.GONE
     }
 
