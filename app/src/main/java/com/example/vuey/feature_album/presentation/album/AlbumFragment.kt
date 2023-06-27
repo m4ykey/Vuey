@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.presentation
+package com.example.vuey.feature_album.presentation.album
 
 import android.content.res.ColorStateList
 import android.graphics.Color

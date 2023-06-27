@@ -1,5 +1,6 @@
-package com.example.vuey.feature_album.presentation
+package com.example.vuey.feature_album.presentation.artist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,12 +25,12 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ArtistAlbumFragment : Fragment() {
 
-    private var _binding : FragmentArtistAlbumBinding? = null
+    private var _binding: FragmentArtistAlbumBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel : AlbumViewModel by viewModels()
+    private val viewModel: AlbumViewModel by viewModels()
 
-    private val args : ArtistAlbumFragmentArgs by navArgs()
+    private val args: ArtistAlbumFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +43,7 @@ class ArtistAlbumFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getArtistDetail(args.artistId)
+        viewModel.getArtistInfo(args.artistName)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,24 +70,28 @@ class ArtistAlbumFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeArtistDetail() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.albumArtistUiState.collect { uiState ->
                     when {
                         uiState.isLoading -> {
-                            binding.progressBar.visibility = View.VISIBLE
                         }
+
                         uiState.isError?.isNotEmpty() == true -> {
-                            binding.progressBar.visibility = View.GONE
-                            showSnackbar(requireView(), uiState.isError.toString(), Snackbar.LENGTH_LONG)
+                            showSnackbar(
+                                requireView(),
+                                uiState.isError.toString(),
+                                Snackbar.LENGTH_LONG
+                            )
                         }
+
                         uiState.artistAlbumData != null -> {
 
-                            binding.progressBar.visibility = View.GONE
-
                             val artistDetail = uiState.artistAlbumData
-                            val artistImage = artistDetail.images.find { it.height == 640 && it.width == 640 }
+                            val artistImage =
+                                artistDetail.images.find { it.height == 640 && it.width == 640 }
 
                             with(binding) {
                                 imgArtist.load(artistImage?.url)

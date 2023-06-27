@@ -3,9 +3,11 @@ package com.example.vuey.feature_album.data.repository
 import com.example.vuey.feature_album.data.local.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
-import com.example.vuey.feature_album.data.remote.model.Album
-import com.example.vuey.feature_album.data.remote.model.AlbumDetail
-import com.example.vuey.feature_album.data.remote.model.ArtistDetail
+import com.example.vuey.feature_album.data.remote.api.ArtistApi
+import com.example.vuey.feature_album.data.remote.model.last_fm.Artist
+import com.example.vuey.feature_album.data.remote.model.spotify.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.AlbumDetail
+import com.example.vuey.feature_album.data.remote.model.spotify.ArtistDetail
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.util.network.Resource
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +21,8 @@ import javax.inject.Singleton
 class AlbumRepositoryImpl @Inject constructor(
     private val albumApi: AlbumApi,
     private val albumDao: AlbumDao,
-    private val spotifyInterceptor: SpotifyInterceptor
+    private val spotifyInterceptor: SpotifyInterceptor,
+    private val lastFmApi: ArtistApi
 ) : AlbumRepository {
 
     override suspend fun insertAlbum(albumEntity: AlbumEntity) {
@@ -64,6 +67,31 @@ class AlbumRepositoryImpl @Inject constructor(
                     token = "Bearer ${spotifyInterceptor.getAccessToken()}"
                 )
                 emit(Resource.Success(albumResponse))
+            } catch (e : HttpException) {
+                emit(
+                    Resource.Failure(
+                        message = e.localizedMessage ?: "An unexpected error occurred",
+                        data = null
+                    )
+                )
+            } catch (e : IOException) {
+                emit(
+                    Resource.Failure(
+                        message = e.localizedMessage ?: "No internet connection",
+                        data = null
+                    )
+                )
+            }
+        }
+    }
+
+    override fun getArtistInfo(artistName: String): Flow<Resource<Artist>> {
+        return flow {
+            emit(Resource.Loading())
+
+            try {
+                val artistResponse = lastFmApi.getArtistInfo(artistName).artist
+                emit(Resource.Success(artistResponse))
             } catch (e : HttpException) {
                 emit(
                     Resource.Failure(

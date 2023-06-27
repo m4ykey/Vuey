@@ -20,4 +20,6 @@ object Constants {
 
     const val CHANNEL_ID = "channelId"
 
+    const val LAST_FM_BASE_URL = "https://ws.audioscrobbler.com/"
+
 }
