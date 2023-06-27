@@ -1,7 +1,7 @@
 package com.example.vuey.util.utils
 
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.Album
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 
@@ -49,7 +49,8 @@ fun AlbumEntity.toAlbum() : Album {
         externalUrls = Album.ExternalUrls(
             spotify = this.externalUrls.spotify
         ),
-        imageList = listOf(Album.Image(
+        imageList = listOf(
+            Album.Image(
             height = 640,
             width = 640,
             url = albumCover.url

@@ -30,6 +30,8 @@
     <string name="cast_image">Cast Image</string>
     <string name="movie_poster">Movie Poster</string>
     <string name="artist_no_internet_connection">You need internet connection to retrieve artist data</string>
+    <string name="popularity">Popularity:</string>
+    <string name="followers">Followers:</string>
 
     <string name="default_notification_channel_id" translatable="false">channelid</string>
 </resources>

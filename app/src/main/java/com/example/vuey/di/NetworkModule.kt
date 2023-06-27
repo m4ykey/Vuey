@@ -1,10 +1,12 @@
 package com.example.vuey.di
 
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
+import com.example.vuey.feature_album.data.remote.api.ArtistApi
 import com.example.vuey.feature_album.data.remote.api.AuthApi
+import com.example.vuey.feature_album.data.remote.token.LastFmInterceptor
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.feature_movie.data.remote.api.MovieApi
-import com.example.vuey.feature_movie.data.remote.token.TmdbToken
+import com.example.vuey.feature_movie.data.remote.token.TmdbInterceptor
 import com.example.vuey.util.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -23,7 +25,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTmdbToken() : TmdbToken = TmdbToken()
+    fun provideTmdbInterceptor() : TmdbInterceptor = TmdbInterceptor()
+
+    @Provides
+    @Singleton
+    fun provideLastFmInterceptor() : LastFmInterceptor = LastFmInterceptor()
 
     @Provides
     @Singleton
@@ -38,14 +44,30 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         spotifyInterceptor: SpotifyInterceptor,
-        tmdbToken: TmdbToken
+        tmdbInterceptor: TmdbInterceptor,
+        lastFmInterceptor: LastFmInterceptor
     ) : OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(tmdbToken)
+            .addInterceptor(tmdbInterceptor)
             .addInterceptor(spotifyInterceptor)
+            .addInterceptor(lastFmInterceptor)
             .readTimeout(2, TimeUnit.MINUTES)
             .connectTimeout(2, TimeUnit.MINUTES)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLastFmRetrofit(
+        httpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ) : ArtistApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.LAST_FM_BASE_URL)
+            .client(httpClient)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+            .create(ArtistApi::class.java)
     }
 
     @Provides

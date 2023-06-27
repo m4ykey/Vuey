@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.presentation
+package com.example.vuey.feature_album.presentation.album
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -20,9 +20,9 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.Artist
-import com.example.vuey.feature_album.data.remote.model.ExternalUrls
-import com.example.vuey.feature_album.data.remote.model.Tracks
+import com.example.vuey.feature_album.data.remote.model.spotify.Artist
+import com.example.vuey.feature_album.data.remote.model.spotify.ExternalUrls
+import com.example.vuey.feature_album.data.remote.model.spotify.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.NetworkStateMonitor
@@ -233,7 +233,7 @@ class DetailAlbumFragment : Fragment() {
 
                             val albumCover =
                                 albumDetail.imageList.find { it.height == 640 && it.width == 640 }
-                            val artistName =
+                            val artistNames =
                                 albumDetail.artistList.joinToString(separator = ", ") { it.artistName }
 
                             var time = 0
@@ -270,12 +270,14 @@ class DetailAlbumFragment : Fragment() {
                                     networkStateMonitor.isInternetAvailable.collect { isAvailable ->
                                         if (isAvailable) {
                                             txtArtist.apply {
-                                                text = artistName
+                                                text = artistNames
+                                                val artistName = albumDetail.artistList[0].artistName
                                                 val artistId = albumDetail.artistList[0].id
                                                 setOnClickListener {
                                                     val action =
                                                         DetailAlbumFragmentDirections.actionAlbumDetailFragmentToArtistAlbumFragment(
-                                                            artistId = artistId
+                                                            artistId = artistId,
+                                                            artistName = artistName
                                                         )
                                                     findNavController().navigate(action)
                                                 }

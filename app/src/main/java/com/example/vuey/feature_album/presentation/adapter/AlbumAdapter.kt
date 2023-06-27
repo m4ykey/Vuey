@@ -9,9 +9,9 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.Album
-import com.example.vuey.feature_album.presentation.AlbumFragmentDirections
-import com.example.vuey.feature_album.presentation.SearchAlbumFragmentDirections
+import com.example.vuey.feature_album.data.remote.model.spotify.Album
+import com.example.vuey.feature_album.presentation.album.AlbumFragmentDirections
+import com.example.vuey.feature_album.presentation.album.SearchAlbumFragmentDirections
 import com.example.vuey.util.utils.DiffUtils
 import com.example.vuey.util.utils.PreDrawListener
 import com.example.vuey.util.utils.toAlbum
