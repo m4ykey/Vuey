@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class ArtistAlbumFragment : Fragment() {
 
@@ -31,6 +32,8 @@ class ArtistAlbumFragment : Fragment() {
     private val viewModel: AlbumViewModel by viewModels()
 
     private val args: ArtistAlbumFragmentArgs by navArgs()
+
+    private var isArtistFollowed = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +55,17 @@ class ArtistAlbumFragment : Fragment() {
         observeArtistDetail()
         setupToolbar()
         hideBottomNavigation()
+
+        with(binding) {
+            chipFollow.setOnClickListener {
+                isArtistFollowed = !isArtistFollowed
+                if (isArtistFollowed) {
+                    chipFollow.text = "Followed"
+                } else {
+                    chipFollow.text = "Follow"
+                }
+            }
+        }
     }
 
     private fun hideBottomNavigation() {
@@ -60,17 +74,6 @@ class ArtistAlbumFragment : Fragment() {
         bottomNavigation.visibility = View.GONE
     }
 
-    private fun setupToolbar() {
-        with(binding) {
-            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-            collapsingToolbar.apply {
-                setCollapsedTitleTextAppearance(R.style.collapsingToolbarTitleColor)
-                setExpandedTitleTextAppearance(R.style.collapsingToolbarTitleColor)
-            }
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
     private fun observeArtistDetail() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -100,6 +103,16 @@ class ArtistAlbumFragment : Fragment() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun setupToolbar() {
+        with(binding) {
+            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+            collapsingToolbar.apply {
+                setCollapsedTitleTextAppearance(R.style.collapsingToolbarTitleColor)
+                setExpandedTitleTextAppearance(R.style.collapsingToolbarTitleColor)
             }
         }
     }
