@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.data.remote.model.spotify
+package com.example.vuey.feature_album.data.remote.model.spotify.album_search
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

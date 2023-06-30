@@ -1,4 +1,4 @@
-package com.example.vuey.feature_album.data.remote.model.spotify
+package com.example.vuey.feature_album.data.remote.model.spotify.token
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,6 +1,6 @@
 package com.example.vuey.feature_album.presentation.viewmodel.ui_state
 
-import com.example.vuey.feature_album.data.remote.model.spotify.AlbumDetail
+import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.AlbumDetail
 
 data class DetailAlbumUiState(
     val isLoading : Boolean = false,

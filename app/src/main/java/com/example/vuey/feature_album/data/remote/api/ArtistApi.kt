@@ -10,4 +10,5 @@ interface ArtistApi {
     suspend fun getArtistInfo(
         @Query("artist") artist : String
     ) : ArtistInfo
+
 }

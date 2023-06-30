@@ -20,9 +20,9 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.spotify.Artist
-import com.example.vuey.feature_album.data.remote.model.spotify.ExternalUrls
-import com.example.vuey.feature_album.data.remote.model.spotify.Tracks
+import com.example.vuey.feature_album.data.remote.model.spotify.artist.Artist
+import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.ExternalUrls
+import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.Tracks
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.NetworkStateMonitor

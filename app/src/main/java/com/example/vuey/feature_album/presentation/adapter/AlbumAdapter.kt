@@ -9,7 +9,7 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.LayoutAlbumBinding
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.spotify.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album
 import com.example.vuey.feature_album.presentation.album.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.album.SearchAlbumFragmentDirections
 import com.example.vuey.util.utils.DiffUtils
@@ -37,10 +37,12 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                     is Album -> {
                         val image = album.imageList.find { it.height == 640 && it.width == 640 }
                         val preDraw = PreDrawListener(imgAlbum, layoutAlbum)
-                        imgAlbum.viewTreeObserver.addOnPreDrawListener(preDraw)
                         txtAlbum.text = album.albumName
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.artistName }
-                        imgAlbum.load(image?.url) { error(R.drawable.album_error) }
+                        imgAlbum.apply {
+                            load(image?.url) { error(R.drawable.album_error) }
+                            viewTreeObserver.addOnPreDrawListener(preDraw)
+                        }
 
                         layoutAlbum.setOnClickListener {
                             val action = SearchAlbumFragmentDirections.actionSearchAlbumFragmentToAlbumDetailFragment(

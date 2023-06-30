@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.repository.AlbumRepository
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.ArtistAlbumUiState
+import com.example.vuey.feature_album.presentation.viewmodel.ui_state.ArtistTopTracksUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.ArtistUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
@@ -40,6 +41,9 @@ class AlbumViewModel @Inject constructor(
 
     private val _artistUiState = MutableStateFlow(ArtistUiState())
     val artistUiState : StateFlow<ArtistUiState> get() = _artistUiState
+
+    private val _artistTopTracksUiState = MutableStateFlow(ArtistTopTracksUiState())
+    val artistTopTracksUiState : StateFlow<ArtistTopTracksUiState> get() = _artistTopTracksUiState
 
     fun getTotalTracks() : Flow<Int> {
         return repository.getTotalTracks()
@@ -81,6 +85,40 @@ class AlbumViewModel @Inject constructor(
 
     fun getAlbumById(albumId : String) : Flow<AlbumEntity> {
         return repository.getAlbumById(albumId)
+    }
+
+    fun getArtistTopTracks(artistId: String) {
+        useCases.getArtistTopTracksUseCase(artistId).onEach { result ->
+            when (result) {
+                is Resource.Failure -> {
+                    _artistTopTracksUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = false,
+                            isError = result.message ?: "An unexpected error occurred",
+                            artistTopTracksData = result.data ?: emptyList()
+                        )
+                    }
+                }
+                is Resource.Success -> {
+                    _artistTopTracksUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = false,
+                            isError = null,
+                            artistTopTracksData = result.data ?: emptyList()
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    _artistTopTracksUiState.update { prevState ->
+                        prevState.copy(
+                            isLoading = true,
+                            isError = null,
+                            artistTopTracksData = result.data ?: emptyList()
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun getArtistInfo(artistName : String) {

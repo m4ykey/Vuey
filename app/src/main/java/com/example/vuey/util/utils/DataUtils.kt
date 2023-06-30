@@ -1,7 +1,7 @@
 package com.example.vuey.util.utils
 
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.spotify.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album
 import com.example.vuey.feature_movie.data.local.entity.MovieEntity
 import com.example.vuey.feature_movie.data.remote.model.MovieList
 

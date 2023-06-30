@@ -96,5 +96,17 @@
         <argument
             android:name="artistName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_artistAlbumFragment_to_artistBioFragment"
+            app:destination="@id/artistBioFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistBioFragment"
+        android:name="com.example.vuey.feature_album.presentation.artist.ArtistBioFragment"
+        android:label="fragment_artist_bio"
+        tools:layout="@layout/fragment_artist_bio" >
+        <argument
+            android:name="artistData"
+            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.artist.ArtistData" />
     </fragment>
 </navigation>

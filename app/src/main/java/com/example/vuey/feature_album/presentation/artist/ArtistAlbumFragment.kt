@@ -15,6 +15,8 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentArtistAlbumBinding
+import com.example.vuey.feature_album.data.remote.model.spotify.artist.ArtistData
+import com.example.vuey.feature_album.presentation.adapter.TopTracksAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,6 +37,8 @@ class ArtistAlbumFragment : Fragment() {
 
     private var isArtistFollowed = false
 
+    private val topTracksAdapter by lazy { TopTracksAdapter() }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,8 +49,10 @@ class ArtistAlbumFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getArtistDetail(args.artistId)
-        viewModel.getArtistInfo(args.artistName)
+        viewModel.apply {
+            getArtistDetail(args.artistId)
+            getArtistInfo(args.artistName)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,12 +63,13 @@ class ArtistAlbumFragment : Fragment() {
         hideBottomNavigation()
 
         with(binding) {
+            recyclerViewTopTracks.adapter = topTracksAdapter
             chipFollow.setOnClickListener {
                 isArtistFollowed = !isArtistFollowed
                 if (isArtistFollowed) {
-                    chipFollow.text = "Followed"
+                    chipFollow.text = getString(R.string.followed)
                 } else {
-                    chipFollow.text = "Follow"
+                    chipFollow.text = getString(R.string.follow)
                 }
             }
         }
@@ -77,28 +84,27 @@ class ArtistAlbumFragment : Fragment() {
     private fun observeArtistDetail() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.albumArtistUiState.collect { uiState ->
+                viewModel.artistUiState.collect { uiState ->
                     when {
-                        uiState.isLoading -> {
-                        }
+                        uiState.isLoading -> {}
+                        uiState.isError?.isNotEmpty() == true -> {}
+                        uiState.artistData != null -> {
 
-                        uiState.isError?.isNotEmpty() == true -> {
-                            showSnackbar(
-                                requireView(),
-                                uiState.isError.toString(),
-                                Snackbar.LENGTH_LONG
-                            )
-                        }
-
-                        uiState.artistAlbumData != null -> {
-
-                            val artistDetail = uiState.artistAlbumData
-                            val artistImage =
-                                artistDetail.images.find { it.height == 640 && it.width == 640 }
-
+                            val artistInfo = uiState.artistData
                             with(binding) {
-                                imgArtist.load(artistImage?.url)
-                                collapsingToolbar.title = artistDetail.name
+                                txtListeners.text = "${artistInfo.stats.listeners} " + getString(R.string.listeners)
+                                txtArtistInfo.text = artistInfo.bio.content
+
+                                cardViewInfo.setOnClickListener {
+                                    val artistData = ArtistData(
+                                        listeners = artistInfo.stats.listeners,
+                                        content = artistInfo.bio.content
+                                    )
+                                    val action = ArtistAlbumFragmentDirections.actionArtistAlbumFragmentToArtistBioFragment(
+                                        artistData = artistData
+                                    )
+                                    findNavController().navigate(action)
+                                }
                             }
                         }
                     }

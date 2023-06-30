@@ -31,6 +31,10 @@
     <string name="cast_image">Zdjęcie obsady</string>
     <string name="movie_poster">Plakat filmu</string>
     <string name="artist_no_internet_connection">Potrzebujesz internetu, aby otrzymać dane o artystach</string>
-    <string name="popularity">Popularność:</string>
-    <string name="followers">Obserwujący:</string>
+    <string name="follow">Obserwuj</string>
+    <string name="followed">Obserwujesz</string>
+    <string name="listeners">słuchaczy</string>
+    <string name="about">Informacje</string>
+    <string name="top_tracks">Popularne utwory</string>
+    <string name="followers">obserwujących</string>
 </resources>

@@ -5,10 +5,10 @@ import com.example.vuey.util.network.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class AlbumArtistUseCase @Inject constructor(
+class ArtistTopTracksUseCase @Inject constructor(
     private val repository: AlbumRepository
 ) {
-    operator fun invoke(artistId : String) : Flow<Resource<ArtistDetail>> {
-        return repository.getArtist(artistId)
+    operator fun invoke(artistId : String) : Flow<Resource<List<Track>>> {
+        return repository.getArtistTopTracks(artistId)
     }
 }

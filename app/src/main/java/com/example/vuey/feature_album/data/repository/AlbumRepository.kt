@@ -2,9 +2,8 @@ package com.example.vuey.feature_album.data.repository
 
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.model.last_fm.Artist
-import com.example.vuey.feature_album.data.remote.model.spotify.Album
-import com.example.vuey.feature_album.data.remote.model.spotify.AlbumDetail
-import com.example.vuey.feature_album.data.remote.model.spotify.ArtistDetail
+import com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album
+import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.AlbumDetail
 import com.example.vuey.util.network.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +14,7 @@ interface AlbumRepository {
     fun getArtist(artistId : String) : Flow<Resource<ArtistDetail>>
 
     fun getArtistInfo(artistName : String) : Flow<Resource<Artist>>
+    fun getArtistTopTracks(artistId : String) : Flow<Resource<List<Track>>>
 
     suspend fun insertAlbum(albumEntity: AlbumEntity)
     suspend fun deleteAlbum(albumEntity: AlbumEntity)

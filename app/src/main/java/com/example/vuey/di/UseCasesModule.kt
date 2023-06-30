@@ -4,6 +4,7 @@ import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumArti
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumDetailUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumSearchUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
+import com.example.vuey.feature_album.presentation.viewmodel.use_cases.ArtistTopTracksUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.ArtistUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieCastUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieDetailUseCase
@@ -23,13 +24,15 @@ object UseCasesModule {
         getAlbumSearchUseCase: AlbumSearchUseCase,
         getAlbumDetailUseCase: AlbumDetailUseCase,
         getAlbumArtistUseCase: AlbumArtistUseCase,
-        getArtistUseCase: ArtistUseCase
+        getArtistUseCase: ArtistUseCase,
+        getArtistTopTrackUseCase : ArtistTopTracksUseCase
     ) : AlbumUseCases {
         return AlbumUseCases(
             getAlbumSearchUseCase,
             getAlbumDetailUseCase,
             getAlbumArtistUseCase,
-            getArtistUseCase
+            getArtistUseCase,
+            getArtistTopTrackUseCase
         )
     }
 
