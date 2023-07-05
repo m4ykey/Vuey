@@ -33,7 +33,7 @@
             app:destination="@id/artistAlbumFragment" />
         <argument
             android:name="album"
-            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.Album" />
+            app:argType="com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album" />
     </fragment>
     <fragment
         android:id="@+id/searchAlbumFragment"

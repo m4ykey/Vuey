@@ -9,7 +9,7 @@ import javax.inject.Inject
 class AlbumDetailUseCase @Inject constructor(
     private val repository: AlbumRepository
 ) {
-    operator fun invoke(albumId : String) : Flow<Resource<AlbumDetail>> {
+    suspend operator fun invoke(albumId : String) : Flow<Resource<AlbumDetail>> {
         return repository.getAlbum(albumId)
     }
 }

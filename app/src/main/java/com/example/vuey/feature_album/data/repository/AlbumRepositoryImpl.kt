@@ -3,10 +3,8 @@ package com.example.vuey.feature_album.data.repository
 import com.example.vuey.feature_album.data.local.dao.AlbumDao
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.remote.api.AlbumApi
-import com.example.vuey.feature_album.data.remote.api.ArtistApi
-import com.example.vuey.feature_album.data.remote.model.last_fm.Artist
-import com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album
 import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.AlbumDetail
+import com.example.vuey.feature_album.data.remote.model.spotify.album_search.Album
 import com.example.vuey.feature_album.data.remote.token.SpotifyInterceptor
 import com.example.vuey.util.network.Resource
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +18,7 @@ import javax.inject.Singleton
 class AlbumRepositoryImpl @Inject constructor(
     private val albumApi: AlbumApi,
     private val albumDao: AlbumDao,
-    private val spotifyInterceptor: SpotifyInterceptor,
-    private val artistApi: ArtistApi
+    private val spotifyInterceptor: SpotifyInterceptor
 ) : AlbumRepository {
 
     override suspend fun insertAlbum(albumEntity: AlbumEntity) {
@@ -56,88 +53,7 @@ class AlbumRepositoryImpl @Inject constructor(
         return albumDao.searchAlbumInDatabase(searchQuery)
     }
 
-    override fun getArtistTopTracks(artistId: String): Flow<Resource<List<Track>>> {
-        return flow {
-            emit(Resource.Loading())
-
-            try {
-                val artistResponse = artistApi.getArtistTopTracks(
-                    artistId = artistId,
-                    token = "Bearer ${spotifyInterceptor.getAccessToken()}"
-                ).tracks
-                emit(Resource.Success(artistResponse))
-            } catch (e : HttpException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "An unexpected error occurred",
-                        data = null
-                    )
-                )
-            } catch (e : IOException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "No internet connection",
-                        data = null
-                    )
-                )
-            }
-        }
-    }
-
-    override fun getArtist(artistId: String): Flow<Resource<ArtistDetail>> {
-        return flow {
-            emit(Resource.Loading())
-
-            try {
-                val albumResponse = artistApi.getArtist(
-                    artistId = artistId,
-                    token = "Bearer ${spotifyInterceptor.getAccessToken()}"
-                )
-                emit(Resource.Success(albumResponse))
-            } catch (e : HttpException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "An unexpected error occurred",
-                        data = null
-                    )
-                )
-            } catch (e : IOException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "No internet connection",
-                        data = null
-                    )
-                )
-            }
-        }
-    }
-
-    override fun getArtistInfo(artistName: String): Flow<Resource<Artist>> {
-        return flow {
-            emit(Resource.Loading())
-
-            try {
-                val artistResponse = artistApi.getArtistInfo(artistName).artist
-                emit(Resource.Success(artistResponse))
-            } catch (e : HttpException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "An unexpected error occurred",
-                        data = null
-                    )
-                )
-            } catch (e : IOException) {
-                emit(
-                    Resource.Failure(
-                        message = e.localizedMessage ?: "No internet connection",
-                        data = null
-                    )
-                )
-            }
-        }
-    }
-
-    override fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {
+    override suspend fun searchAlbum(albumName: String): Flow<Resource<List<Album>>> {
         return flow {
             emit(Resource.Loading())
 
@@ -166,7 +82,7 @@ class AlbumRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAlbum(albumId: String): Flow<Resource<AlbumDetail>> {
+    override suspend fun getAlbum(albumId: String): Flow<Resource<AlbumDetail>> {
         return flow {
             emit(Resource.Loading())
 

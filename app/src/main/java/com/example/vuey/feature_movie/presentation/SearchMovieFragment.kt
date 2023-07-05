@@ -21,7 +21,7 @@ import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
-import com.example.vuey.util.utils.showSnackbar
+import com.example.vuey.util.utils.showSnackbarSpotifyError
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -116,7 +116,7 @@ class SearchMovieFragment : Fragment() {
                         }
                         uiState.isError?.isNotEmpty() == true -> {
                             binding.progressBar.visibility = View.GONE
-                            showSnackbar(requireView(), uiState.isError.toString(), Snackbar.LENGTH_LONG)
+                            showSnackbarSpotifyError(requireView(), uiState.isError.toString(), Snackbar.LENGTH_LONG)
                         }
                         uiState.searchMovieData.isNotEmpty() -> {
                             binding.progressBar.visibility = View.GONE

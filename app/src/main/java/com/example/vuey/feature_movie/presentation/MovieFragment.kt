@@ -11,13 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -44,14 +46,16 @@ class MovieFragment : Fragment() {
         setupNavigation()
         showBottomNavigation()
         with(binding) {
-            movieRecyclerView.apply {
-                adapter = movieAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-            }
+            movieRecyclerView.adapter = movieAdapter
         }
         lifecycleScope.launch {
-            movieViewModel.allMovies.collect { movies ->
-                movieAdapter.submitMovie(movies)
+            coroutineScope {
+                movieViewModel.allMovies.collect { movies ->
+                    movieAdapter.submitMovie(movies)
+                }
+                movieViewModel.searchMovieInDatabase.collect { movieList ->
+                    movieAdapter.submitMovie(movieList)
+                }
             }
         }
     }
@@ -61,6 +65,18 @@ class MovieFragment : Fragment() {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when(menuItem.itemId) {
                     R.id.imgSearch -> {
+                        val materialAlertLayout = LayoutInflater.from(requireContext())
+                            .inflate(R.layout.material_alert_edit_text, null)
+                        val etSearchMovie =
+                            materialAlertLayout.findViewById<TextInputEditText>(R.id.etSearchAlbum)
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Search for a movie")
+                            .setView(materialAlertLayout)
+                            .setPositiveButton(getString(R.string.search)) { _, _ ->
+                                movieViewModel.searchMovieDatabase(etSearchMovie.text.toString())
+                            }
+                            .setNegativeButton(getString(R.string.close)) { _, _ -> }
+                            .show()
                         true
                     }
                     R.id.imgAdd -> {

@@ -145,7 +145,7 @@
                         android:fontFamily="@font/cabin_semibold"
                         app:icon="@drawable/ic_artist"
                         android:layout_marginEnd="20dp"
-                        android:backgroundTint="@color/album_green"
+                        android:backgroundTint="@color/green"
                         android:text="@string/artist"/>
 
                     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -157,7 +157,7 @@
                         android:fontFamily="@font/cabin_semibold"
                         android:id="@+id/btnAlbum"
                         android:textColor="@color/white"
-                        android:backgroundTint="@color/album_green"
+                        android:backgroundTint="@color/green"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 

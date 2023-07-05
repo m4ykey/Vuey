@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:backgroundTint="@color/tv_show_red"
+    android:backgroundTint="@color/red_snackbar"
     app:cardElevation="0dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
@@ -15,11 +15,11 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imgError"
+            android:id="@+id/imgDelete"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/ic_error_outline"
+            android:src="@drawable/ic_delete_outline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -27,13 +27,13 @@
 
         <TextView
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgError"
+            app:layout_constraintStart_toEndOf="@id/imgDelete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Service Unavailable - The server is currently unable to handle the request due to a temporary condition which will be alleviated after some delay. You can choose to resend the request again."
+            android:text="@string/removed_from_library"
             android:layout_width="0dp"
             android:textColor="@color/white"
-            android:id="@+id/txtError"
+            android:id="@+id/txtSuccess"
             android:padding="10dp"
             android:fontFamily="@font/cabin"
             android:layout_height="wrap_content"/>

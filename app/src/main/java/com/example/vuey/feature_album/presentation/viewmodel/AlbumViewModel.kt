@@ -4,9 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
 import com.example.vuey.feature_album.data.repository.AlbumRepository
-import com.example.vuey.feature_album.presentation.viewmodel.ui_state.ArtistAlbumUiState
-import com.example.vuey.feature_album.presentation.viewmodel.ui_state.ArtistTopTracksUiState
-import com.example.vuey.feature_album.presentation.viewmodel.ui_state.ArtistUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.DetailAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.ui_state.SearchAlbumUiState
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
@@ -36,15 +33,6 @@ class AlbumViewModel @Inject constructor(
     private val _searchAlbumInDatabase = MutableStateFlow<List<AlbumEntity>>(emptyList())
     val searchAlbumInDatabase : StateFlow<List<AlbumEntity>> get() = _searchAlbumInDatabase
 
-    private val _albumArtistUiState = MutableStateFlow(ArtistAlbumUiState())
-    val albumArtistUiState : StateFlow<ArtistAlbumUiState> get() = _albumArtistUiState
-
-    private val _artistUiState = MutableStateFlow(ArtistUiState())
-    val artistUiState : StateFlow<ArtistUiState> get() = _artistUiState
-
-    private val _artistTopTracksUiState = MutableStateFlow(ArtistTopTracksUiState())
-    val artistTopTracksUiState : StateFlow<ArtistTopTracksUiState> get() = _artistTopTracksUiState
-
     fun getTotalTracks() : Flow<Int> {
         return repository.getTotalTracks()
     }
@@ -67,7 +55,7 @@ class AlbumViewModel @Inject constructor(
 
     val allAlbums = repository.getAllAlbums()
 
-    fun refreshDetail(albumId: String) {
+    suspend fun refreshDetail(albumId: String) {
         getAlbumDetail(albumId)
     }
 
@@ -87,109 +75,7 @@ class AlbumViewModel @Inject constructor(
         return repository.getAlbumById(albumId)
     }
 
-    fun getArtistTopTracks(artistId: String) {
-        useCases.getArtistTopTracksUseCase(artistId).onEach { result ->
-            when (result) {
-                is Resource.Failure -> {
-                    _artistTopTracksUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = result.message ?: "An unexpected error occurred",
-                            artistTopTracksData = result.data ?: emptyList()
-                        )
-                    }
-                }
-                is Resource.Success -> {
-                    _artistTopTracksUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = null,
-                            artistTopTracksData = result.data ?: emptyList()
-                        )
-                    }
-                }
-                is Resource.Loading -> {
-                    _artistTopTracksUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = true,
-                            isError = null,
-                            artistTopTracksData = result.data ?: emptyList()
-                        )
-                    }
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    fun getArtistInfo(artistName : String) {
-        useCases.getArtistUseCase(artistName).onEach { result ->
-            when (result) {
-                is Resource.Failure -> {
-                    _artistUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = result.message ?: "An unexpected error occurred",
-                            artistData = result.data
-                        )
-                    }
-                }
-                is Resource.Success -> {
-                    _artistUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = null,
-                            artistData = result.data
-                        )
-                    }
-                }
-                is Resource.Loading -> {
-                    _artistUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = true,
-                            isError = null,
-                            artistData = result.data
-                        )
-                    }
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    fun getArtistDetail(artistId : String) {
-        useCases.getAlbumArtistUseCase(artistId).onEach { result ->
-            when (result) {
-                is Resource.Failure -> {
-                    _albumArtistUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = result.message ?: "An unexpected error occurred",
-                            artistAlbumData = result.data
-                        )
-                    }
-                }
-                is Resource.Loading -> {
-                    _albumArtistUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = true,
-                            isError = null,
-                            artistAlbumData = result.data
-                        )
-                    }
-                }
-                is Resource.Success -> {
-                    _albumArtistUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = null,
-                            artistAlbumData = result.data
-                        )
-                    }
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    fun getAlbumDetail(albumId : String) {
+    suspend fun getAlbumDetail(albumId : String) {
         useCases.getAlbumDetailUseCase(albumId).onEach { result ->
             when(result) {
                 is Resource.Success -> {
@@ -223,7 +109,7 @@ class AlbumViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun searchAlbum(albumName : String) {
+    suspend fun searchAlbum(albumName : String) {
         useCases.getAlbumSearchUseCase(albumName).onEach { result ->
             when(result) {
                 is Resource.Success -> {

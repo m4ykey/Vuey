@@ -36,12 +36,15 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                 when(album) {
                     is Album -> {
                         val image = album.imageList.find { it.height == 640 && it.width == 640 }
-                        val preDraw = PreDrawListener(imgAlbum, layoutAlbum)
                         txtAlbum.text = album.albumName
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.artistName }
                         imgAlbum.apply {
-                            load(image?.url) { error(R.drawable.album_error) }
-                            viewTreeObserver.addOnPreDrawListener(preDraw)
+                            load(image?.url) {
+                                listener { _, _ ->
+                                    PreDrawListener(imgAlbum, layoutAlbum)
+                                }
+                                error(R.drawable.album_error)
+                            }
                         }
 
                         layoutAlbum.setOnClickListener {
@@ -58,9 +61,14 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                             width = 640,
                             url = album.albumCover.url
                         )
-                        imgAlbum.load(image.url) { error(R.drawable.album_error) }
-                        val preDraw = PreDrawListener(imgAlbum, layoutAlbum)
-                        imgAlbum.viewTreeObserver.addOnPreDrawListener(preDraw)
+                        imgAlbum.apply {
+                            load(image.url) {
+                                listener { _, _ ->
+                                    PreDrawListener(imgAlbum, layoutAlbum)
+                                }
+                                error(R.drawable.album_error)
+                            }
+                        }
                         txtAlbum.text = album.albumName
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.name }
                         layoutAlbum.setOnClickListener {

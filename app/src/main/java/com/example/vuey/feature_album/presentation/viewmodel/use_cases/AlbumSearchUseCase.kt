@@ -9,7 +9,7 @@ import javax.inject.Inject
 class AlbumSearchUseCase @Inject constructor(
     private val repository: AlbumRepository
     ) {
-    operator fun invoke(albumName : String) : Flow<Resource<List<Album>>> {
+    suspend operator fun invoke(albumName : String) : Flow<Resource<List<Album>>> {
         return repository.searchAlbum(albumName)
     }
 }

@@ -10,7 +10,9 @@
     <color name="text_grey">#CCCCCC</color>
     <color name="search_edit_text_icon">#CCCCCC</color>
 
-    <color name="album_green">#32E875</color>
-    <color name="movie_blue">#357DED</color>
-    <color name="tv_show_red">#F44336</color>
+    <color name="green">#32E875</color>
+    <color name="red">#F44336</color>
+
+    <color name="red_snackbar">#AA0C00</color>
+    <color name="green_snackbar">#00A33C</color>
 </resources>

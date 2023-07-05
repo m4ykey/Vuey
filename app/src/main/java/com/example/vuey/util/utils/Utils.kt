@@ -41,13 +41,13 @@ object DateUtils {
 }
 
 @SuppressLint("InflateParams")
-fun showSnackbar(view: View, errorCode: String, duration: Int = Snackbar.LENGTH_SHORT) {
+fun showSnackbarSpotifyError(view: View, errorCode: String, duration: Int = Snackbar.LENGTH_SHORT) {
 
     val snackBar = Snackbar.make(view, errorCode, duration)
     snackBar.view.setBackgroundColor(Color.TRANSPARENT)
 
     val customSnackbar : View = LayoutInflater.from(view.context)
-        .inflate(R.layout.custom_snackbar, null)
+        .inflate(R.layout.custom_error_snackbar, null)
 
     val errorMessage = getSpotifyErrorMessage(errorCode)
     val txtError : TextView = customSnackbar.findViewById(R.id.txtError)
@@ -61,19 +61,50 @@ fun showSnackbar(view: View, errorCode: String, duration: Int = Snackbar.LENGTH_
     snackBar.show()
 }
 
-class PreDrawListener(private val imgAlbum : ImageView, private val layoutAlbum : MaterialCardView)
+@SuppressLint("InflateParams")
+fun showAddDeleteSnackbar(view: View, duration: Int = Snackbar.LENGTH_SHORT, isAdded : Boolean) {
+
+    val addSnackbar : View = LayoutInflater.from(view.context)
+        .inflate(R.layout.custom_add_snackbar, null)
+    val deleteSnackbar  : View = LayoutInflater.from(view.context)
+        .inflate(R.layout.custom_error_snackbar, null)
+
+    if (isAdded) {
+        val snackBar = Snackbar.make(view, "", duration)
+        snackBar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarAddLayout = snackBar.view as SnackbarLayout
+        snackbarAddLayout.apply {
+            setPadding(0,0,0,0)
+            addView(addSnackbar, 0)
+        }
+        snackBar.show()
+    } else {
+        val snackBar = Snackbar.make(view, "", duration)
+        snackBar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarDeleteLayout = snackBar.view as SnackbarLayout
+        snackbarDeleteLayout.apply {
+            setPadding(0,0,0,0)
+            addView(deleteSnackbar, 0)
+        }
+        snackBar.show()
+    }
+}
+
+class PreDrawListener(private val imageView : ImageView, private val materialCardView : MaterialCardView)
     : ViewTreeObserver.OnPreDrawListener {
     override fun onPreDraw(): Boolean {
-        imgAlbum.viewTreeObserver.removeOnPreDrawListener(this)
+        imageView.viewTreeObserver.removeOnPreDrawListener(this)
 
-        if (imgAlbum.isShown) {
-            val drawable = imgAlbum.drawable
+        if (imageView.isShown) {
+            val drawable = imageView.drawable
             if (drawable is BitmapDrawable) {
                 val originalBitmap = drawable.bitmap
                 val bitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true)
                 Palette.from(bitmap).generate { palette ->
                     val dominantColor = palette?.dominantSwatch?.rgb ?: Color.GRAY
-                    layoutAlbum.strokeColor = dominantColor
+                    materialCardView.strokeColor = dominantColor
                 }
             }
         }

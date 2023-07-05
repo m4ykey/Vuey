@@ -1,10 +1,9 @@
 package com.example.vuey.di
 
-import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumArtistUseCase
+import com.example.vuey.feature_album.data.repository.ArtistRepository
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumDetailUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumSearchUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.AlbumUseCases
-import com.example.vuey.feature_album.presentation.viewmodel.use_cases.ArtistTopTracksUseCase
 import com.example.vuey.feature_album.presentation.viewmodel.use_cases.ArtistUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieCastUseCase
 import com.example.vuey.feature_movie.presentation.viewmodel.use_case.MovieDetailUseCase
@@ -23,16 +22,19 @@ object UseCasesModule {
     fun provideAlbumUseCases(
         getAlbumSearchUseCase: AlbumSearchUseCase,
         getAlbumDetailUseCase: AlbumDetailUseCase,
-        getAlbumArtistUseCase: AlbumArtistUseCase,
-        getArtistUseCase: ArtistUseCase,
-        getArtistTopTrackUseCase : ArtistTopTracksUseCase
     ) : AlbumUseCases {
         return AlbumUseCases(
             getAlbumSearchUseCase,
             getAlbumDetailUseCase,
-            getAlbumArtistUseCase,
-            getArtistUseCase,
-            getArtistTopTrackUseCase
+        )
+    }
+
+    @Provides
+    fun provideArtistUseCase(
+        repository: ArtistRepository
+    ) : ArtistUseCase {
+        return ArtistUseCase(
+            repository
         )
     }
 

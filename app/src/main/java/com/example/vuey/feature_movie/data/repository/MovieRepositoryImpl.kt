@@ -34,6 +34,10 @@ class MovieRepositoryImpl @Inject constructor(
         return movieDao.getMovieById(movieId)
     }
 
+    override fun searchMovieInDatabase(movieTitle: String): Flow<List<MovieEntity>> {
+        return movieDao.searchMovieInDatabase(movieTitle)
+    }
+
     override fun searchMovie(query: String): Flow<Resource<List<MovieList>>> {
         return flow {
 

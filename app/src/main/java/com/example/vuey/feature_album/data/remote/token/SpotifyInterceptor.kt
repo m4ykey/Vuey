@@ -1,7 +1,7 @@
 package com.example.vuey.feature_album.data.remote.token
 
 import android.content.SharedPreferences
-import androidx.core.content.edit
+import android.util.Base64
 import com.example.vuey.BuildConfig.SPOTIFY_CLIENT_ID
 import com.example.vuey.BuildConfig.SPOTIFY_CLIENT_SECRET
 import com.example.vuey.feature_album.data.remote.api.AuthApi
@@ -9,7 +9,6 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
-import android.util.Base64
 
 class SpotifyInterceptor @Inject constructor(
     private val sharedPreferences: SharedPreferences,

@@ -34,7 +34,18 @@ class MovieViewModel @Inject constructor(
     private val _movieCastUiState = MutableStateFlow(CastMovieUiState())
     val movieCastUiState : StateFlow<CastMovieUiState> get() = _movieCastUiState
 
+    private val _searchMovieInDatabase = MutableStateFlow<List<MovieEntity>>(emptyList())
+    val searchMovieInDatabase : StateFlow<List<MovieEntity>> get() = _searchMovieInDatabase
+
     val allMovies = repository.getAllMovies()
+
+    fun searchMovieDatabase(movieTitle : String) {
+        viewModelScope.launch {
+            repository.searchMovieInDatabase(movieTitle).collect { movieList ->
+                _searchMovieInDatabase.emit(movieList)
+            }
+        }
+    }
 
     fun getMovieById(movieId: Int) : Flow<MovieEntity> {
         return repository.getMovieById(movieId)

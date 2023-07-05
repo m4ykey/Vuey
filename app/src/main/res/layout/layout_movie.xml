@@ -52,7 +52,7 @@
                 <TextView
                     android:fontFamily="@font/cabin"
                     android:textSize="13sp"
-                    android:textColor="@color/tv_show_red"
+                    android:textColor="@color/red"
                     android:id="@+id/txtReleaseDate"
                     android:layout_weight="1"
                     android:layout_width="0dp"
@@ -62,7 +62,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:tint="@color/tv_show_red"
+                    app:tint="@color/red"
                     android:src="@drawable/ic_round_star"
                     android:importantForAccessibility="no" />
 
