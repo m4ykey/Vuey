@@ -113,9 +113,6 @@ dependencies {
     // SwipeToRefresh
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
 
-    // Palette
-    implementation 'androidx.palette:palette-ktx:1.0.0'
-
     // LeakCanary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.11'
 

@@ -1,18 +1,12 @@
 package com.example.vuey.util.utils
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.palette.graphics.Palette
 import com.example.vuey.R
 import com.example.vuey.util.network.SpotifyError
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.SnackbarLayout
 import java.text.SimpleDateFormat
@@ -89,26 +83,6 @@ fun showAddDeleteSnackbar(view: View, duration: Int = Snackbar.LENGTH_SHORT, isA
             addView(deleteSnackbar, 0)
         }
         snackBar.show()
-    }
-}
-
-class PreDrawListener(private val imageView : ImageView, private val materialCardView : MaterialCardView)
-    : ViewTreeObserver.OnPreDrawListener {
-    override fun onPreDraw(): Boolean {
-        imageView.viewTreeObserver.removeOnPreDrawListener(this)
-
-        if (imageView.isShown) {
-            val drawable = imageView.drawable
-            if (drawable is BitmapDrawable) {
-                val originalBitmap = drawable.bitmap
-                val bitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true)
-                Palette.from(bitmap).generate { palette ->
-                    val dominantColor = palette?.dominantSwatch?.rgb ?: Color.GRAY
-                    materialCardView.strokeColor = dominantColor
-                }
-            }
-        }
-        return true
     }
 }
 

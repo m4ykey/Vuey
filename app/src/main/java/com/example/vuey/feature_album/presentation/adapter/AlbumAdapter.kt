@@ -13,7 +13,6 @@ import com.example.vuey.feature_album.data.remote.model.spotify.album_search.Alb
 import com.example.vuey.feature_album.presentation.album.AlbumFragmentDirections
 import com.example.vuey.feature_album.presentation.album.SearchAlbumFragmentDirections
 import com.example.vuey.util.utils.DiffUtils
-import com.example.vuey.util.utils.PreDrawListener
 import com.example.vuey.util.utils.toAlbum
 import com.example.vuey.util.utils.toAlbumEntity
 
@@ -38,14 +37,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                         val image = album.imageList.find { it.height == 640 && it.width == 640 }
                         txtAlbum.text = album.albumName
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.artistName }
-                        imgAlbum.apply {
-                            load(image?.url) {
-                                listener { _, _ ->
-                                    PreDrawListener(imgAlbum, layoutAlbum)
-                                }
-                                error(R.drawable.album_error)
-                            }
-                        }
+                        imgAlbum.load(image?.url) { error(R.drawable.album_error) }
 
                         layoutAlbum.setOnClickListener {
                             val action = SearchAlbumFragmentDirections.actionSearchAlbumFragmentToAlbumDetailFragment(
@@ -61,14 +53,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder>() {
                             width = 640,
                             url = album.albumCover.url
                         )
-                        imgAlbum.apply {
-                            load(image.url) {
-                                listener { _, _ ->
-                                    PreDrawListener(imgAlbum, layoutAlbum)
-                                }
-                                error(R.drawable.album_error)
-                            }
-                        }
+                        imgAlbum.load(image.url) { error(R.drawable.album_error) }
                         txtAlbum.text = album.albumName
                         txtArtist.text = album.artistList.joinToString(separator = ", ") { it.name }
                         layoutAlbum.setOnClickListener {
