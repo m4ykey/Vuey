@@ -24,7 +24,7 @@
             app:navigationIcon="@drawable/ic_arrow_back"
             app:navigationIconTint="@color/white">
 
-            <EditText
+            <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"

@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -122,6 +123,16 @@ class SearchAlbumFragment : Fragment() {
                             }
                             uiState.searchAlbumData.isNotEmpty() -> {
                                 progressBar.visibility = View.GONE
+                                val suggestions = uiState.searchAlbumData.map { it.albumName } ?: emptyList()
+
+                                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, suggestions)
+                                
+                                etSearch.setAdapter(adapter)
+                                
+                                etSearch.setOnItemClickListener { parent, view, position, id ->
+                                    val selectedSuggestion = parent.getItemAtPosition(position) as String
+                                }
+                                
                                 albumAdapter.submitAlbums(uiState.searchAlbumData)
                             }
                             uiState.isError?.isNotEmpty() == true -> {
