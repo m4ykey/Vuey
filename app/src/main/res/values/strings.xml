@@ -33,4 +33,6 @@
     <string name="what_did_you_listen_to_today">What did you listen to today?</string>
     <string name="search_artist_or_album">Search artist or album</string>
     <string name="search_album">Search album</string>
+    <string name="what_did_you_watch_today">What did you watch today?</string>
+    <string name="search_movie">Search movie</string>
 </resources>

@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,16 +25,16 @@ class MovieViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _movieSearchUiState = MutableStateFlow(SearchMovieUiState())
-    val movieSearchUiState : StateFlow<SearchMovieUiState> get() = _movieSearchUiState
+    val movieSearchUiState : StateFlow<SearchMovieUiState> = _movieSearchUiState
 
     private val _movieDetailUiState = MutableStateFlow(DetailMovieUiState())
-    val movieDetailUiState : StateFlow<DetailMovieUiState> get() = _movieDetailUiState
+    val movieDetailUiState : StateFlow<DetailMovieUiState> = _movieDetailUiState
 
     private val _movieCastUiState = MutableStateFlow(CastMovieUiState())
-    val movieCastUiState : StateFlow<CastMovieUiState> get() = _movieCastUiState
+    val movieCastUiState : StateFlow<CastMovieUiState> = _movieCastUiState
 
     private val _searchMovieInDatabase = MutableStateFlow<List<MovieEntity>>(emptyList())
-    val searchMovieInDatabase : StateFlow<List<MovieEntity>> get() = _searchMovieInDatabase
+    val searchMovieInDatabase : StateFlow<List<MovieEntity>> = _searchMovieInDatabase
 
     val allMovies = repository.getAllMovies()
 
@@ -51,7 +50,7 @@ class MovieViewModel @Inject constructor(
         return repository.getMovieById(movieId)
     }
 
-    fun refreshDetail(movieId : Int) {
+    suspend fun refreshDetail(movieId : Int) {
         getMovieDetail(movieId)
     }
 
@@ -67,103 +66,79 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    fun getMovieCast(movieId: Int) {
+    suspend fun getMovieCast(movieId: Int) {
         useCase.getMovieCastUseCase(movieId).onEach { result ->
             when (result) {
                 is Resource.Failure -> {
-                    _movieCastUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = result.message ?: "An unexpected error occurred",
-                            castMovieData = result.data ?: emptyList()
-                        )
-                    }
+                    _movieCastUiState.value = movieCastUiState.value.copy(
+                        castMovieData = result.data ?: emptyList(),
+                        isLoading = false,
+                        isError = result.message ?: "Unknown error"
+                    )
                 }
                 is Resource.Success -> {
-                    _movieCastUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = null,
-                            castMovieData = result.data ?: emptyList()
-                        )
-                    }
+                    _movieCastUiState.value = movieCastUiState.value.copy(
+                        castMovieData = result.data ?: emptyList(),
+                        isLoading = false,
+                    )
                 }
                 is Resource.Loading -> {
-                    _movieCastUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = true,
-                            isError = null,
-                            castMovieData = result.data ?: emptyList()
-                        )
-                    }
+                    _movieCastUiState.value = movieCastUiState.value.copy(
+                        castMovieData = result.data ?: emptyList(),
+                        isLoading = true,
+                    )
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    fun getMovieDetail(movieId : Int) {
+    suspend fun getMovieDetail(movieId : Int) {
         useCase.getMovieDetailUseCase(movieId).onEach { result ->
             when (result) {
                 is Resource.Failure -> {
-                    _movieDetailUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = result.message ?: "An unexpected error occurred",
-                            detailMovieData = result.data
-                        )
-                    }
+                    _movieDetailUiState.value = movieDetailUiState.value.copy(
+                        detailMovieData = result.data,
+                        isLoading = false,
+                        isError = result.message ?: "Unknown error"
+                    )
                 }
                 is Resource.Loading -> {
-                    _movieDetailUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = true,
-                            isError = null,
-                            detailMovieData = result.data
-                        )
-                    }
+                    _movieDetailUiState.value = movieDetailUiState.value.copy(
+                        detailMovieData = result.data,
+                        isLoading = true,
+                    )
                 }
                 is Resource.Success -> {
-                    _movieDetailUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = null,
-                            detailMovieData = result.data
-                        )
-                    }
+                    _movieDetailUiState.value = movieDetailUiState.value.copy(
+                        detailMovieData = result.data,
+                        isLoading = false,
+                    )
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    fun searchMovie(movieName : String) {
+    suspend fun searchMovie(movieName : String) {
         useCase.getMovieSearchUseCase(movieName).onEach { result ->
             when (result) {
                 is Resource.Failure -> {
-                    _movieSearchUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = result.message ?: "An unexpected error occurred.",
-                            searchMovieData = result.data ?: emptyList()
-                        )
-                    }
+                    _movieSearchUiState.value = movieSearchUiState.value.copy(
+                        isLoading = false,
+                        isError = result.message ?: "Unknown error",
+                        searchMovieData = result.data ?: emptyList()
+                    )
                 }
                 is Resource.Success -> {
-                    _movieSearchUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = false,
-                            isError = null,
-                            searchMovieData = result.data ?: emptyList()
-                        )
-                    }
+                    _movieSearchUiState.value = movieSearchUiState.value.copy(
+                        isLoading = false,
+                        searchMovieData = result.data ?: emptyList()
+                    )
                 }
                 is Resource.Loading -> {
-                    _movieSearchUiState.update { prevState ->
-                        prevState.copy(
-                            isLoading = true,
-                            isError = null,
-                            searchMovieData = result.data ?: emptyList()
-                        )
-                    }
+                    _movieSearchUiState.value = movieSearchUiState.value.copy(
+                        isLoading = true,
+                        searchMovieData = result.data ?: emptyList()
+                    )
                 }
             }
         }.launchIn(viewModelScope)

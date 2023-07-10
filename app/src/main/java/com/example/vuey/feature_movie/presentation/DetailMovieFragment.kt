@@ -25,7 +25,7 @@ import com.example.vuey.util.Constants.TMDB_IMAGE_ORIGINAL
 import com.example.vuey.util.network.NetworkStateMonitor
 import com.example.vuey.util.utils.DateUtils
 import com.example.vuey.util.utils.formatVoteAverage
-import com.example.vuey.util.utils.showSnackbarSpotifyError
+import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,8 +64,6 @@ class DetailMovieFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        viewModel.getMovieDetail(args.movie.id)
-        viewModel.getMovieCast(args.movie.id)
         networkStateMonitor.startMonitoring()
     }
 
@@ -75,9 +73,20 @@ class DetailMovieFragment : Fragment() {
         observeMovieDetail()
         observeMovieCast()
         hideBottomNavigation()
-        refreshDetail()
 
         lifecycleScope.launch {
+            viewModel.getMovieDetail(args.movie.id)
+            viewModel.getMovieCast(args.movie.id)
+
+            binding.swipeRefresh.apply {
+                setOnRefreshListener {
+                    launch {
+                        viewModel.refreshDetail(args.movie.id)
+                        isRefreshing = false
+                    }
+                }
+            }
+
             networkStateMonitor.isInternetAvailable.collect { isAvailable ->
                 if (isAvailable) {
                     binding.recyclerViewTopCast.visibility = View.VISIBLE
@@ -163,11 +172,11 @@ class DetailMovieFragment : Fragment() {
             imgSave.setOnClickListener {
                 isMovieSaved = !isMovieSaved
                 if (isMovieSaved) {
-                    showSnackbarSpotifyError(requireView(), getString(R.string.added_to_library))
+                    showSnackbar(requireView(), getString(R.string.added_to_library))
                     imgSave.setImageResource(R.drawable.ic_save)
                     viewModel.insertMovie(movieEntity)
                 } else {
-                    showSnackbarSpotifyError(requireView(), getString(R.string.removed_from_library))
+                    showSnackbar(requireView(), getString(R.string.removed_from_library))
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                     viewModel.deleteMovie(movieEntity)
                 }
@@ -185,15 +194,6 @@ class DetailMovieFragment : Fragment() {
 
     }
 
-    private fun refreshDetail() {
-        binding.swipeRefresh.apply {
-            setOnRefreshListener {
-                viewModel.refreshDetail(args.movie.id)
-                isRefreshing = false
-            }
-        }
-    }
-
     private fun observeMovieDetail() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -205,7 +205,7 @@ class DetailMovieFragment : Fragment() {
 
                         uiState.isError?.isNotEmpty() == true -> {
                             binding.progressBar.visibility = View.GONE
-                            showSnackbarSpotifyError(
+                            showSnackbar(
                                 requireView(),
                                 uiState.isError.toString(),
                                 Snackbar.LENGTH_LONG
@@ -276,14 +276,14 @@ class DetailMovieFragment : Fragment() {
                                 imgSave.setOnClickListener {
                                     isMovieSaved = !isMovieSaved
                                     if (isMovieSaved) {
-                                        showSnackbarSpotifyError(
+                                        showSnackbar(
                                             requireView(),
                                             getString(R.string.added_to_library)
                                         )
                                         imgSave.setImageResource(R.drawable.ic_save)
                                         viewModel.insertMovie(movieEntity)
                                     } else {
-                                        showSnackbarSpotifyError(
+                                        showSnackbar(
                                             requireView(),
                                             getString(R.string.removed_from_library)
                                         )
@@ -312,7 +312,7 @@ class DetailMovieFragment : Fragment() {
                         uiState.isError?.isNotEmpty() == true -> {
                             binding.progressBar.visibility = View.GONE
                             binding.progressBarCast.visibility = View.GONE
-                            showSnackbarSpotifyError(
+                            showSnackbar(
                                 requireView(),
                                 uiState.isError.toString(),
                                 Snackbar.LENGTH_LONG

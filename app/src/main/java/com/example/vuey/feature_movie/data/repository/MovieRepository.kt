@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
-    fun searchMovie(query : String) : Flow<Resource<List<MovieList>>>
-    fun getMovieDetail(movieId : Int) : Flow<Resource<MovieDetail>>
-    fun getMovieCast(movieId: Int) : Flow<Resource<List<MovieCast.CastDetail>>>
+    suspend fun searchMovie(query : String) : Flow<Resource<List<MovieList>>>
+    suspend fun getMovieDetail(movieId : Int) : Flow<Resource<MovieDetail>>
+    suspend fun getMovieCast(movieId: Int) : Flow<Resource<List<MovieCast.CastDetail>>>
 
     suspend fun insertMovie(movieEntity: MovieEntity)
     suspend fun deleteMovie(movieEntity: MovieEntity)

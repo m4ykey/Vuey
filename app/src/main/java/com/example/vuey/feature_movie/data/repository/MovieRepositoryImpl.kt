@@ -38,7 +38,7 @@ class MovieRepositoryImpl @Inject constructor(
         return movieDao.searchMovieInDatabase(movieTitle)
     }
 
-    override fun searchMovie(query: String): Flow<Resource<List<MovieList>>> {
+    override suspend fun searchMovie(query: String): Flow<Resource<List<MovieList>>> {
         return flow {
 
             emit(Resource.Loading())
@@ -62,7 +62,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMovieDetail(movieId: Int): Flow<Resource<MovieDetail>> {
+    override suspend fun getMovieDetail(movieId: Int): Flow<Resource<MovieDetail>> {
         return flow {
             emit(Resource.Loading())
 
@@ -83,7 +83,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMovieCast(movieId: Int): Flow<Resource<List<MovieCast.CastDetail>>> {
+    override suspend fun getMovieCast(movieId: Int): Flow<Resource<List<MovieCast.CastDetail>>> {
         return flow {
             emit(Resource.Loading())
 
