@@ -103,4 +103,12 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun getMovieCount(): Flow<Int> {
+        return movieDao.getMovieCount()
+    }
+
+    override fun getTotalLength(): Flow<Int> {
+        return movieDao.getTotalLength()
+    }
 }

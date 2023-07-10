@@ -35,4 +35,5 @@
     <string name="search_album">Szukaj albumu</string>
     <string name="what_did_you_watch_today">Co dzisiaj obejrzałeś?</string>
     <string name="search_movie">Szukaj filmu</string>
+    <string name="watched_movies">Obejrzanych filmów</string>
 </resources>

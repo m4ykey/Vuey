@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".feature_movie.presentation.MovieFragment">
 
@@ -34,17 +35,60 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/movieRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:overScrollMode="never"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+    <LinearLayout
         app:layout_constraintTop_toBottomOf="@id/appBar"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutHide"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:imeOptions="actionSearch"
+                android:drawableTint="@color/text_grey"
+                android:textColorHint="@color/text_grey"
+                android:maxLines="1"
+                android:inputType="text"
+                android:hint="@string/search_movie"
+                android:drawableEnd="@drawable/ic_search"
+                android:padding="10dp"
+                android:id="@+id/etSearch"
+                android:fontFamily="@font/cabin"
+                android:textColor="@color/white"
+                android:background="@drawable/edit_text_search_box"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/imgHide"
+                android:layout_margin="10dp"
+                app:tint="@color/white"
+                android:src="@drawable/ic_hide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movieRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:layout_margin="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

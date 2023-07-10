@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_movieFragment_to_detailMovieFragment"
             app:destination="@id/detailMovieFragment" />
+        <action
+            android:id="@+id/action_movieFragment_to_movieStatisticsFragment"
+            app:destination="@id/movieStatisticsFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchMovieFragment"
@@ -109,4 +112,9 @@
             android:name="artistData"
             app:argType="com.example.vuey.feature_album.data.remote.model.spotify.artist.ArtistData" />
     </fragment>
+    <fragment
+        android:id="@+id/movieStatisticsFragment"
+        android:name="com.example.vuey.feature_movie.presentation.MovieStatisticsFragment"
+        android:label="fragment_movie_statistics"
+        tools:layout="@layout/fragment_movie_statistics" />
 </navigation>

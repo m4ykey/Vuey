@@ -46,6 +46,14 @@ class MovieViewModel @Inject constructor(
         }
     }
 
+    fun getTotalLength() : Flow<Int> {
+        return repository.getTotalLength()
+    }
+
+    fun getMovieCount() : Flow<Int> {
+        return repository.getMovieCount()
+    }
+
     fun getMovieById(movieId: Int) : Flow<MovieEntity> {
         return repository.getMovieById(movieId)
     }

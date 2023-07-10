@@ -16,8 +16,6 @@ import com.example.vuey.databinding.FragmentMovieBinding
 import com.example.vuey.feature_movie.presentation.adapter.MovieAdapter
 import com.example.vuey.feature_movie.presentation.viewmodel.MovieViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -65,25 +63,20 @@ class MovieFragment : Fragment() {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when(menuItem.itemId) {
                     R.id.imgSearch -> {
-                        val materialAlertLayout = LayoutInflater.from(requireContext())
-                            .inflate(R.layout.material_alert_edit_text, null)
-                        val etSearchMovie =
-                            materialAlertLayout.findViewById<TextInputEditText>(R.id.etSearchAlbum)
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Search for a movie")
-                            .setView(materialAlertLayout)
-                            .setPositiveButton(getString(R.string.search)) { _, _ ->
-                                movieViewModel.searchMovieDatabase(etSearchMovie.text.toString())
-                            }
-                            .setNegativeButton(getString(R.string.close)) { _, _ -> }
-                            .show()
+                        linearLayoutHide.visibility = View.VISIBLE
+                        imgHide.setOnClickListener {
+                            linearLayoutHide.visibility = View.GONE
+                        }
                         true
                     }
                     R.id.imgAdd -> {
                         findNavController().navigate(R.id.action_movieFragment_to_searchMovieFragment)
                         true
                     }
-                    R.id.imgStatistics -> { true }
+                    R.id.imgStatistics -> {
+                        findNavController().navigate(R.id.action_movieFragment_to_movieStatisticsFragment)
+                        true
+                    }
                     else -> { false }
                 }
             }
