@@ -1,7 +1,5 @@
 package com.example.vuey.feature_album.presentation.album
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -10,21 +8,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentSearchAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.SpotifyError
-import com.example.vuey.util.utils.showSnackbarSpotifyError
+import com.example.vuey.util.utils.getSpotifyErrorMessage
+import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,45 +48,23 @@ class SearchAlbumFragment : Fragment() {
 
         searchAlbum()
         observeSearchAlbum()
-        setupToolbar()
         hideBottomNavigation()
-        binding.recyclerViewAlbum.apply {
-            adapter = albumAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
 
-    }
-
-    private fun setupToolbar() {
         with(binding) {
-            toolBar.setNavigationOnClickListener { findNavController().navigateUp() }
-            toolBar.setOnMenuItemClickListener { menuItem ->
-                when(menuItem.itemId) {
-                    R.id.clearText -> {
-                        etSearch.setText("")
-                        true
-                    }
-                    else -> { false }
-                }
-            }
-            val menuItem = toolBar.menu.findItem(R.id.clearText)
-            menuItem.icon.let {
-                MenuItemCompat.setIconTintList(menuItem, ColorStateList.valueOf(Color.WHITE))
-            }
+            recyclerViewAlbum.adapter = albumAdapter
+            imgBack.setOnClickListener { findNavController().navigateUp() }
         }
+
     }
 
     private fun searchAlbum() {
         with(binding) {
             etSearch.addTextChangedListener(object : TextWatcher {
 
-                private val DELAY : Long = 500
                 private var searchHandler = Handler()
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
                 override fun afterTextChanged(s: Editable?) {
                     searchHandler.removeCallbacksAndMessages(null)
 
@@ -103,7 +77,7 @@ class SearchAlbumFragment : Fragment() {
                                 searchViewModel.searchAlbum(searchAlbum)
                             }
                             progressBar.visibility = View.GONE
-                        }, DELAY)
+                        }, 500)
                     } else {
                         progressBar.visibility = View.GONE
                     }
@@ -123,23 +97,14 @@ class SearchAlbumFragment : Fragment() {
                             }
                             uiState.searchAlbumData.isNotEmpty() -> {
                                 progressBar.visibility = View.GONE
-                                val suggestions = uiState.searchAlbumData.map { it.albumName } ?: emptyList()
-
-                                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, suggestions)
-                                
-                                etSearch.setAdapter(adapter)
-                                
-                                etSearch.setOnItemClickListener { parent, view, position, id ->
-                                    val selectedSuggestion = parent.getItemAtPosition(position) as String
-                                }
-                                
                                 albumAdapter.submitAlbums(uiState.searchAlbumData)
                             }
                             uiState.isError?.isNotEmpty() == true -> {
                                 progressBar.visibility = View.GONE
-                                val error = uiState.isError.toString()
+                                val error = getSpotifyErrorMessage(uiState.isError)
+                                Log.i("Error", "observeSearchAlbum: $error")
                                 if (error != SpotifyError.code200) {
-                                    showSnackbarSpotifyError(
+                                    showSnackbar(
                                         requireView(),
                                         error,
                                         Snackbar.LENGTH_LONG

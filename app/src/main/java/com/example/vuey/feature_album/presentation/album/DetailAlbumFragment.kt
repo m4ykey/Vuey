@@ -21,16 +21,16 @@ import coil.load
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumDetailBinding
 import com.example.vuey.feature_album.data.local.entity.AlbumEntity
-import com.example.vuey.feature_album.data.remote.model.spotify.artist.Artist
 import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.ExternalUrls
 import com.example.vuey.feature_album.data.remote.model.spotify.album_detail.Tracks
+import com.example.vuey.feature_album.data.remote.model.spotify.artist.Artist
 import com.example.vuey.feature_album.presentation.adapter.TrackListAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.example.vuey.util.network.NetworkStateMonitor
 import com.example.vuey.util.network.SpotifyError
 import com.example.vuey.util.utils.DateUtils
-import com.example.vuey.util.utils.showAddDeleteSnackbar
-import com.example.vuey.util.utils.showSnackbarSpotifyError
+import com.example.vuey.util.utils.getSpotifyErrorMessage
+import com.example.vuey.util.utils.showSnackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -151,16 +151,16 @@ class DetailAlbumFragment : Fragment() {
             imgSave.setOnClickListener {
                 isAlbumSaved = !isAlbumSaved
                 if (isAlbumSaved) {
-                    showAddDeleteSnackbar(
+                    showSnackbar(
                         requireView(),
-                        isAdded = isAlbumSaved
+                        getString(R.string.added_to_library)
                     )
                     imgSave.setImageResource(R.drawable.ic_save)
                     detailViewModel.insertAlbum(albumEntity)
                 } else {
-                    showAddDeleteSnackbar(
+                    showSnackbar(
                         requireView(),
-                        isAdded = isAlbumSaved
+                        getString(R.string.removed_from_library)
                     )
                     imgSave.setImageResource(R.drawable.ic_save_outlined)
                     detailViewModel.deleteAlbum(albumEntity)
@@ -232,9 +232,9 @@ class DetailAlbumFragment : Fragment() {
 
                             uiState.isError?.isNotEmpty() == true -> {
                                 progressBar.visibility = View.GONE
-                                val error = uiState.isError.toString()
+                                val error = getSpotifyErrorMessage(uiState.isError)
                                 if (error != SpotifyError.code200) {
-                                    showSnackbarSpotifyError(
+                                    showSnackbar(
                                         requireView(),
                                         error,
                                         Snackbar.LENGTH_LONG
@@ -301,7 +301,7 @@ class DetailAlbumFragment : Fragment() {
                                             }
                                         } else {
                                             txtArtist.setOnClickListener {
-                                                showSnackbarSpotifyError(
+                                                showSnackbar(
                                                     requireView(),
                                                     getString(R.string.artist_no_internet_connection)
                                                 )
@@ -386,16 +386,16 @@ class DetailAlbumFragment : Fragment() {
                                 imgSave.setOnClickListener {
                                     isAlbumSaved = !isAlbumSaved
                                     if (isAlbumSaved) {
-                                        showAddDeleteSnackbar(
+                                        showSnackbar(
                                             requireView(),
-                                            isAdded = isAlbumSaved
+                                            getString(R.string.added_to_library)
                                         )
                                         imgSave.setImageResource(R.drawable.ic_save)
                                         detailViewModel.insertAlbum(albumEntity)
                                     } else {
-                                        showAddDeleteSnackbar(
+                                        showSnackbar(
                                             requireView(),
-                                            isAdded = isAlbumSaved
+                                            getString(R.string.removed_from_library)
                                         )
                                         imgSave.setImageResource(R.drawable.ic_save_outlined)
                                         detailViewModel.deleteAlbum(albumEntity)

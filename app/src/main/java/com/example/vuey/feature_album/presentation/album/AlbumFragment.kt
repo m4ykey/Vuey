@@ -11,14 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vuey.R
 import com.example.vuey.databinding.FragmentAlbumBinding
 import com.example.vuey.feature_album.presentation.adapter.AlbumAdapter
 import com.example.vuey.feature_album.presentation.viewmodel.AlbumViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -43,9 +40,8 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.albumRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = albumAdapter
+        with(binding) {
+            albumRecyclerView.adapter = albumAdapter
         }
         lifecycleScope.launch {
             coroutineScope {
@@ -72,18 +68,11 @@ class AlbumFragment : Fragment() {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.imgSearch -> {
-                        val materialAlertLayout = LayoutInflater.from(requireContext())
-                            .inflate(R.layout.material_alert_edit_text, null)
-                        val etSearchAlbum =
-                            materialAlertLayout.findViewById<TextInputEditText>(R.id.etSearchAlbum)
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.search_album))
-                            .setView(materialAlertLayout)
-                            .setPositiveButton(getString(R.string.search)) { _, _ ->
-                                albumViewModel.searchAlbumDatabase(etSearchAlbum.text.toString())
-                            }
-                            .setNegativeButton(getString(R.string.close)) { _, _ -> }
-                            .show()
+                        searchAlbumInDatabase()
+                        linearLayoutHide.visibility = View.VISIBLE
+                        imgHide.setOnClickListener {
+                            linearLayoutHide.visibility = View.GONE
+                        }
                         true
                     }
 
@@ -114,6 +103,11 @@ class AlbumFragment : Fragment() {
             addItem.icon.let {
                 MenuItemCompat.setIconTintList(addItem, ColorStateList.valueOf(Color.WHITE))
             }
+        }
+    }
+
+    private fun searchAlbumInDatabase() {
+        with(binding) {
         }
     }
 

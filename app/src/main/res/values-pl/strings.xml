@@ -21,9 +21,7 @@
     <string name="listened_albums">Przesłuchane albumy</string>
     <string name="listened_songs">Przesłuchane piosenki</string>
     <string name="total_time">Łączny czas</string>
-    <string name="discovered_artists">Odkryci artyści</string>
     <string name="close">Zamknij</string>
-    <string name="search_album">Wyszukaj album</string>
     <string name="add">Dodaj</string>
     <string name="save_icon">Ikona zapisu</string>
     <string name="album_image">Zdjęcie albumu</string>
@@ -31,10 +29,8 @@
     <string name="cast_image">Zdjęcie obsady</string>
     <string name="movie_poster">Plakat filmu</string>
     <string name="artist_no_internet_connection">Potrzebujesz internetu, aby otrzymać dane o artystach</string>
-    <string name="follow">Obserwuj</string>
-    <string name="followed">Obserwujesz</string>
-    <string name="listeners">słuchaczy</string>
-    <string name="about">Informacje</string>
-    <string name="top_tracks">Popularne utwory</string>
-    <string name="followers">obserwujących</string>
+    <string name="browse">Odkrywaj</string>
+    <string name="what_did_you_listen_to_today">Czego dzisiaj słuchałeś?</string>
+    <string name="search_artist_or_album">Szukaj artysty lub albumu</string>
+    <string name="search_album">Szukaj albumu</string>
 </resources>

@@ -1,14 +1,8 @@
 package com.example.vuey.util.utils
 
-import android.annotation.SuppressLint
-import android.graphics.Color
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
-import com.example.vuey.R
 import com.example.vuey.util.network.SpotifyError
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.Snackbar.SnackbarLayout
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -34,56 +28,9 @@ object DateUtils {
     }
 }
 
-@SuppressLint("InflateParams")
-fun showSnackbarSpotifyError(view: View, errorCode: String, duration: Int = Snackbar.LENGTH_SHORT) {
+fun showSnackbar(view: View, message: String, duration: Int = Snackbar.LENGTH_SHORT) {
 
-    val snackBar = Snackbar.make(view, errorCode, duration)
-    snackBar.view.setBackgroundColor(Color.TRANSPARENT)
-
-    val customSnackbar : View = LayoutInflater.from(view.context)
-        .inflate(R.layout.custom_error_snackbar, null)
-
-    val errorMessage = getSpotifyErrorMessage(errorCode)
-    val txtError : TextView = customSnackbar.findViewById(R.id.txtError)
-    txtError.text = errorMessage
-
-    val snackbarLayout = snackBar.view as SnackbarLayout
-    snackbarLayout.apply {
-        setPadding(0,0,0,0)
-        addView(customSnackbar, 0)
-    }
-    snackBar.show()
-}
-
-@SuppressLint("InflateParams")
-fun showAddDeleteSnackbar(view: View, duration: Int = Snackbar.LENGTH_SHORT, isAdded : Boolean) {
-
-    val addSnackbar : View = LayoutInflater.from(view.context)
-        .inflate(R.layout.custom_add_snackbar, null)
-    val deleteSnackbar  : View = LayoutInflater.from(view.context)
-        .inflate(R.layout.custom_error_snackbar, null)
-
-    if (isAdded) {
-        val snackBar = Snackbar.make(view, "", duration)
-        snackBar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarAddLayout = snackBar.view as SnackbarLayout
-        snackbarAddLayout.apply {
-            setPadding(0,0,0,0)
-            addView(addSnackbar, 0)
-        }
-        snackBar.show()
-    } else {
-        val snackBar = Snackbar.make(view, "", duration)
-        snackBar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarDeleteLayout = snackBar.view as SnackbarLayout
-        snackbarDeleteLayout.apply {
-            setPadding(0,0,0,0)
-            addView(deleteSnackbar, 0)
-        }
-        snackBar.show()
-    }
+    Snackbar.make(view, message, duration).show()
 }
 
 fun getSpotifyErrorMessage(errorCode : String) : String {

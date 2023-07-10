@@ -20,9 +20,7 @@
     <string name="listened_albums">Listened albums</string>
     <string name="listened_songs">Listened songs</string>
     <string name="total_time">Total time</string>
-    <string name="discovered_artists">Discovered artists</string>
     <string name="close">Close</string>
-    <string name="search_album">Search for an album</string>
     <string name="add">Add</string>
     <string name="save_icon">Save Icon</string>
     <string name="album_image">Album Image</string>
@@ -30,11 +28,9 @@
     <string name="cast_image">Cast Image</string>
     <string name="movie_poster">Movie Poster</string>
     <string name="artist_no_internet_connection">You need internet connection to retrieve artist data</string>
-    <string name="follow">Follow</string>
-    <string name="followed">Followed</string>
-    <string name="listeners">listeners</string>
     <string name="default_notification_channel_id" translatable="false">channelid</string>
-    <string name="about">About</string>
-    <string name="top_tracks">Top Tracks</string>
-    <string name="followers">followers</string>
+    <string name="browse">Browse</string>
+    <string name="what_did_you_listen_to_today">What did you listen to today?</string>
+    <string name="search_artist_or_album">Search artist or album</string>
+    <string name="search_album">Search album</string>
 </resources>
